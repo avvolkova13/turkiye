@@ -1169,15 +1169,21 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 }
 
 .manifesto-layout {
-  display: grid;
-  grid-template-columns: 12rem minmax(0, 1fr) 32rem;
-  gap: clamp(1.5rem, 2.5vw, 3rem);
-  align-items: start;
-  min-height: 46rem;
+  display: block;
+  min-height: 54rem;
   padding-top: 1.5rem;
 }
 
+.manifesto-layout::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
 .manifesto-aside {
+  float: left;
+  width: 13rem;
+  margin-right: clamp(2rem, 3vw, 4rem);
   font-size: 0.78rem;
 }
 
@@ -1213,12 +1219,11 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
 .manifesto-main {
   min-width: 0;
-  align-self: end;
-  padding-bottom: 1rem;
+  padding-top: 19rem;
 }
 
 .manifesto-copy {
-  max-width: 72rem;
+  max-width: none;
   margin: 0;
   font-size: clamp(2.8rem, 4.55vw, 5.5rem);
   line-height: 0.98;
@@ -1226,11 +1231,12 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 }
 
 .manifesto-cards {
+  float: right;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(0.75rem, 1.3vw, 1.25rem);
-  align-self: end;
-  padding-bottom: 1rem;
+  width: 32rem;
+  margin-top: 26rem;
 }
 
 .manifesto-cards article {
@@ -2586,12 +2592,16 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
   }
 
   .manifesto-layout {
+    display: grid;
     grid-template-columns: 1fr;
     min-height: 0;
     padding-top: 4rem;
   }
 
   .manifesto-aside {
+    float: none;
+    width: auto;
+    margin-right: 0;
     display: grid;
     grid-template-columns: auto auto;
     gap: 0 0.5rem;
@@ -2607,10 +2617,14 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
   .manifesto-copy {
     margin: 0;
+    padding-top: 0;
     font-size: clamp(2.35rem, 10.5vw, 3.6rem);
   }
 
   .manifesto-cards {
+    float: none;
+    width: auto;
+    margin-top: 0;
     padding-top: 2rem;
   }
 

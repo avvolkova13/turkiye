@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import type { DirectionScene } from "@/data/home";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { sitePath } from "@/lib/sitePath";
 
 import { gsap } from "./motion/gsap";
 import { FloemaMetaRow } from "./FloemaMetaRow";
@@ -161,7 +162,7 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
               priority={index === 0}
               loading={index > 0 && index < 3 ? "eager" : undefined}
               sizes="100vw"
-              src={scene.image}
+              src={sitePath(scene.image)}
               style={{ objectPosition: scene.focalPoint }}
             />
           </div>
@@ -189,7 +190,7 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
                 alt={scene.imageAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 1px"
-                src={scene.image}
+                src={sitePath(scene.image)}
                 style={{ objectPosition: scene.focalPoint }}
               />
             </div>

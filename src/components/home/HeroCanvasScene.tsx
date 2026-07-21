@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import type { HeroFragment } from "@/data/home";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { sitePath } from "@/lib/sitePath";
 
 import { createHeroScene } from "./motion/createHeroScene";
 import { gsap, ScrollTrigger } from "./motion/gsap";
@@ -123,7 +124,7 @@ export function HeroCanvasScene({
               } as CSSProperties
             }
           >
-            <Image alt="" fill sizes="20vw" src={fragment.image} />
+            <Image alt="" fill sizes="20vw" src={sitePath(fragment.image)} />
           </div>
         ))}
       </div>

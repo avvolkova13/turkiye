@@ -3,6 +3,7 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
+import { sitePath } from "@/lib/sitePath";
 import { ConnectedPillNav } from "./ConnectedPillNav";
 
 type HeaderProps = {
@@ -111,7 +112,7 @@ export function Header({ brandName }: HeaderProps) {
       <header className="site-header" data-site-header>
         <div className="header-brand-cluster">
           <a className="wordmark" href="#hero" aria-label="На начало главной">
-            <Image alt="Faro" height={68} priority src="/faro-logo.svg" width={161} />
+            <Image alt="Faro" height={68} priority src={sitePath("/faro-logo.svg")} width={161} />
           </a>
           <span className="header-divider" aria-hidden="true" />
           <button

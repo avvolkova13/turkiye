@@ -9,6 +9,7 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { RevealObserver } from "@/components/home/RevealObserver";
 import { siteConfig } from "@/config/site";
 import { affordableItems, directionScenes, heroFragments } from "@/data/home";
+import { sitePath } from "@/lib/sitePath";
 
 const brandName = siteConfig.publicBrandName ?? "Türkiye";
 
@@ -56,16 +57,9 @@ export default function HomePage() {
                   alt="Деталь утреннего Стамбула у воды"
                   fill
                   sizes="(max-width: 760px) 34vw, 12vw"
-                  src="/images/istanbul-motion.jpg"
+                  src={sitePath("/images/istanbul-motion.jpg")}
                 />
               </div>
-            </div>
-            <div className="manifesto-main">
-              <p className="manifesto-copy">
-                Здесь можно купить карту прогулки, подключить связь, заказать трансфер
-                или собрать поездку на несколько дней — без пяти сайтов и десятка
-                переписок.
-              </p>
             </div>
             <div className="manifesto-cards">
               <article>
@@ -74,7 +68,7 @@ export default function HomePage() {
                     alt="Бухта у побережья Каша"
                     fill
                     sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/images/kas-coast.jpg"
+                    src={sitePath("/images/kas-coast.jpg")}
                   />
                 </div>
                 <strong>Маршруты, которые остаются</strong>
@@ -86,12 +80,19 @@ export default function HomePage() {
                     alt="Свет раннего утра в Каппадокии"
                     fill
                     sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/images/cappadocia-rocks.jpg"
+                    src={sitePath("/images/cappadocia-rocks.jpg")}
                   />
                 </div>
                 <strong>Места вне привычного списка</strong>
                 <span>Каппадокия · на рассвете</span>
               </article>
+            </div>
+            <div className="manifesto-main">
+              <p className="manifesto-copy">
+                Здесь можно купить карту прогулки, подключить связь, заказать трансфер
+                или собрать поездку на несколько дней — без пяти сайтов и десятка
+                переписок.
+              </p>
             </div>
           </div>
           <div className="manifesto-signature">
@@ -114,7 +115,7 @@ export default function HomePage() {
                     alt="Тёплый свод и ритм арок стамбульского базара"
                     fill
                     sizes="(max-width: 760px) 100vw, 58vw"
-                    src="/images/spice-bazaar.jpg"
+                src={sitePath("/images/spice-bazaar.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
@@ -131,7 +132,7 @@ export default function HomePage() {
                     alt="Белые минеральные террасы Памуккале"
                     fill
                     sizes="(max-width: 760px) 100vw, 30vw"
-                    src="/images/pamukkale.jpg"
+                src={sitePath("/images/pamukkale.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
@@ -147,7 +148,7 @@ export default function HomePage() {
                     alt="Воздушные шары над мягкими утренними долинами Каппадокии"
                     fill
                     sizes="(max-width: 760px) 100vw, 22vw"
-                    src="/images/cappadocia-soft.jpg"
+                src={sitePath("/images/cappadocia-soft.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
@@ -166,7 +167,7 @@ export default function HomePage() {
                 alt="Паром на Босфоре в золотом вечернем свете"
                 fill
                 sizes="(max-width: 760px) 100vw, 52vw"
-                src="/images/bosphorus-ferry.jpg"
+                src={sitePath("/images/bosphorus-ferry.jpg")}
               />
               <span>Сейчас выбирают</span>
             </div>
@@ -218,7 +219,7 @@ export default function HomePage() {
               alt="Современная архитектура Стамбула в вечернем свете"
               fill
               sizes="(max-width: 760px) 70vw, 16vw"
-              src="/images/istanbul-modern.jpg"
+              src={sitePath("/images/istanbul-modern.jpg")}
             />
           </div>
           <div className="bundle-visual bundle-visual-right" data-reveal>
@@ -226,7 +227,7 @@ export default function HomePage() {
               alt="Тихая бухта Эгейского побережья Турции"
               fill
               sizes="(max-width: 760px) 92vw, 42vw"
-              src="/images/aegean-bodrum.jpg"
+              src={sitePath("/images/aegean-bodrum.jpg")}
             />
           </div>
           <div className="bundles-copy" data-reveal>
@@ -292,7 +293,7 @@ export default function HomePage() {
             alt="Ночная панорама Галатской башни и огней Стамбула"
             fill
             sizes="100vw"
-            src="/images/galata-night.jpg"
+            src={sitePath("/images/galata-night.jpg")}
           />
           <div className="final-cta-shade" />
           <div className="final-cta-copy" data-reveal>
@@ -321,7 +322,7 @@ export default function HomePage() {
 
       <footer className="page-footer" id="page-footer" data-header-tone="light">
         <div className="footer-wordmark">
-          <Image alt="Faro" height={68} src="/faro-logo.svg" width={161} />
+          <Image alt="Faro" height={68} src={sitePath("/faro-logo.svg")} width={161} />
         </div>
         <div className="footer-grid">
           <nav aria-label="Направления в Турции">

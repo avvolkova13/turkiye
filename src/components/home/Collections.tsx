@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { collectionItems } from "@/data/home";
+import { sitePath } from "@/lib/sitePath";
 
 function CollectionIcon({ index }: { index: number }) {
   const paths = [
@@ -56,7 +57,7 @@ export function Collections() {
               <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
               <span className="collection-name-main">{item.name}</span>
               <span className="collection-thumb">
-                <Image alt={item.alt} fill sizes="(max-width: 760px) 7rem, 16rem" src={item.image} />
+                <Image alt={item.alt} fill sizes="(max-width: 760px) 7rem, 16rem" src={sitePath(item.image)} />
               </span>
               <span className="collection-count">({item.count.replace(/ .*/, "")})</span>
             </span>

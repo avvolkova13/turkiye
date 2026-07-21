@@ -99,7 +99,7 @@ function verifyHomepageFreeze() {
   const committedMarketplacePaths = [
     ...new Set(
       gitLines("rev-list", `${homepageBaseRef}..HEAD`).flatMap((commit) =>
-        gitLines("diff-tree", "--no-commit-id", "--name-only", "-r", commit),
+        gitLines("diff-tree", "--no-commit-id", "--name-only", "-r", "-m", commit),
       ),
     ),
   ].sort();
@@ -295,8 +295,13 @@ async function verifyViewport(width, height, includeEveryDestination) {
         `${width}px ${path}`,
       );
       try {
-        assert.equal(await page.getByRole("heading", { level: 2 }).count(), 1, `${path} must have a destination title`);
-        assert.ok((await page.content()).includes(destinationName), `${path} HTML must contain ${destinationName}`);
+        const destinationHeading = page.getByRole("heading", { level: 2 });
+        assert.equal(await destinationHeading.count(), 1, `${path} must have a destination title`);
+        assert.equal(
+          (await destinationHeading.innerText()).replace(/\s+/g, " ").trim(),
+          destinationName,
+          `${path} must render its expected destination title`,
+        );
 
         const serviceHrefs = await page.locator("article a[href]").evaluateAll((links) =>
           links.map((link) => link.getAttribute("href")).filter(Boolean),

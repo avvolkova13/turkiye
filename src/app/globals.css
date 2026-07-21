@@ -816,7 +816,10 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 }
 
 .direction-scene:nth-child(3) .direction-meta {
+  display: flex;
+  justify-content: center;
   width: min(48rem, 70vw);
+  gap: 1rem;
   margin-right: auto;
   margin-left: auto;
   padding-left: 0;

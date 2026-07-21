@@ -45,7 +45,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
         </div>
         <div className={styles.destinationHeroImage}>
           <Image
-            alt={`Пейзаж для направления ${destination.name}`}
+            alt=""
             fill
             priority
             sizes="(max-width: 960px) 100vw, 50vw"

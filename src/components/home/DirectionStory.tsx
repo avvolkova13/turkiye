@@ -7,6 +7,7 @@ import type { DirectionScene } from "@/data/home";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 import { gsap } from "./motion/gsap";
+import { FloemaMetaRow } from "./FloemaMetaRow";
 
 function DirectionIcon({ index }: { index: number }) {
   const paths = [
@@ -200,12 +201,21 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
                   {scene.label}
                 </span>
               </div>
-              <h2 data-direction-part="title">{scene.title}</h2>
+              <h2 data-direction-part="title">
+                {scene.titleLines
+                  ? scene.titleLines.map((line) => (
+                      <span className="direction-title-line" key={line}>
+                        {line}
+                      </span>
+                    ))
+                  : scene.title}
+              </h2>
               <p data-direction-part="description">{scene.description}</p>
               <a className="text-link light-link" data-direction-part="cta" href="#services">
-                <span className="text-link-icon"><DirectionIcon index={index} /></span>
-                <span className="text-link-label">{scene.cta}</span>
-                <span className="text-link-arrow" aria-hidden="true">↗</span>
+                <FloemaMetaRow
+                  icon={<DirectionIcon index={index} />}
+                  label={scene.cta}
+                />
               </a>
             </div>
           </article>

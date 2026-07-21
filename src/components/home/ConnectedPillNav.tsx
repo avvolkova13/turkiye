@@ -32,33 +32,37 @@ type Geometry = {
 
 const emptyGeometry: Geometry = { width: 0, height: 0, rects: [] };
 
-function roundedRectPath({ x, y, width, height }: MeasuredRect, radius = 16) {
-  const r = Math.min(radius, width / 2, height / 2);
+function floemaLabelPath(rect: MeasuredRect) {
+  const y = (rect.height - 41.296875) / 2;
+  const bottom = y + 41.296875;
+  const radius = Math.min(14.0409375, rect.width / 2, 20.6484375);
   return [
-    `M ${x + r} ${y}`,
-    `H ${x + width - r}`,
-    `Q ${x + width} ${y} ${x + width} ${y + r}`,
-    `V ${y + height - r}`,
-    `Q ${x + width} ${y + height} ${x + width - r} ${y + height}`,
-    `H ${x + r}`,
-    `Q ${x} ${y + height} ${x} ${y + height - r}`,
-    `V ${y + r}`,
-    `Q ${x} ${y} ${x + r} ${y}`,
+    `M${rect.x} ${y + radius}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + radius} ${y}`,
+    `L${rect.x + rect.width - radius} ${y}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + rect.width} ${y + radius}`,
+    `L${rect.x + rect.width} ${bottom - radius}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + rect.width - radius} ${bottom}`,
+    `L${rect.x + radius} ${bottom}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x} ${bottom - radius}`,
     "Z",
   ].join(" ");
 }
 
 function bridgePath(left: MeasuredRect, right: MeasuredRect) {
-  const middle = (left.x + left.width + right.x) / 2;
-  const half = 8;
-  const top = Math.max(left.y, right.y) + 5;
-  const bottom = Math.min(left.y + left.height, right.y + right.height) - 5;
+  const leftEdge = left.x + left.width;
+  const rightEdge = right.x;
+  const middle = (leftEdge + rightEdge) / 2;
+  const top = Math.max(left.y, right.y) + 9.96788665631135;
+  const bottom = Math.min(left.y + left.height, right.y + right.height) - 9.96788665631135;
+  const leftPoint = middle - (rightEdge - leftEdge) / 2 - 1.0818500254605;
+  const rightPoint = middle + (rightEdge - leftEdge) / 2 + 1.0358437839447;
 
   return [
-    `M ${middle - half} ${bottom - 5}`,
-    `C ${middle - 0.2} ${bottom - 7} ${middle + 0.2} ${bottom - 7} ${middle + half} ${bottom - 5}`,
-    `L ${middle + half} ${top + 5}`,
-    `C ${middle + 0.2} ${top + 7} ${middle - 0.2} ${top + 7} ${middle - half} ${top + 5}`,
+    `M ${leftPoint} ${bottom}`,
+    `C ${leftPoint + 0.6046792} ${bottom - 0.9256123} ${rightPoint - 0.5889258} ${bottom - 1.1853955} ${rightPoint} ${bottom - 0.33042}`,
+    `L ${rightPoint} ${top + 0.33042}`,
+    `C ${rightPoint - 0.5889258} ${top + 1.1853955} ${leftPoint + 0.6046792} ${top + 0.9256123} ${leftPoint} ${top}`,
     "Z",
   ].join(" ");
 }
@@ -144,7 +148,7 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
   }, [measure, items]);
 
   const shapePath = useMemo(() => {
-    const segments = geometry.rects.map((rect) => roundedRectPath(rect));
+    const segments = geometry.rects.map((rect) => floemaLabelPath(rect));
     const bridges = geometry.rects
       .slice(0, -1)
       .map((rect, index) => bridgePath(rect, geometry.rects[index + 1]));

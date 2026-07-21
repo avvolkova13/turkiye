@@ -38,8 +38,7 @@ export function Collections() {
         <span />
       </div>
       <div className="collections-intro">
-        <p>Пять способов увидеть Турцию</p>
-        <h2>Выберите свой темп</h2>
+        <p>The Collections</p>
       </div>
       <div className="collection-list">
         {collectionItems.map((item, index) => (
@@ -53,12 +52,13 @@ export function Collections() {
             onClick={() => setActiveIndex(index)}
           >
             <span className="collection-index">0{index + 1}</span>
-            <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
-            <span className="collection-name">
-              {item.name} <small>({item.count.replace(/ .*/, "")})</small>
-            </span>
-            <span className="collection-thumb">
-              <Image alt={item.alt} fill sizes="8rem" src={item.image} />
+            <span className="collection-content">
+              <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
+              <span className="collection-name-main">{item.name}</span>
+              <span className="collection-thumb">
+                <Image alt={item.alt} fill sizes="(max-width: 760px) 7rem, 16rem" src={item.image} />
+              </span>
+              <span className="collection-count">({item.count.replace(/ .*/, "")})</span>
             </span>
           </button>
         ))}

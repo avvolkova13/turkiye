@@ -27,6 +27,7 @@ export type DirectionScene = {
   number: string;
   label: string;
   title: string;
+  titleLines?: string[];
   description: string;
   cta: string;
   image: string;
@@ -41,6 +42,7 @@ const baseDirectionScenes = [
     number: "01",
     label: "Города и история",
     title: "История, которую не пролистаешь",
+    titleLines: ["История, которую", "не пролистаешь"],
     description:
       "Стамбул, Эфес, Троя, Памуккале и десятки исторических маршрутов с профессиональными гидами.",
     cta: "История и культура",
@@ -85,6 +87,7 @@ const baseDirectionScenes = [
     number: "05",
     label: "Помощь в путешествии",
     title: "Связь, документы и помощь — в одном месте",
+    titleLines: ["Связь, документы", "и помощь — в одном", "месте"],
     description:
       "Связь, страховка, переводчики, аренда оборудования, помощь с документами и поддержка туристов.",
     cta: "Полезные услуги",
@@ -326,7 +329,7 @@ export const collectionItems = [
     alt: "Историческая улица Стамбула",
   },
   {
-    name: "Анталья и побережье",
+    name: "Анталья",
     count: "51 идея",
     image: "/images/istanbul-waterfront-heritage.webp",
     alt: "Босфор и историческая архитектура Стамбула",
@@ -344,7 +347,7 @@ export const collectionItems = [
     alt: "Парусная лодка в тихой бухте Бодрума",
   },
   {
-    name: "Полезные услуги",
+    name: "Услуги",
     count: "46 решений",
     image: "/images/istanbul-motion.jpg",
     alt: "Современное городское пространство Стамбула",

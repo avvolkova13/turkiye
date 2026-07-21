@@ -182,9 +182,6 @@ export default function HomePage() {
                 <span className="service-name">{name}</span>
                 <span className="service-place">{place}</span>
                 <span className="service-price">{price}</span>
-                <span className="service-arrow" aria-hidden="true">
-                  ↗
-                </span>
               </a>
             ))}
           </div>
@@ -249,7 +246,6 @@ export default function HomePage() {
                     <strong>{bundle}</strong>
                     <small>{details}</small>
                   </span>
-                  <span className="bundle-arrow" aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>
@@ -324,7 +320,9 @@ export default function HomePage() {
       </main>
 
       <footer className="page-footer" id="page-footer" data-header-tone="light">
-        <div className="footer-wordmark">{brandName}</div>
+        <div className="footer-wordmark">
+          <Image alt="Faro" height={68} src="/faro-logo.svg" width={161} />
+        </div>
         <div className="footer-grid">
           <nav aria-label="Направления в Турции">
             <span>Направления</span>

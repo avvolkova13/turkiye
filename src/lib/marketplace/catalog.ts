@@ -3,6 +3,7 @@ import type {
   CatalogFilters,
   CatalogResult,
   CatalogSort,
+  MarketplaceDemoDate,
   MarketplaceDuration,
   MarketplaceLanguage,
   MarketplaceService,
@@ -94,17 +95,28 @@ function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-export function filterMarketplaceServices(
+function isDemoDate(value: unknown): value is MarketplaceDemoDate {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function currentPageNumber(page: number): number {
+  return Number.isInteger(page) && page > 0 ? page : 1;
+}
+
+function sortedMarketplaceServices(
   filters: CatalogFilters,
   sort: CatalogSort,
-  page = 1,
-): CatalogResult {
+): MarketplaceService[] {
   const query = typeof filters.text === "string" ? normalized(filters.text) : "";
   const category = isKnownCategory(filters.category) ? filters.category : undefined;
   const destination =
     typeof filters.destination === "string" && destinationIds.has(filters.destination)
       ? filters.destination
       : undefined;
+  const date = isDemoDate(filters.date) ? filters.date : undefined;
   const minPrice = isFiniteNumber(filters.minPrice) ? filters.minPrice : undefined;
   const maxPrice = isFiniteNumber(filters.maxPrice) ? filters.maxPrice : undefined;
   const duration = isKnownDuration(filters.duration) ? filters.duration : undefined;
@@ -115,6 +127,7 @@ export function filterMarketplaceServices(
     if (query && !searchText(service).includes(query)) return false;
     if (category && service.categoryId !== category) return false;
     if (destination && service.destinationId !== destination) return false;
+    if (date && !service.demoDates?.includes(date)) return false;
     if (minPrice !== undefined && service.price < minPrice) return false;
     if (maxPrice !== undefined && service.price > maxPrice) return false;
     if (duration && service.duration !== duration) return false;
@@ -140,13 +153,37 @@ export function filterMarketplaceServices(
     return relevance(right.service, query) - relevance(left.service, query) || left.index - right.index;
   });
 
-  const currentPage = Number.isInteger(page) && page > 0 ? page : 1;
+  return indexed.map(({ service }) => service);
+}
+
+export function filterMarketplaceServices(
+  filters: CatalogFilters,
+  sort: CatalogSort,
+  page = 1,
+): CatalogResult {
+  const services = sortedMarketplaceServices(filters, sort);
+  const currentPage = currentPageNumber(page);
   const start = (currentPage - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
 
   return {
-    items: indexed.slice(start, end).map(({ service }) => service),
-    total: indexed.length,
-    hasNextPage: indexed.length > end,
+    items: services.slice(start, end),
+    total: services.length,
+    hasNextPage: services.length > end,
+  };
+}
+
+export function getVisibleMarketplaceServices(
+  filters: CatalogFilters,
+  sort: CatalogSort,
+  page = 1,
+): CatalogResult {
+  const services = sortedMarketplaceServices(filters, sort);
+  const end = currentPageNumber(page) * PAGE_SIZE;
+
+  return {
+    items: services.slice(0, end),
+    total: services.length,
+    hasNextPage: services.length > end,
   };
 }

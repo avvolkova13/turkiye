@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { marketplaceCategories, marketplaceDestinations } from "@/data/marketplace";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { filterMarketplaceServices } from "@/lib/marketplace/catalog";
+import { getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
 import { parseCatalogQuery, serializeCatalogQuery } from "@/lib/marketplace/query-state";
 import type { CatalogFilters, CatalogSort } from "@/types/marketplace";
 
@@ -80,7 +80,7 @@ function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }:
   const [isPending, startTransition] = useTransition();
 
   const results = useMemo(
-    () => filterMarketplaceServices(filters, sort, page),
+    () => getVisibleMarketplaceServices(filters, sort, page),
     [filters, page, sort],
   );
 
@@ -222,7 +222,7 @@ function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }:
                 Показать ещё
               </button>
               <p id="catalog-pagination-note">
-                Показана страница {page}: {results.items.length} из {results.total} вариантов.
+                Показано {results.items.length} из {results.total} вариантов (страницы 1–{page}).
               </p>
             </div>
           )}

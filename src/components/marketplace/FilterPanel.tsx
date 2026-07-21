@@ -2,6 +2,7 @@
 
 import type {
   CatalogFilters,
+  MarketplaceDemoDate,
   MarketplaceDuration,
   MarketplaceLanguage,
   MarketplaceServiceType,
@@ -71,6 +72,15 @@ export function FilterPanel({ onChange, options, value }: FilterPanelProps) {
           </select>
         </label>
       )}
+      <label>
+        <span>Дата (демо)</span>
+        <input
+          onChange={(event) => update({ date: (event.target.value || undefined) as MarketplaceDemoDate | undefined })}
+          type="date"
+          value={value.date ?? ""}
+        />
+        <small>Фильтрует только демонстрационные даты, не фактическую доступность.</small>
+      </label>
       {options.durations && (
         <label>
           <span>Длительность</span>

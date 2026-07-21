@@ -1,5 +1,6 @@
 import type {
   CatalogFilters,
+  MarketplaceDemoDate,
   MarketplaceDuration,
   MarketplaceLanguage,
   MarketplaceServiceType,
@@ -42,10 +43,18 @@ function isEnabled(value: string | undefined): boolean {
   return value === "1";
 }
 
+function isDemoDate(value: string | undefined): value is MarketplaceDemoDate {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value;
+}
+
 export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
   const text = firstValue(searchParams.q)?.trim();
   const category = firstValue(searchParams.category);
   const destination = firstValue(searchParams.destination)?.trim();
+  const date = firstValue(searchParams.date);
   const duration = firstValue(searchParams.duration);
   const language = firstValue(searchParams.language);
 
@@ -55,6 +64,7 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
       ? { category: category as MarketplaceServiceType }
       : {}),
     ...(destination ? { destination } : {}),
+    ...(isDemoDate(date) ? { date } : {}),
     ...(numberValue(firstValue(searchParams.minPrice)) !== undefined
       ? { minPrice: numberValue(firstValue(searchParams.minPrice)) }
       : {}),
@@ -80,6 +90,7 @@ export function serializeCatalogQuery(filters: CatalogFilters): string {
   if (filters.text?.trim()) query.set("q", filters.text.trim());
   if (filters.category) query.set("category", filters.category);
   if (filters.destination) query.set("destination", filters.destination);
+  if (filters.date) query.set("date", filters.date);
   if (Number.isFinite(filters.minPrice)) query.set("minPrice", String(filters.minPrice));
   if (Number.isFinite(filters.maxPrice)) query.set("maxPrice", String(filters.maxPrice));
   if (filters.duration) query.set("duration", filters.duration);

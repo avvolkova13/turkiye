@@ -201,3 +201,45 @@ test("catalog applies every supported filter and sort without mutating data", ()
     ),
   );
 });
+
+test("catalog filters only explicit demo-date metadata", () => {
+  const { filterMarketplaceServices } = require(
+    "../src/lib/marketplace/catalog.ts",
+  );
+
+  const matching = filterMarketplaceServices(
+    { date: "2026-08-15" },
+    "relevance",
+  );
+
+  assert.deepEqual(matching.items.map(({ id }) => id), [
+    "istanbul-bosphorus-walk",
+  ]);
+  assert.equal(
+    filterMarketplaceServices({ date: "2026-08-16" }, "relevance").total,
+    0,
+  );
+});
+
+test("catalog accumulates visible pages without dropping the first page", () => {
+  const {
+    getVisibleMarketplaceServices,
+    filterMarketplaceServices,
+  } = require("../src/lib/marketplace/catalog.ts");
+
+  const firstPage = filterMarketplaceServices({}, "relevance", 1);
+  const firstVisiblePage = getVisibleMarketplaceServices({}, "relevance", 1);
+  const secondVisiblePage = getVisibleMarketplaceServices({}, "relevance", 2);
+
+  assert.deepEqual(
+    firstVisiblePage.items.map(({ id }) => id),
+    firstPage.items.map(({ id }) => id),
+  );
+  assert.deepEqual(
+    secondVisiblePage.items.slice(0, firstPage.items.length).map(({ id }) => id),
+    firstPage.items.map(({ id }) => id),
+  );
+  assert.equal(secondVisiblePage.items.length, 24);
+  assert.equal(firstVisiblePage.hasNextPage, true);
+  assert.equal(secondVisiblePage.hasNextPage, false);
+});

@@ -22,6 +22,7 @@ export type MarketplaceDuration =
   | "half-day"
   | "full-day"
   | "multi-day";
+export type MarketplaceDemoDate = `${number}-${number}-${number}`;
 
 export interface MarketplaceDestination {
   id: string;
@@ -58,6 +59,8 @@ export interface MarketplaceService {
   suitableForChildren: boolean;
   isDigital: boolean;
   orderToday: boolean;
+  /** Interface-only dates for demo filtering; they are not live availability. */
+  demoDates?: MarketplaceDemoDate[];
   included: string[];
   excluded: string[];
   cancellation: string;
@@ -96,6 +99,7 @@ export interface CatalogFilters {
   text?: string;
   category?: MarketplaceServiceType;
   destination?: string;
+  date?: MarketplaceDemoDate;
   minPrice?: number;
   maxPrice?: number;
   duration?: MarketplaceDuration;

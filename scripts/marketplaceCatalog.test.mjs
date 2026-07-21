@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
 import { createRequire } from "node:module";
@@ -104,6 +105,17 @@ test("marketplace links and images remain local and unambiguous", () => {
       existsSync(resolve(process.cwd(), "public", imagePath.slice(1))),
       `${imagePath} must resolve under public/images`,
     );
+  }
+});
+
+test("marketplace routes expose Next.js route-segment error boundaries", () => {
+  for (const route of ["catalog", "search", "destinations"]) {
+    const boundaryPath = resolve(process.cwd(), "src", "app", route, "error.tsx");
+    assert.ok(existsSync(boundaryPath), `${route} must define error.tsx`);
+
+    const boundary = readFileSync(boundaryPath, "utf8");
+    assert.match(boundary, /^"use client";/, `${route} error boundary must be a client component`);
+    assert.match(boundary, /marketplace-error/, `${route} boundary must reuse the marketplace error UI`);
   }
 });
 

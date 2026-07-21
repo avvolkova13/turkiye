@@ -753,7 +753,8 @@ html[data-motion="reduced"] .hero-canvas-scene::after {
 
 .direction-copy {
   width: min(62rem, 78vw);
-  opacity: 0.28;
+  visibility: hidden;
+  opacity: 0;
   filter: blur(8px);
   clip-path: inset(0 0 9% 0);
   transform: translateY(2rem) scale(0.985);
@@ -765,10 +766,34 @@ html[data-motion="reduced"] .hero-canvas-scene::after {
 }
 
 .direction-scene[data-active="true"] .direction-copy {
+  visibility: visible;
   opacity: 1;
   filter: blur(0);
   clip-path: inset(0);
   transform: translateY(0) scale(1);
+}
+
+html[data-motion="reduced"] .direction-copy [data-direction-part] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.directions-story[data-direction-motion="pending"]
+  .direction-scene[data-active="true"]
+  [data-direction-part],
+.directions-story[data-direction-motion="full"]
+  .direction-scene[data-active="true"]
+  [data-direction-part] {
+  opacity: 0;
+  transform: translate3d(4.5rem, 0.75rem, 0);
+}
+
+.directions-story[data-direction-motion="reduced"]
+  .direction-scene[data-active="true"]
+  [data-direction-part] {
+  opacity: 1;
+  transform: none;
 }
 
 .direction-scene:nth-child(2) .direction-copy {

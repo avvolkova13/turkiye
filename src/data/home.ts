@@ -325,31 +325,51 @@ export const collectionItems = [
   {
     name: "Стамбул",
     count: "84 идеи",
-    image: "/images/istanbul-street.jpg",
+    images: [
+      "/images/istanbul-street.jpg",
+      "/images/istanbul-contrast.jpg",
+      "/images/home-canvas/istanbul-legacy-hotel.webp",
+    ],
     alt: "Историческая улица Стамбула",
   },
   {
     name: "Анталья",
     count: "51 идея",
-    image: "/images/istanbul-waterfront-heritage.webp",
+    images: [
+      "/images/istanbul-waterfront-heritage.webp",
+      "/images/antalya-ruins.jpg",
+      "/images/home-canvas/bodrum-amanruya.webp",
+    ],
     alt: "Босфор и историческая архитектура Стамбула",
   },
   {
     name: "Каппадокия",
     count: "29 идей",
-    image: "/images/cappadocia-rocks.jpg",
+    images: [
+      "/images/cappadocia-rocks.jpg",
+      "/images/cappadocia-dawn.jpg",
+      "/images/home-canvas/cappadocia-cave-hotel.webp",
+    ],
     alt: "Каменные долины Каппадокии на рассвете",
   },
   {
     name: "Эгейское море",
     count: "37 идей",
-    image: "/images/aegean-bodrum.jpg",
+    images: [
+      "/images/aegean-bodrum.jpg",
+      "/images/home-canvas/aegean-bodrum.webp",
+      "/images/kas-coast.jpg",
+    ],
     alt: "Парусная лодка в тихой бухте Бодрума",
   },
   {
     name: "Услуги",
     count: "46 решений",
-    image: "/images/istanbul-motion.jpg",
+    images: [
+      "/images/istanbul-motion.jpg",
+      "/images/modern-downtown.jpg",
+      "/images/home-canvas/istanbul-modern.webp",
+    ],
     alt: "Современное городское пространство Стамбула",
   },
 ] as const;

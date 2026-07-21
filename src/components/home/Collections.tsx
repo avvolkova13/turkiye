@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { collectionItems } from "@/data/home";
 import { sitePath } from "@/lib/sitePath";
@@ -23,14 +23,43 @@ function CollectionIcon({ index }: { index: number }) {
 }
 
 export function Collections() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [activePreviewIndex, setActivePreviewIndex] = useState(0);
+  const previewTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopPreview = () => {
+    if (previewTimer.current) {
+      clearInterval(previewTimer.current);
+      previewTimer.current = null;
+    }
+  };
+
+  const activateCollection = (index: number) => {
+    stopPreview();
+    setActiveIndex(index);
+    setIsInteracting(true);
+    setActivePreviewIndex(0);
+    previewTimer.current = setInterval(() => {
+      setActivePreviewIndex((current) => (current + 1) % collectionItems[index].images.length);
+    }, 900);
+  };
+
+  const deactivateCollection = () => {
+    stopPreview();
+    setIsInteracting(false);
+  };
+
+  useEffect(() => stopPreview, []);
 
   return (
     <section
       className="collections-section"
+      data-interaction={isInteracting ? "open" : "list"}
       id="collections"
       data-header-tone="dark"
       data-reveal
+      onMouseLeave={deactivateCollection}
     >
       <div className="collections-atmosphere" aria-hidden="true">
         <span />
@@ -44,26 +73,54 @@ export function Collections() {
       <div className="collection-list">
         {collectionItems.map((item, index) => (
           <button
-            aria-pressed={activeIndex === index}
-            className="collection-row"
-            data-active={activeIndex === index}
+            aria-pressed={isInteracting && activeIndex === index}
+            className={`collection-row collection-row-${index + 1}`}
+            data-active={isInteracting && activeIndex === index}
             key={item.name}
-            onFocus={() => setActiveIndex(index)}
-            onMouseEnter={() => setActiveIndex(index)}
-            onClick={() => setActiveIndex(index)}
+            onBlur={deactivateCollection}
+            onClick={() => activateCollection(index)}
+            onFocus={() => activateCollection(index)}
+            onMouseEnter={() => activateCollection(index)}
+            onMouseLeave={stopPreview}
           >
             <span className="collection-index">0{index + 1}</span>
             <span className="collection-content">
+              {index === 3 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
               <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
               <span className="collection-name-main">{item.name}</span>
-              <span className="collection-thumb">
-                <Image alt={item.alt} fill sizes="(max-width: 760px) 7rem, 16rem" src={sitePath(item.image)} />
-              </span>
+              {index !== 3 && index !== 2 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
               <span className="collection-count">({item.count.replace(/ .*/, "")})</span>
+              {index === 2 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
             </span>
           </button>
         ))}
       </div>
     </section>
+  );
+}
+
+function CollectionThumb({
+  item,
+  index,
+  activeIndex,
+  activePreviewIndex,
+}: {
+  item: (typeof collectionItems)[number];
+  index: number;
+  activeIndex: number | null;
+  activePreviewIndex: number;
+}) {
+  const isActive = activeIndex === index;
+
+  return (
+    <span className="collection-thumb">
+      <Image
+        alt={item.alt}
+        fill
+        key={`${item.name}-${isActive ? activePreviewIndex : 0}`}
+        sizes="(max-width: 760px) 7rem, 16rem"
+        src={sitePath(item.images[isActive ? activePreviewIndex : 0])}
+      />
+    </span>
   );
 }

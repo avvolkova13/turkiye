@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import test from "node:test";
 import { createRequire } from "node:module";
 
@@ -50,12 +52,33 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
     assert.ok(service.price >= 50);
     assert.equal(service.currency, "RUB");
     assert.ok(service.priceUnit);
-    assert.ok(service.status);
+    assert.equal(service.status, "demo");
     assert.equal(service.isMockData, true);
-    assert.ok(service.imagePath.startsWith("/"));
+    assert.equal(service.orderToday, false);
+    assert.ok(
+      existsSync(resolve(process.cwd(), "public", service.imagePath.slice(1))),
+      `${service.id} image path must resolve locally`,
+    );
+    for (const imagePath of service.images) {
+      assert.ok(
+        existsSync(resolve(process.cwd(), "public", imagePath.slice(1))),
+        `${service.id} image path must resolve locally`,
+      );
+    }
+  }
+
+  for (const destination of marketplaceDestinations) {
+    assert.ok(
+      existsSync(resolve(process.cwd(), "public", destination.imagePath.slice(1))),
+      `${destination.id} image path must resolve locally`,
+    );
   }
 
   assert.ok(marketplaceServiceVariants.length > 0);
+  for (const variant of marketplaceServiceVariants) {
+    assert.equal(variant.status, "demo");
+    assert.equal(variant.isMockData, true);
+  }
 });
 
 test("catalog filters services and returns a deterministic first page", () => {
@@ -102,7 +125,7 @@ test("catalog applies every supported filter and sort without mutating data", ()
       language: "Русский",
       children: true,
       digital: true,
-      orderToday: true,
+      orderToday: false,
     },
     "relevance",
   );
@@ -110,6 +133,9 @@ test("catalog applies every supported filter and sort without mutating data", ()
   assert.deepEqual(matching.items.map(({ id }) => id), [
     "istanbul-weekend-digital-route",
   ]);
+
+  const orderToday = filterMarketplaceServices({ orderToday: true }, "relevance");
+  assert.equal(orderToday.total, 0);
 
   const transfers = filterMarketplaceServices({ transfer: true }, "duration");
   assert.ok(transfers.items.every((service) => service.hasTransfer));

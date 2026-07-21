@@ -10,7 +10,11 @@ export type MarketplaceServiceType =
   | "rental"
   | "services";
 
-export type MarketplaceServiceStatus = "available" | "on-request";
+/**
+ * This catalog is seeded for interface development only. It intentionally
+ * communicates no live inventory or purchase availability.
+ */
+export type MarketplaceServiceStatus = "demo";
 export type MarketplaceCurrency = "RUB";
 export type MarketplaceLanguage = "Русский" | "Английский" | "Турецкий";
 export type MarketplaceDuration =

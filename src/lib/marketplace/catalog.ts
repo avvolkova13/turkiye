@@ -97,6 +97,7 @@ function isFiniteNumber(value: unknown): value is number {
 export function filterMarketplaceServices(
   filters: CatalogFilters,
   sort: CatalogSort,
+  page = 1,
 ): CatalogResult {
   const query = typeof filters.text === "string" ? normalized(filters.text) : "";
   const category = isKnownCategory(filters.category) ? filters.category : undefined;
@@ -139,9 +140,13 @@ export function filterMarketplaceServices(
     return relevance(right.service, query) - relevance(left.service, query) || left.index - right.index;
   });
 
+  const currentPage = Number.isInteger(page) && page > 0 ? page : 1;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+
   return {
-    items: indexed.slice(0, PAGE_SIZE).map(({ service }) => service),
+    items: indexed.slice(start, end).map(({ service }) => service),
     total: indexed.length,
-    hasNextPage: indexed.length > PAGE_SIZE,
+    hasNextPage: indexed.length > end,
   };
 }

@@ -1,0 +1,36 @@
+.catalog { display: grid; gap: 1.5rem; min-width: 0; }
+.quickFilters { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.quickFilter, .clearButton, .emptyState button, .moreResults button { border: 1px solid rgba(36, 39, 33, 0.28); border-radius: 0; background: transparent; color: #242721; cursor: pointer; }
+.quickFilter { padding: 0.65rem 0.85rem; font-size: 0.8125rem; }
+.quickFilter[aria-pressed="true"] { border-color: #242721; background: #242721; color: #fffdf8; }
+.filterDisclosure { border: 1px solid rgba(36, 39, 33, 0.2); background: #fffdf8; }
+.filterDisclosure summary { display: none; cursor: pointer; padding: 1rem 1.15rem; font-weight: 700; }
+.filterBody { display: grid; gap: 0; }
+.priceFilters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: 1rem; padding: 0 1.25rem 1.25rem; background: #fffdf8; }
+.priceFilters label { display: grid; gap: 0.4rem; color: #60645b; font-size: 0.75rem; }
+.priceFilters input, .sortControl select { width: 100%; min-width: 0; padding: 0.7rem; border: 1px solid rgba(36, 39, 33, 0.28); border-radius: 0; background: #fffdf8; color: #242721; }
+.clearButton { min-height: 2.7rem; padding: 0.65rem 0.85rem; font-size: 0.8125rem; }
+.resultsToolbar { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid rgba(36, 39, 33, 0.2); }
+.resultCount { margin: 0; font-family: "Literata", Georgia, serif; font-size: clamp(1.25rem, 2vw, 1.75rem); }
+.sortControl { display: grid; gap: 0.4rem; min-width: min(100%, 15rem); color: #60645b; font-size: 0.75rem; }
+.serviceList { display: grid; min-width: 0; }
+.emptyState { display: grid; gap: 0.85rem; max-width: 36rem; padding: clamp(1.5rem, 4vw, 3rem); border: 1px solid rgba(36, 39, 33, 0.2); background: #fffdf8; }
+.emptyState h2, .emptyState p { margin: 0; }
+.emptyState h2 { font-family: "Literata", Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; }
+.emptyState p, .moreResults p { color: #60645b; }
+.emptyState button, .moreResults button { justify-self: start; padding: 0.75rem 1rem; }
+.moreResults { display: grid; justify-items: start; gap: 0.75rem; padding: 1.5rem 0 0; border-top: 1px solid rgba(36, 39, 33, 0.22); }
+.moreResults p { margin: 0; font-size: 0.8125rem; }
+
+@media (max-width: 720px) {
+  .catalog { gap: 1.25rem; }
+  .filterDisclosure summary { display: block; }
+  .filterDisclosure[open] summary { border-bottom: 1px solid rgba(36, 39, 33, 0.16); }
+  .priceFilters { grid-template-columns: 1fr; padding: 1rem; }
+  .resultsToolbar { align-items: stretch; }
+  .sortControl { min-width: 0; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog * { transition: none !important; }
+}

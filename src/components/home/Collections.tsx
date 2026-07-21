@@ -76,6 +76,8 @@ export function Collections() {
             aria-pressed={isInteracting && activeIndex === index}
             className={`collection-row collection-row-${index + 1}`}
             data-active={isInteracting && activeIndex === index}
+            data-reveal
+            data-reveal-step={String((index % 4) + 1)}
             key={item.name}
             onBlur={deactivateCollection}
             onClick={() => activateCollection(index)}

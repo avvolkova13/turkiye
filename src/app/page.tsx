@@ -44,12 +44,12 @@ export default function HomePage() {
           data-reveal
         >
           <h2 className="visually-hidden">О сервисе путешествий по Турции</h2>
-          <div className="manifesto-heading">
+          <div className="manifesto-heading" data-reveal>
             <p>Один сервис для всей поездки</p>
             <span>От 50 ₽ до маршрута, который меняет всё</span>
           </div>
           <div className="manifesto-layout">
-            <div className="manifesto-aside">
+            <div className="manifesto-aside" data-reveal data-reveal-step="1">
               <p>Türkiye</p>
               <strong>Est. 2026</strong>
               <div className="manifesto-aside-image">
@@ -61,8 +61,8 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="manifesto-cards">
-              <article>
+            <div className="manifesto-cards" data-reveal>
+              <article data-reveal data-reveal-step="2">
                 <div className="manifesto-card-image">
                   <Image
                     alt="Бухта у побережья Каша"
@@ -74,7 +74,7 @@ export default function HomePage() {
                 <strong>Маршруты, которые остаются</strong>
                 <span>Эгейское побережье</span>
               </article>
-              <article>
+              <article data-reveal data-reveal-step="3">
                 <div className="manifesto-card-image">
                   <Image
                     alt="Свет раннего утра в Каппадокии"
@@ -87,7 +87,7 @@ export default function HomePage() {
                 <span>Каппадокия · на рассвете</span>
               </article>
             </div>
-            <div className="manifesto-main">
+            <div className="manifesto-main" data-reveal data-reveal-step="2">
               <p className="manifesto-copy">
                 Здесь можно купить карту прогулки, подключить связь, заказать трансфер
                 или собрать поездку на несколько дней — без пяти сайтов и десятка
@@ -95,10 +95,10 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <div className="manifesto-signature">
-            <span>Один сервис</span>
-            <span>Вся Турция</span>
-            <span>Любой масштаб</span>
+          <div className="manifesto-signature" data-reveal>
+            <span data-reveal data-reveal-step="1">Один сервис</span>
+            <span data-reveal data-reveal-step="2">Вся Турция</span>
+            <span data-reveal data-reveal-step="3">Любой масштаб</span>
           </div>
         </section>
 
@@ -162,7 +162,7 @@ export default function HomePage() {
 
         <section className="services-section" id="services" data-header-tone="light">
           <div className="services-stage" data-reveal>
-            <div className="services-image">
+            <div className="services-image" data-reveal>
               <Image
                 alt="Паром на Босфоре в золотом вечернем свете"
                 fill
@@ -171,7 +171,7 @@ export default function HomePage() {
               />
               <span>Сейчас выбирают</span>
             </div>
-            <div className="services-intro">
+            <div className="services-intro" data-reveal>
               <p>Выберите первый шаг</p>
               <h2>Услуги для ближайшей поездки</h2>
             </div>
@@ -196,7 +196,7 @@ export default function HomePage() {
           data-header-tone="dark"
           data-reveal
         >
-          <div className="affordable-title">
+          <div className="affordable-title" data-reveal>
             <span>Полезные вещи, которые лучше купить заранее</span>
             <h2>
               Для поездки — <em>от 50 ₽</em>
@@ -204,7 +204,7 @@ export default function HomePage() {
           </div>
           <div className="affordable-list">
             {affordableItems.map(([name, price], index) => (
-              <a href="#newsletter" key={name}>
+              <a href="#newsletter" key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{name}</strong>
                 <b>{price}</b>
@@ -312,11 +312,13 @@ export default function HomePage() {
           data-header-tone="dark"
           data-reveal
         >
-          <div>
+          <div data-reveal>
             <p>Полезные идеи перед следующей поездкой</p>
             <h2>Маршруты, места и практичные советы — без рекламного шума.</h2>
           </div>
-          <Newsletter />
+          <div data-reveal>
+            <Newsletter />
+          </div>
         </section>
       </main>
 
@@ -325,27 +327,27 @@ export default function HomePage() {
           <Image alt="Faro" height={68} src={sitePath("/faro-logo.svg")} width={161} />
         </div>
         <div className="footer-grid">
-          <nav aria-label="Направления в Турции">
+          <nav aria-label="Направления в Турции" data-reveal>
             <span>Направления</span>
             <a href="#directions">Стамбул</a>
             <a href="#directions">Анталья</a>
             <a href="#directions">Каппадокия</a>
             <a href="#collections">Эгейское море</a>
           </nav>
-          <nav aria-label="Сервисы в путешествии">
+          <nav aria-label="Сервисы в путешествии" data-reveal>
             <span>В путешествии</span>
             <a href="#services">Впечатления</a>
             <a href="#services">Транспорт</a>
             <a href="#affordable">Связь и помощь</a>
             <a href="#bundles">Наборы</a>
           </nav>
-          <nav aria-label="Информация о сервисе">
+          <nav aria-label="Информация о сервисе" data-reveal>
             <span>Сервис</span>
             <a href="#statement">О подходе</a>
             <a href="#principles">Как это работает</a>
             <a href="#newsletter">Поддержка</a>
           </nav>
-          <div className="footer-meta">
+          <div className="footer-meta" data-reveal>
             <span>Язык и валюта</span>
             <strong>Русский · RUB</strong>
             <small>Поддержка ежедневно · 09:00–21:00</small>

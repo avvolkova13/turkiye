@@ -117,8 +117,14 @@ async function buildMarketplaceExport(buildRoot) {
     throw new Error(`Catalog export build failed with code ${exitCode}: ${output}`);
   }
 
+  const { marketplaceDestinations } = require("../src/data/marketplace.ts");
   const exportedRoutes = new Map();
-  for (const route of ["catalog", "search"]) {
+  for (const route of [
+    "catalog",
+    "search",
+    "destinations",
+    ...marketplaceDestinations.map(({ slug }) => `destinations/${slug}`),
+  ]) {
     const candidates = [
       join(buildRoot, "out", route, "index.html"),
       join(buildRoot, "out", "turkiye", route, "index.html"),
@@ -127,10 +133,17 @@ async function buildMarketplaceExport(buildRoot) {
     assert.ok(html, `${route} export should contain static HTML`);
     exportedRoutes.set(route, html);
   }
-  return exportedRoutes;
+
+  const notFound = [
+    join(buildRoot, "out", "404.html"),
+    join(buildRoot, "out", "turkiye", "404.html"),
+  ].find(existsSync);
+  assert.ok(notFound, "export should contain the project 404 route");
+
+  return { exportedRoutes, notFound };
 }
 
-async function startStaticServer(exportedRoutes) {
+async function startStaticServer(exportedRoutes, notFound) {
   const server = createServer(async (request, response) => {
     const requestedUrl = new URL(request.url ?? "/", "http://127.0.0.1");
     const requestedRoute = `${requestedUrl.pathname}${requestedUrl.search}`;
@@ -138,7 +151,8 @@ async function startStaticServer(exportedRoutes) {
     const html = exportedRoutes.get(route);
 
     if (!html) {
-      response.writeHead(404).end();
+      response.writeHead(404, { "content-type": "text/html; charset=utf-8" });
+      response.end(await readFile(notFound, "utf8"));
       return;
     }
 
@@ -185,8 +199,8 @@ test("catalog and search routes serve each required query from a temporary stati
     symlink(join(projectRoot, "node_modules"), join(buildRoot, "node_modules"), "dir"),
     symlink(join(projectRoot, "public"), join(buildRoot, "public"), "dir"),
   ]);
-  const exportedRoutes = await buildMarketplaceExport(buildRoot);
-  staticServer = await startStaticServer(exportedRoutes);
+  const { exportedRoutes, notFound } = await buildMarketplaceExport(buildRoot);
+  staticServer = await startStaticServer(exportedRoutes, notFound);
 
   const cases = [
     ["/catalog", /Каталог для поездки в Турцию/],
@@ -209,6 +223,45 @@ test("catalog and search routes serve each required query from a temporary stati
   }
 });
 
+test("destination routes export every slug and use the project 404 page for unknown destinations", async (t) => {
+  const buildRoot = await mkdtemp(join(tmpdir(), "marketplace-destination-route-"));
+  let staticServer;
+  t.after(async () => {
+    await staticServer?.close();
+    await rm(buildRoot, { force: true, recursive: true });
+  });
+  await Promise.all([
+    cp(join(projectRoot, "src"), join(buildRoot, "src"), { recursive: true }),
+    cp(join(projectRoot, "next.config.ts"), join(buildRoot, "next.config.ts")),
+    cp(join(projectRoot, "package.json"), join(buildRoot, "package.json")),
+    cp(join(projectRoot, "tsconfig.json"), join(buildRoot, "tsconfig.json")),
+    symlink(join(projectRoot, "node_modules"), join(buildRoot, "node_modules"), "dir"),
+    symlink(join(projectRoot, "public"), join(buildRoot, "public"), "dir"),
+  ]);
+  const { exportedRoutes, notFound } = await buildMarketplaceExport(buildRoot);
+  staticServer = await startStaticServer(exportedRoutes, notFound);
+
+  const { marketplaceDestinations } = require("../src/data/marketplace.ts");
+  assert.equal(
+    exportedRoutes.size,
+    marketplaceDestinations.length + 3,
+    "the destination index and every centralized destination slug should be exported",
+  );
+
+  for (const destination of marketplaceDestinations.slice(0, 5)) {
+    const response = await fetch(`${staticServer.origin}/destinations/${destination.slug}`);
+    const html = await response.text();
+
+    assert.equal(response.status, 200, `${destination.slug} should return HTTP 200`);
+    assert.match(html, new RegExp(destination.name), `${destination.slug} should render its name`);
+  }
+
+  const unknownResponse = await fetch(`${staticServer.origin}/destinations/not-a-real-place`);
+  const unknownHtml = await unknownResponse.text();
+  assert.equal(unknownResponse.status, 404, "unknown destination slugs should render the project 404 response");
+  assert.match(unknownHtml, /404|not found/i, "unknown destination slugs should render not-found HTML");
+});
+
 test("search entry points use real paths instead of hash-only targets", () => {
   const header = readFileSync(resolve(projectRoot, "src/components/marketplace/MarketplaceHeader.tsx"), "utf8");
   const browser = readFileSync(resolve(projectRoot, "src/components/marketplace/CatalogBrowser.tsx"), "utf8");
@@ -223,4 +276,11 @@ test("search entry points use real paths instead of hash-only targets", () => {
     "the marketplace search quick action should start in the catalog",
   );
   assert.doesNotMatch(searchPage, /href="#/, "search should not add hash-only links");
+});
+
+test("destination cards use real detail paths instead of hash-only targets", () => {
+  const card = readFileSync(resolve(projectRoot, "src/components/marketplace/DestinationCard.tsx"), "utf8");
+
+  assert.match(card, /href=\{`\/destinations\/\$\{destination\.slug\}`\}/, "destination cards should target their detail route");
+  assert.doesNotMatch(card, /href="#/, "destination cards should not add hash-only links");
 });

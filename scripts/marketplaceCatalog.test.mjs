@@ -81,6 +81,32 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
   }
 });
 
+test("marketplace links and images remain local and unambiguous", () => {
+  const {
+    marketplaceDestinations,
+    marketplaceNavigation,
+    marketplaceServices,
+  } = require("../src/data/marketplace.ts");
+
+  for (const item of marketplaceNavigation) {
+    assert.ok(item.href.startsWith("/"), `${item.label} must use an internal path`);
+  }
+
+  const slugs = marketplaceServices.map(({ slug }) => slug);
+  assert.equal(new Set(slugs).size, slugs.length, "service slugs must be unique");
+
+  for (const imagePath of [
+    ...marketplaceDestinations.map(({ imagePath }) => imagePath),
+    ...marketplaceServices.flatMap(({ imagePath, images }) => [imagePath, ...images]),
+  ]) {
+    assert.ok(imagePath.startsWith("/images/"), `${imagePath} must be a public image`);
+    assert.ok(
+      existsSync(resolve(process.cwd(), "public", imagePath.slice(1))),
+      `${imagePath} must resolve under public/images`,
+    );
+  }
+});
+
 test("catalog filters services and returns a deterministic first page", () => {
   const { filterMarketplaceServices } = require(
     "../src/lib/marketplace/catalog.ts",

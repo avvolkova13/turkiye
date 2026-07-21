@@ -63,6 +63,30 @@ test("catalog query state parses typed filters and serializes supported values",
   assert.equal(serializeCatalogQuery({ text: "", digital: false }), "");
 });
 
+test("search query state filters catalog results and keeps an empty query unfiltered", () => {
+  const { parseCatalogQuery } = require("../src/lib/marketplace/query-state.ts");
+  const { filterMarketplaceServices } = require("../src/lib/marketplace/catalog.ts");
+
+  const searchFilters = parseCatalogQuery({ q: "  Каппадокия  " });
+  const searchResults = filterMarketplaceServices(searchFilters, "relevance");
+  const catalogResults = filterMarketplaceServices({}, "relevance");
+  const emptySearchFilters = parseCatalogQuery({ q: "   " });
+  const emptySearchResults = filterMarketplaceServices(emptySearchFilters, "relevance");
+
+  assert.deepEqual(searchFilters, { text: "Каппадокия" });
+  assert.ok(searchResults.total > 0, "a search query should return matching catalog results");
+  assert.ok(
+    searchResults.total < catalogResults.total,
+    "a search query should narrow the catalog rather than return its full result set",
+  );
+  assert.deepEqual(emptySearchFilters, {}, "an empty search query should not create filters");
+  assert.deepEqual(
+    emptySearchResults,
+    catalogResults,
+    "an empty search query should keep the catalog unfiltered",
+  );
+});
+
 test("catalog pagination returns the next page without repeating results", () => {
   const { filterMarketplaceServices } = require("../src/lib/marketplace/catalog.ts");
   const firstPage = filterMarketplaceServices({}, "relevance", 1);
@@ -188,8 +212,15 @@ test("catalog and search routes serve each required query from a temporary stati
 test("search entry points use real paths instead of hash-only targets", () => {
   const header = readFileSync(resolve(projectRoot, "src/components/marketplace/MarketplaceHeader.tsx"), "utf8");
   const browser = readFileSync(resolve(projectRoot, "src/components/marketplace/CatalogBrowser.tsx"), "utf8");
+  const searchPage = readFileSync(resolve(projectRoot, "src/app/search/page.tsx"), "utf8");
 
   assert.match(header, /href="\/search"/, "header search action should target /search");
   assert.doesNotMatch(header, /href="#/, "header should not add hash-only links");
   assert.doesNotMatch(browser, /href="#/, "catalog quick filters should not add hash-only links");
+  assert.match(
+    searchPage,
+    /<Link href="\/catalog">Начать путешествие<\/Link>/,
+    "the marketplace search quick action should start in the catalog",
+  );
+  assert.doesNotMatch(searchPage, /href="#/, "search should not add hash-only links");
 });

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 
 import { CatalogBrowser } from "@/components/marketplace/CatalogBrowser";
 import { parseCatalogQuery } from "@/lib/marketplace/query-state";
@@ -21,6 +22,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         ) : (
           <p>Введите запрос или выберите фильтры, чтобы сузить каталог.</p>
         )}
+        <Link href="/catalog">Начать путешествие</Link>
       </section>
       <Suspense fallback={<p role="status">Загружаем каталог…</p>}>
         <CatalogBrowser initialFilters={filters} />

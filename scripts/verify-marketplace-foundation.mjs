@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { join, relative, resolve } from "node:path";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const baseUrl = (process.env.BASE_URL ?? "http://127.0.0.1:3100").replace(/\/$/, "");
-const homepageBaseRef = process.env.HOMEPAGE_BASE_REF ?? "origin/main";
+const homepageBaseRef = process.env.HOMEPAGE_BASE_REF ?? "7dde1c0";
 const playwrightPath =
   process.env.CODEX_PLAYWRIGHT_PATH ??
   "/Users/anastasiavolkova/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/.pnpm/playwright@1.61.1/node_modules/playwright/index.mjs";
@@ -20,6 +21,26 @@ const frozenHomepagePathspecs = [
   "src/components/home",
   "src/data/home.ts",
 ];
+
+const require = createRequire(import.meta.url);
+const typescript = require("typescript");
+
+require.extensions[".ts"] = (module, filename) => {
+  const output = typescript.transpileModule(readFileSync(filename, "utf8"), {
+    compilerOptions: {
+      module: typescript.ModuleKind.CommonJS,
+      target: typescript.ScriptTarget.ES2022,
+    },
+    fileName: filename,
+  });
+
+  module._compile(output.outputText, filename);
+};
+
+const { marketplaceDestinations } = require("../src/data/marketplace.ts");
+const destinationNamesByPath = new Map(
+  marketplaceDestinations.map(({ name, slug }) => [`/destinations/${slug}`, name]),
+);
 
 function runGit(...args) {
   return execFileSync("git", args, { cwd: projectRoot, encoding: "utf8" }).trim();
@@ -75,11 +96,13 @@ function verifyHomepageFreeze() {
     `Frozen homepage file list differs from ${homepageBaseRef}`,
   );
 
-  const committedMarketplacePaths = gitLines(
-    "diff",
-    "--name-only",
-    `${homepageBaseRef}..HEAD`,
-  );
+  const committedMarketplacePaths = [
+    ...new Set(
+      gitLines("rev-list", `${homepageBaseRef}..HEAD`).flatMap((commit) =>
+        gitLines("diff-tree", "--no-commit-id", "--name-only", "-r", commit),
+      ),
+    ),
+  ].sort();
   const forbiddenCommittedPaths = committedMarketplacePaths.filter(isFrozenHomepagePath);
   assert.deepEqual(
     forbiddenCommittedPaths,
@@ -262,6 +285,9 @@ async function verifyViewport(width, height, includeEveryDestination) {
 
     const pathsToCheck = includeEveryDestination ? paths : paths.slice(0, 1);
     for (const path of pathsToCheck) {
+      const destinationName = destinationNamesByPath.get(path);
+      assert.ok(destinationName, `${path} must correspond to marketplace destination data`);
+
       const { page, errors } = await openMarketplacePage(
         context,
         path,
@@ -270,6 +296,17 @@ async function verifyViewport(width, height, includeEveryDestination) {
       );
       try {
         assert.equal(await page.getByRole("heading", { level: 2 }).count(), 1, `${path} must have a destination title`);
+        assert.ok((await page.content()).includes(destinationName), `${path} HTML must contain ${destinationName}`);
+
+        const serviceHrefs = await page.locator("article a[href]").evaluateAll((links) =>
+          links.map((link) => link.getAttribute("href")).filter(Boolean),
+        );
+        if (serviceHrefs.length > 0) {
+          assert.ok(
+            serviceHrefs.every((href) => href.startsWith("/services/")),
+            `${path} service links must use /services/ paths: ${serviceHrefs.join(", ")}`,
+          );
+        }
       } finally {
         await assertCleanPage(page, errors, `${width}px ${path}`);
         await page.close();

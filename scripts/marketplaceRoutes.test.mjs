@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { cp, mkdtemp, readFile, rm, symlink } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import test from "node:test";
 import { tmpdir } from "node:os";
 
@@ -74,7 +74,7 @@ test("catalog pagination returns the next page without repeating results", () =>
   );
 });
 
-async function buildCatalogExport(buildRoot) {
+async function buildMarketplaceExport(buildRoot) {
   const next = spawn(
     process.execPath,
     [join(projectRoot, "node_modules/next/dist/bin/next"), "build", "--webpack"],
@@ -93,32 +93,38 @@ async function buildCatalogExport(buildRoot) {
     throw new Error(`Catalog export build failed with code ${exitCode}: ${output}`);
   }
 
-  const candidates = [
-    join(buildRoot, "out", "catalog", "index.html"),
-    join(buildRoot, "out", "turkiye", "catalog", "index.html"),
-  ];
-  const catalogHtml = candidates.find(existsSync);
-  assert.ok(catalogHtml, "catalog export should contain static HTML");
-  return catalogHtml;
+  const exportedRoutes = new Map();
+  for (const route of ["catalog", "search"]) {
+    const candidates = [
+      join(buildRoot, "out", route, "index.html"),
+      join(buildRoot, "out", "turkiye", route, "index.html"),
+    ];
+    const html = candidates.find(existsSync);
+    assert.ok(html, `${route} export should contain static HTML`);
+    exportedRoutes.set(route, html);
+  }
+  return exportedRoutes;
 }
 
-async function startStaticServer(catalogHtml) {
+async function startStaticServer(exportedRoutes) {
   const server = createServer(async (request, response) => {
     const requestedUrl = new URL(request.url ?? "/", "http://127.0.0.1");
     const requestedRoute = `${requestedUrl.pathname}${requestedUrl.search}`;
+    const route = requestedUrl.pathname.replace(/^\//, "").replace(/\/$/, "");
+    const html = exportedRoutes.get(route);
 
-    if (requestedUrl.pathname !== "/catalog" && requestedUrl.pathname !== "/catalog/") {
+    if (!html) {
       response.writeHead(404).end();
       return;
     }
 
     try {
-      const html = await readFile(catalogHtml, "utf8");
+      const content = await readFile(html, "utf8");
       response.writeHead(200, {
         "content-type": "text/html; charset=utf-8",
         "x-marketplace-route": requestedRoute,
       });
-      response.end(html);
+      response.end(content);
     } catch {
       response.writeHead(500).end();
     }
@@ -140,7 +146,7 @@ async function startStaticServer(catalogHtml) {
   };
 }
 
-test("catalog route serves each required query from a temporary static server", async (t) => {
+test("catalog and search routes serve each required query from a temporary static server", async (t) => {
   const buildRoot = await mkdtemp(join(tmpdir(), "marketplace-catalog-route-"));
   let staticServer;
   t.after(async () => {
@@ -155,24 +161,35 @@ test("catalog route serves each required query from a temporary static server", 
     symlink(join(projectRoot, "node_modules"), join(buildRoot, "node_modules"), "dir"),
     symlink(join(projectRoot, "public"), join(buildRoot, "public"), "dir"),
   ]);
-  const exportRoot = await buildCatalogExport(buildRoot);
-  staticServer = await startStaticServer(exportRoot);
+  const exportedRoutes = await buildMarketplaceExport(buildRoot);
+  staticServer = await startStaticServer(exportedRoutes);
 
   const cases = [
-    "/catalog",
-    "/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F",
-    "/catalog?date=2026-08-15",
-    "/catalog?digital=1",
-    "/catalog?maxPrice=1000",
+    ["/catalog", /Каталог для поездки в Турцию/],
+    ["/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", /Каталог для поездки в Турцию/],
+    ["/catalog?date=2026-08-15", /Каталог для поездки в Турцию/],
+    ["/catalog?digital=1", /Каталог для поездки в Турцию/],
+    ["/catalog?maxPrice=1000", /Каталог для поездки в Турцию/],
+    ["/search", /Поиск по каталогу/],
+    ["/search?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", /Поиск по каталогу/],
   ];
 
-  for (const path of cases) {
+  for (const [path, heading] of cases) {
     const response = await fetch(`${staticServer.origin}${path}`);
     const html = await response.text();
 
     assert.equal(response.status, 200, `${path} should return HTTP 200`);
     assert.equal(response.headers.get("x-marketplace-route"), path, `${path} should reach the static server unchanged`);
-    assert.match(html, /Каталог для поездки в Турцию/, `${path} should return the catalog shell`);
+    assert.match(html, heading, `${path} should return the expected marketplace shell`);
     assert.match(html, /Загружаем каталог…/, `${path} should retain the client query-state loading marker`);
   }
+});
+
+test("search entry points use real paths instead of hash-only targets", () => {
+  const header = readFileSync(resolve(projectRoot, "src/components/marketplace/MarketplaceHeader.tsx"), "utf8");
+  const browser = readFileSync(resolve(projectRoot, "src/components/marketplace/CatalogBrowser.tsx"), "utf8");
+
+  assert.match(header, /href="\/search"/, "header search action should target /search");
+  assert.doesNotMatch(header, /href="#/, "header should not add hash-only links");
+  assert.doesNotMatch(browser, /href="#/, "catalog quick filters should not add hash-only links");
 });

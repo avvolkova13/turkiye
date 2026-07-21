@@ -56,7 +56,7 @@ export default function HomePage() {
                   alt="Деталь утреннего Стамбула у воды"
                   fill
                   sizes="(max-width: 760px) 34vw, 12vw"
-                  src="/images/istanbul-motion.jpg"
+                  src="/turkiye/images/istanbul-motion.jpg"
                 />
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function HomePage() {
                     alt="Бухта у побережья Каша"
                     fill
                     sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/images/kas-coast.jpg"
+                    src="/turkiye/images/kas-coast.jpg"
                   />
                 </div>
                 <strong>Маршруты, которые остаются</strong>
@@ -86,7 +86,7 @@ export default function HomePage() {
                     alt="Свет раннего утра в Каппадокии"
                     fill
                     sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/images/cappadocia-rocks.jpg"
+                    src="/turkiye/images/cappadocia-rocks.jpg"
                   />
                 </div>
                 <strong>Места вне привычного списка</strong>
@@ -114,7 +114,7 @@ export default function HomePage() {
                     alt="Тёплый свод и ритм арок стамбульского базара"
                     fill
                     sizes="(max-width: 760px) 100vw, 58vw"
-                    src="/images/spice-bazaar.jpg"
+                    src="/turkiye/images/spice-bazaar.jpg"
                   />
                 </div>
                 <div className="idea-copy">
@@ -131,7 +131,7 @@ export default function HomePage() {
                     alt="Белые минеральные террасы Памуккале"
                     fill
                     sizes="(max-width: 760px) 100vw, 30vw"
-                    src="/images/pamukkale.jpg"
+                    src="/turkiye/images/pamukkale.jpg"
                   />
                 </div>
                 <div className="idea-copy">
@@ -147,7 +147,7 @@ export default function HomePage() {
                     alt="Воздушные шары над мягкими утренними долинами Каппадокии"
                     fill
                     sizes="(max-width: 760px) 100vw, 22vw"
-                    src="/images/cappadocia-soft.jpg"
+                    src="/turkiye/images/cappadocia-soft.jpg"
                   />
                 </div>
                 <div className="idea-copy">
@@ -166,7 +166,7 @@ export default function HomePage() {
                 alt="Паром на Босфоре в золотом вечернем свете"
                 fill
                 sizes="(max-width: 760px) 100vw, 52vw"
-                src="/images/bosphorus-ferry.jpg"
+                src="/turkiye/images/bosphorus-ferry.jpg"
               />
               <span>Сейчас выбирают</span>
             </div>
@@ -221,7 +221,7 @@ export default function HomePage() {
               alt="Современная архитектура Стамбула в вечернем свете"
               fill
               sizes="(max-width: 760px) 70vw, 16vw"
-              src="/images/istanbul-modern.jpg"
+              src="/turkiye/images/istanbul-modern.jpg"
             />
           </div>
           <div className="bundle-visual bundle-visual-right" data-reveal>
@@ -229,7 +229,7 @@ export default function HomePage() {
               alt="Тихая бухта Эгейского побережья Турции"
               fill
               sizes="(max-width: 760px) 92vw, 42vw"
-              src="/images/aegean-bodrum.jpg"
+              src="/turkiye/images/aegean-bodrum.jpg"
             />
           </div>
           <div className="bundles-copy" data-reveal>
@@ -296,7 +296,7 @@ export default function HomePage() {
             alt="Ночная панорама Галатской башни и огней Стамбула"
             fill
             sizes="100vw"
-            src="/images/galata-night.jpg"
+            src="/turkiye/images/galata-night.jpg"
           />
           <div className="final-cta-shade" />
           <div className="final-cta-copy" data-reveal>

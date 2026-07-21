@@ -53,3 +53,21 @@ Homepage files, components, styles, data, and assets were not modified.
 ### Scope
 
 No homepage files, components, styles, homepage data, or assets were modified. The only data change is explicit interface-only demo-date metadata in `src/data/marketplace.ts`.
+
+## Task 3 review fix — HTTP route smoke test
+
+### Finding resolved
+
+`scripts/marketplaceRoutes.test.mjs` now builds its isolated static export, starts a temporary localhost static server, and requests each required endpoint: `/catalog`, the `Каппадокия` search query, `digital=1`, `maxPrice=1000`, and `date=2026-08-15`. Every request must return HTTP 200, preserve its exact request target in the server response header, and return the catalog shell and client query-state loading markers. The test closes the server and removes the temporary build directory through one cleanup hook, including on assertion failures.
+
+### Verification
+
+- `node --test scripts/marketplaceCatalog.test.mjs scripts/marketplaceRoutes.test.mjs` — passed: 10 tests.
+- `npx eslint scripts/marketplaceRoutes.test.mjs` — passed.
+- `npm run typecheck` — passed.
+- `npm run build` — passed; `/catalog` is statically generated.
+- `git diff --check` — passed.
+
+### Scope
+
+Only `scripts/marketplaceRoutes.test.mjs` and this Task 3 report were changed. No homepage files were modified.

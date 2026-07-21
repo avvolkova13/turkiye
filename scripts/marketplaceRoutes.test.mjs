@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, mkdtemp, readFile, rm, symlink } from "node:fs/promises";
+import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import test from "node:test";
@@ -98,12 +99,54 @@ async function buildCatalogExport(buildRoot) {
   ];
   const catalogHtml = candidates.find(existsSync);
   assert.ok(catalogHtml, "catalog export should contain static HTML");
-  return readFile(catalogHtml, "utf8");
+  return catalogHtml;
 }
 
-test("catalog route exports query-compatible states without an external server", async (t) => {
+async function startStaticServer(catalogHtml) {
+  const server = createServer(async (request, response) => {
+    const requestedUrl = new URL(request.url ?? "/", "http://127.0.0.1");
+    const requestedRoute = `${requestedUrl.pathname}${requestedUrl.search}`;
+
+    if (requestedUrl.pathname !== "/catalog" && requestedUrl.pathname !== "/catalog/") {
+      response.writeHead(404).end();
+      return;
+    }
+
+    try {
+      const html = await readFile(catalogHtml, "utf8");
+      response.writeHead(200, {
+        "content-type": "text/html; charset=utf-8",
+        "x-marketplace-route": requestedRoute,
+      });
+      response.end(html);
+    } catch {
+      response.writeHead(500).end();
+    }
+  });
+
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => resolve());
+  });
+
+  const address = server.address();
+  assert.ok(address && typeof address !== "string", "static server should listen on a local port");
+
+  return {
+    origin: `http://127.0.0.1:${address.port}`,
+    close: () => new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    }),
+  };
+}
+
+test("catalog route serves each required query from a temporary static server", async (t) => {
   const buildRoot = await mkdtemp(join(tmpdir(), "marketplace-catalog-route-"));
-  t.after(() => rm(buildRoot, { force: true, recursive: true }));
+  let staticServer;
+  t.after(async () => {
+    await staticServer?.close();
+    await rm(buildRoot, { force: true, recursive: true });
+  });
   await Promise.all([
     cp(join(projectRoot, "src"), join(buildRoot, "src"), { recursive: true }),
     cp(join(projectRoot, "next.config.ts"), join(buildRoot, "next.config.ts")),
@@ -112,19 +155,24 @@ test("catalog route exports query-compatible states without an external server",
     symlink(join(projectRoot, "node_modules"), join(buildRoot, "node_modules"), "dir"),
     symlink(join(projectRoot, "public"), join(buildRoot, "public"), "dir"),
   ]);
-  const html = await buildCatalogExport(buildRoot);
+  const exportRoot = await buildCatalogExport(buildRoot);
+  staticServer = await startStaticServer(exportRoot);
 
   const cases = [
-    ["/catalog", ["Загружаем каталог"]],
-    ["/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", ["Загружаем каталог"]],
-    ["/catalog?date=2026-08-15", ["Загружаем каталог"]],
-    ["/catalog?digital=1", ["Загружаем каталог"]],
-    ["/catalog?maxPrice=1000", ["Загружаем каталог"]],
+    "/catalog",
+    "/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F",
+    "/catalog?date=2026-08-15",
+    "/catalog?digital=1",
+    "/catalog?maxPrice=1000",
   ];
 
-  for (const [path, labels] of cases) {
-    for (const label of labels) {
-      assert.match(html, new RegExp(label), `${path} should contain ${label}`);
-    }
+  for (const path of cases) {
+    const response = await fetch(`${staticServer.origin}${path}`);
+    const html = await response.text();
+
+    assert.equal(response.status, 200, `${path} should return HTTP 200`);
+    assert.equal(response.headers.get("x-marketplace-route"), path, `${path} should reach the static server unchanged`);
+    assert.match(html, /Каталог для поездки в Турцию/, `${path} should return the catalog shell`);
+    assert.match(html, /Загружаем каталог…/, `${path} should retain the client query-state loading marker`);
   }
 });

@@ -11,8 +11,9 @@
 .selectionRow small { color: #60645b; font-weight: 400; }
 .contact { display: grid; align-content: start; gap: 1rem; background: #e9e2d6; }
 .contact label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
-.contact input { min-height: 2.8rem; padding: .75rem; border: 1px solid rgba(36,39,33,.24); background: #f4f0e8; }
+.contact input, .contact select, .contact textarea { min-height: 2.8rem; padding: .75rem; border: 1px solid rgba(36,39,33,.24); background: #f4f0e8; font: inherit; resize: vertical; }
 .contact button { min-height: 2.8rem; margin-top: .75rem; border: 0; border-radius: 999px; background: #242721; color: #fffdf8; cursor: pointer; }
+.contact button:disabled { opacity: .45; cursor: not-allowed; }
 .confirmation { max-width: 45rem; background: #e9e2d6; }
 .confirmation p:last-child { color: #60645b; }
 @media (max-width: 720px) { .checkout { grid-template-columns: 1fr; } .selectionRow { flex-direction: column; } }

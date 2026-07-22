@@ -31,6 +31,8 @@ export type MarketplaceDuration =
 export type MarketplaceDemoDate = `${number}-${number}-${number}`;
 export type MarketplaceRegion = "aegean";
 export type MarketplaceScenario = "experience" | "transfer" | "self-service" | "support";
+export type TransferServiceMode = "private" | "shared";
+export type TransferVehicleClass = "standard" | "comfort" | "minivan";
 
 export interface TransferSearchState {
   from: string;
@@ -42,6 +44,8 @@ export interface TransferSearchState {
   childSeat: boolean;
   flightNumber: string | null;
   returnTrip: boolean;
+  serviceMode: TransferServiceMode;
+  vehicleClass: TransferVehicleClass;
 }
 
 export interface BookingIntent {
@@ -148,6 +152,10 @@ export interface CatalogFilters {
   childSeat?: boolean;
   flightNumber?: string;
   returnTrip?: boolean;
+  serviceMode?: TransferServiceMode;
+  vehicleClass?: TransferVehicleClass;
+  participants?: number;
+  privateTour?: boolean;
 }
 
 export type CatalogSort =

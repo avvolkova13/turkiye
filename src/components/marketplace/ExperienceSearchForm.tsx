@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { marketplaceDestinations } from "@/data/marketplace";
 import type { CatalogFilters, MarketplaceDemoDate, MarketplaceDuration, MarketplaceServiceType } from "@/types/marketplace";
 import styles from "./catalog.module.css";
 
@@ -33,7 +34,7 @@ export function ExperienceSearchForm({ onSubmit, value }: ExperienceSearchFormPr
         <p>Укажите город и дату, затем выберите формат и длительность.</p>
       </div>
       <div className={styles.formGrid}>
-        <label><span>Город или направление</span><input value={draft.destination ?? ""} onChange={(event) => setDraft({ ...draft, destination: event.target.value || undefined })} placeholder="Стамбул, Анталья, Каппадокия" /></label>
+        <label><span>Город или направление</span><select value={draft.destination ?? ""} onChange={(event) => setDraft({ ...draft, destination: event.target.value || undefined })}><option value="">Любое направление</option>{marketplaceDestinations.map((destination) => <option key={destination.id} value={destination.id}>{destination.name}</option>)}</select></label>
         <label><span>Дата поездки</span><input type="date" value={draft.date ?? ""} onChange={(event) => setDraft({ ...draft, date: (event.target.value || undefined) as MarketplaceDemoDate | undefined })} /></label>
         <label>
           <span>Формат</span>
@@ -49,6 +50,10 @@ export function ExperienceSearchForm({ onSubmit, value }: ExperienceSearchFormPr
             {durationOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
           </select>
         </label>
+        <label><span>Участники</span><input min="1" type="number" value={draft.participants ?? 1} onChange={(event) => setDraft({ ...draft, participants: event.target.value ? Number(event.target.value) : undefined })} /></label>
+      </div>
+      <div className={styles.formChecks}>
+        <label><input checked={draft.privateTour ?? false} onChange={(event) => setDraft({ ...draft, privateTour: event.target.checked || undefined })} type="checkbox" /> Индивидуальный формат</label>
       </div>
       <button className={styles.primaryAction} type="submit">Показать варианты</button>
     </form>

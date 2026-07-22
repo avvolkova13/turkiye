@@ -25,13 +25,13 @@ export const marketplaceDestinations: MarketplaceDestination[] = [
 ];
 
 export const marketplaceCategories: MarketplaceCategory[] = [
-  { id: "excursions", name: "Туры и активности", description: "Экскурсии, прогулки и выезды по Турции." },
-  { id: "transfers", name: "Трансферы", description: "Поездки между аэропортом, отелем и городом." },
+  { id: "excursions", name: "Туры и впечатления", description: "Экскурсии, прогулки и выезды по Турции." },
+  { id: "transfers", name: "Трансферы и поездки", description: "Поездки между аэропортом, отелем и городом." },
   { id: "taxi", name: "Такси", description: "Поездки по городам и к аэропортам." },
-  { id: "visa", name: "Визовые услуги", description: "Информация и помощь с документами для поездки." },
+  { id: "visa", name: "Документы", description: "Проверка документов и помощь перед поездкой." },
   { id: "rental", name: "Аренда авто", description: "Автомобили для самостоятельных маршрутов по Турции." },
   { id: "yachts", name: "Яхты и лодки", description: "Морские прогулки и частные выходы в бухты." },
-  { id: "tickets", name: "Билеты", description: "Билеты на достопримечательности и развлечения." },
+  { id: "tickets", name: "Билеты и события", description: "Билеты на достопримечательности и развлечения." },
   { id: "shopping", name: "Шопинг", description: "Магазины, рынки и товары для путешествия." },
   { id: "spa", name: "SPA", description: "Хамам, массаж и спокойный отдых." },
   { id: "airline-tickets", name: "Авиабилеты", description: "Поиск перелётов до Турции и внутри страны." },
@@ -40,7 +40,7 @@ export const marketplaceCategories: MarketplaceCategory[] = [
   { id: "digital", name: "Самостоятельные маршруты", description: "Карты, аудиогиды и планы поездок." },
   { id: "connectivity", name: "Связь и eSIM", description: "Цифровая связь для поездки по Турции." },
   { id: "insurance", name: "Страхование", description: "Страховая защита на время поездки." },
-  { id: "services", name: "Поддержка в поездке", description: "Документы, памятки и помощь по маршруту." },
+  { id: "services", name: "Помощь в поездке", description: "Переводчики, памятки и помощь по маршруту." },
 ];
 
 const mock = {
@@ -94,20 +94,24 @@ export const marketplaceServices: MarketplaceService[] = [
   { ...mock, id: "antalya-hammam-session", slug: "antalya-hammam-session", title: "Хамам и массаж в Анталье", categoryId: "spa", destinationId: "antalya", type: "spa", description: "Расслабляющий сеанс хамама и массажа в Анталье.", imagePath: "/images/bosphorus-ferry.jpg", images: ["/images/bosphorus-ferry.jpg"], price: 2100, priceUnit: "за человека", duration: "up-to-2-hours", durationMinutes: 120, languages: ["Русский", "Английский"], hasTransfer: false, suitableForChildren: false, isDigital: false, orderToday: false, included: ["Сеанс хамама", "Массаж"], excluded: ["Трансфер"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "SPA-центр", deliveryMethod: "Встреча на месте" },
   { ...mock, id: "istanbul-bazaar-shopping", slug: "istanbul-bazaar-shopping", title: "Шопинг по рынкам Стамбула", categoryId: "shopping", destinationId: "istanbul", type: "shopping", description: "Маршрут по рынкам и магазинам Стамбула с местным сопровождающим.", imagePath: "/images/bosphorus-ferry.jpg", images: ["/images/bosphorus-ferry.jpg"], price: 2300, priceUnit: "за маршрут", duration: "half-day", durationMinutes: 210, languages: ["Русский", "Турецкий"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: false, included: ["Маршрут", "Сопровождение"], excluded: ["Покупки"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "Египетский базар", deliveryMethod: "Встреча на месте" },
   { ...mock, id: "turkey-flight-search", slug: "turkey-flight-search", title: "Подбор авиабилета в Турцию", categoryId: "airline-tickets", destinationId: null, type: "airline-tickets", description: "Подбор перелёта до Стамбула, Антальи или другого города Турции.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 490, priceUnit: "за подбор", duration: "up-to-2-hours", durationMinutes: 60, languages: ["Русский"], hasTransfer: false, suitableForChildren: true, isDigital: true, orderToday: false, included: ["Подбор вариантов"], excluded: ["Стоимость билета"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: null, deliveryMethod: "Онлайн-подбор" },
+  { ...mock, id: "turkey-esim-20gb", slug: "turkey-esim-20gb", title: "Турецкая eSIM: пакет 20 ГБ", categoryId: "connectivity", destinationId: null, type: "connectivity", description: "Цифровой пакет связи для длительной поездки по Турции.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 990, priceUnit: "за товар", duration: "multi-day", durationMinutes: 20160, languages: ["Русский"], hasTransfer: false, suitableForChildren: false, isDigital: true, orderToday: false, included: ["Инструкция по подключению"], excluded: ["Физическая SIM-карта"], cancellation: "Цифровой товар: условия уточняются перед заказом.", meetingPoint: null, deliveryMethod: "Цифровая доставка" },
+  { ...mock, id: "turkey-powerbank-rental", slug: "turkey-powerbank-rental", title: "Аренда powerbank на день", categoryId: "rental", destinationId: null, type: "rental", description: "Зарядное устройство на день для прогулки и поездки по городу.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 300, priceUnit: "за день", duration: "full-day", durationMinutes: 1440, languages: ["Русский", "Турецкий"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: true, included: ["Powerbank", "Кабель"], excluded: ["Доставка до адреса"], cancellation: "Возврат устройства в согласованной точке.", meetingPoint: "Пункт выдачи в городе", deliveryMethod: "Получение на месте" },
+  { ...mock, id: "turkey-translator-hour", slug: "turkey-translator-hour", title: "Переводчик на час", categoryId: "services", destinationId: null, type: "services", description: "Удалённая или очная помощь с переводом в поездке.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 1500, priceUnit: "за час", duration: "up-to-2-hours", durationMinutes: 60, languages: ["Русский", "Турецкий"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: false, included: ["Перевод в согласованное время"], excluded: ["Юридическое заверение"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "Онлайн или по адресу", deliveryMethod: "По записи" },
+  { ...mock, id: "turkey-gift-certificate-500", slug: "turkey-gift-certificate-500", title: "Подарочный сертификат Faro", categoryId: "services", destinationId: null, type: "services", description: "Сертификат на услуги и впечатления для поездки по Турции.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 500, priceUnit: "за сертификат", duration: "multi-day", durationMinutes: null, languages: ["Русский"], hasTransfer: false, suitableForChildren: true, isDigital: true, orderToday: true, included: ["Электронный сертификат"], excluded: ["Обналичивание"], cancellation: "Условия использования уточняются перед оформлением.", meetingPoint: null, deliveryMethod: "Цифровая доставка" },
 ];
 
 export const marketplaceServiceVariants: ServiceVariant[] = [
   { ...mock, id: "istanbul-bosphorus-private", serviceId: "istanbul-bosphorus-walk", title: "Индивидуальный маршрут", price: 4800, priceUnit: "за маршрут", durationMinutes: 240 },
   { ...mock, id: "antalya-transfer-minivan", serviceId: "antalya-airport-transfer", title: "Минивэн", price: 2900, priceUnit: "за автомобиль", durationMinutes: 75 },
-  { ...mock, id: "turkey-esim-20gb", serviceId: "turkey-esim-10gb", title: "Пакет 20 ГБ", price: 990, priceUnit: "за товар", durationMinutes: 20160 },
+  { ...mock, id: "turkey-esim-20gb-variant", serviceId: "turkey-esim-20gb", title: "Пакет 20 ГБ", price: 990, priceUnit: "за товар", durationMinutes: 20160 },
   { ...mock, id: "bodrum-car-rental-weekend", serviceId: "bodrum-car-rental", title: "Автомобиль на выходные", price: 7200, priceUnit: "за автомобиль", durationMinutes: 2880 },
 ];
 
 export const marketplaceNavigation: MarketplaceNavigationItem[] = [
   { label: "Каталог", href: "/catalog" },
   { label: "Направления", href: "/destinations" },
-  { label: "Туры и активности", href: "/catalog?category=excursions" },
-  { label: "Трансферы", href: "/catalog?category=transfers" },
-  { label: "Сервис", href: "/catalog?category=services" },
-  { label: "Советы", href: "/guides" },
+  { label: "Туры и впечатления", href: "/catalog?scenario=experience" },
+  { label: "Трансферы", href: "/catalog?scenario=transfer" },
+  { label: "Помощь", href: "/catalog?scenario=support" },
+  { label: "Самостоятельно", href: "/catalog?scenario=self-service" },
 ];

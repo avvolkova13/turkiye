@@ -6,6 +6,8 @@ import type {
   MarketplaceRegion,
   MarketplaceServiceType,
   MarketplaceScenario,
+  TransferServiceMode,
+  TransferVehicleClass,
 } from "@/types/marketplace";
 import { marketplaceDestinations } from "../../data/marketplace";
 
@@ -44,6 +46,8 @@ const scenarios = new Set<MarketplaceScenario>([
   "self-service",
   "support",
 ]);
+const transferModes = new Set<TransferServiceMode>(["private", "shared"]);
+const vehicleClasses = new Set<TransferVehicleClass>(["standard", "comfort", "minivan"]);
 
 function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -76,6 +80,8 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
   const date = firstValue(searchParams.date);
   const duration = firstValue(searchParams.duration);
   const language = firstValue(searchParams.language);
+  const serviceMode = firstValue(searchParams.serviceMode);
+  const vehicleClass = firstValue(searchParams.vehicleClass);
 
   const scenario =
     scenarioValue && scenarios.has(scenarioValue as MarketplaceScenario)
@@ -123,6 +129,10 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
       ? { flightNumber: firstValue(searchParams.flightNumber)?.trim() }
       : {}),
     ...(isEnabled(firstValue(searchParams.returnTrip)) ? { returnTrip: true } : {}),
+    ...(serviceMode && transferModes.has(serviceMode as TransferServiceMode) ? { serviceMode: serviceMode as TransferServiceMode } : {}),
+    ...(vehicleClass && vehicleClasses.has(vehicleClass as TransferVehicleClass) ? { vehicleClass: vehicleClass as TransferVehicleClass } : {}),
+    ...(numberValue(firstValue(searchParams.participants)) !== undefined ? { participants: numberValue(firstValue(searchParams.participants)) } : {}),
+    ...(isEnabled(firstValue(searchParams.privateTour)) ? { privateTour: true } : {}),
   };
 }
 
@@ -151,6 +161,10 @@ export function serializeCatalogQuery(filters: CatalogFilters): string {
   if (filters.childSeat) query.set("childSeat", "1");
   if (filters.flightNumber?.trim()) query.set("flightNumber", filters.flightNumber.trim());
   if (filters.returnTrip) query.set("returnTrip", "1");
+  if (filters.serviceMode) query.set("serviceMode", filters.serviceMode);
+  if (filters.vehicleClass) query.set("vehicleClass", filters.vehicleClass);
+  if (Number.isFinite(filters.participants)) query.set("participants", String(filters.participants));
+  if (filters.privateTour) query.set("privateTour", "1");
 
   return query.toString();
 }

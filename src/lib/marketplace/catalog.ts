@@ -44,7 +44,7 @@ const scenarioCategories: Record<MarketplaceScenario, MarketplaceServiceType[]> 
   experience: ["excursions", "activities", "guides", "tickets", "yachts", "spa"],
   transfer: ["transfers", "taxi"],
   "self-service": ["digital", "connectivity", "insurance", "rental"],
-  support: ["services", "visa", "airline-tickets", "shopping"],
+  support: ["services", "visa", "insurance", "airline-tickets", "shopping"],
 };
 
 const destinationNames = new Map(
@@ -143,7 +143,7 @@ function sortedMarketplaceServices(
     if (query && !searchText(service).includes(query)) return false;
     if (scenarioTypes && !scenarioTypes.includes(service.type)) return false;
     if (category && service.categoryId !== category) return false;
-    if (destination && service.destinationId !== destination) return false;
+    if (destination && service.destinationId && service.destinationId !== destination) return false;
     if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;
     if (date && !service.demoDates?.includes(date)) return false;
     if (minPrice !== undefined && service.price < minPrice) return false;

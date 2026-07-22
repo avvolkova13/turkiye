@@ -12,6 +12,7 @@ import { ExperienceSearchForm } from "./ExperienceSearchForm";
 import { FilterPanel } from "./FilterPanel";
 import { ScenarioPicker } from "./ScenarioPicker";
 import { ServiceCard } from "./ServiceCard";
+import { ServiceRequestForm } from "./ServiceRequestForm";
 import { TransferSearchForm } from "./TransferSearchForm";
 import { getServiceScenario } from "./marketplace-content";
 import styles from "./catalog.module.css";
@@ -164,6 +165,8 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     childSeat: filters.childSeat ?? false,
     flightNumber: filters.flightNumber ?? null,
     returnTrip: filters.returnTrip ?? false,
+    serviceMode: filters.serviceMode ?? "private",
+    vehicleClass: filters.vehicleClass ?? "standard",
   };
 
   return (
@@ -183,11 +186,14 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
             childSeat: value.childSeat || undefined,
             flightNumber: value.flightNumber ?? undefined,
             returnTrip: value.returnTrip || undefined,
+            serviceMode: value.serviceMode,
+            vehicleClass: value.vehicleClass,
           })}
           value={transferValue}
         />
       )}
       {scenario === "experience" && <ExperienceSearchForm onSubmit={updateFilters} value={filters} />}
+      {(scenario === "self-service" || scenario === "support") && <ServiceRequestForm onSubmit={updateFilters} scenario={scenario} value={filters} />}
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
         {quickFilters.map((quickFilter) => (
           <button

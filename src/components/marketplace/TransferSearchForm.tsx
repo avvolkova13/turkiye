@@ -1,6 +1,6 @@
 "use client";
 
-import type { MarketplaceDemoDate, TransferSearchState } from "@/types/marketplace";
+import type { MarketplaceDemoDate, TransferSearchState, TransferServiceMode, TransferVehicleClass } from "@/types/marketplace";
 import { useState } from "react";
 import styles from "./catalog.module.css";
 
@@ -29,6 +29,8 @@ export function TransferSearchForm({ onSubmit, value }: TransferSearchFormProps)
         <label><span>Время</span><input required type="time" value={draft.time ?? ""} onChange={(event) => update({ time: event.target.value || null })} /></label>
         <label><span>Пассажиры</span><input min="1" type="number" value={draft.passengers ?? ""} onChange={(event) => update({ passengers: event.target.value ? Number(event.target.value) : null })} /></label>
         <label><span>Багаж</span><input min="0" type="number" value={draft.luggage ?? ""} onChange={(event) => update({ luggage: event.target.value ? Number(event.target.value) : null })} /></label>
+        <label><span>Формат поездки</span><select value={draft.serviceMode} onChange={(event) => update({ serviceMode: event.target.value as TransferServiceMode })}><option value="private">Индивидуальный</option><option value="shared">С группой</option></select></label>
+        <label><span>Автомобиль</span><select value={draft.vehicleClass} onChange={(event) => update({ vehicleClass: event.target.value as TransferVehicleClass })}><option value="standard">Стандарт</option><option value="comfort">Комфорт</option><option value="minivan">Минивэн</option></select></label>
         <label className={styles.formWide}><span>Номер рейса <small>если встречаем в аэропорту</small></span><input value={draft.flightNumber ?? ""} onChange={(event) => update({ flightNumber: event.target.value || null })} placeholder="Например, TK 401" /></label>
       </div>
       <div className={styles.formChecks}>

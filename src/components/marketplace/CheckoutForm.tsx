@@ -11,6 +11,9 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   const [submitted, setSubmitted] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [contactMethod, setContactMethod] = useState("Телефон");
+  const [details, setDetails] = useState("");
   const selected = useMemo(() => {
     const stored = typeof window === "undefined" ? [] : JSON.parse(window.localStorage.getItem("faro-cart") ?? "[]") as string[];
     const ids = requestedId ? [...new Set([...stored, requestedId])] : stored;
@@ -30,8 +33,11 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
       <section className={styles.contact}>
         <h2>Контакты</h2>
         <label><span>Имя</span><input required value={name} onChange={(event) => setName(event.target.value)} /></label>
+        <label><span>Телефон</span><input required type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="+90 ..." /></label>
         <label><span>Email</span><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></label>
-        <button type="submit">Отправить заявку</button>
+        <label><span>Как удобнее связаться</span><select value={contactMethod} onChange={(event) => setContactMethod(event.target.value)}><option>Телефон</option><option>WhatsApp</option><option>Email</option></select></label>
+        <label><span>Комментарий к заказу</span><textarea value={details} onChange={(event) => setDetails(event.target.value)} placeholder="Город, даты и важные детали" rows={4} /></label>
+        <button disabled={!selected.length} type="submit">Отправить заявку</button>
       </section>
     </form>
   );

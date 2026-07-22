@@ -1,0 +1,7 @@
+1:"$Sreact.fragment"
+2:I[22016,["/turkiye/_next/static/chunks/05-c3ty_6dwfk.js","/turkiye/_next/static/chunks/14mrh2-p_w84d.js","/turkiye/_next/static/chunks/1dizhx9-2u2_o.js","/turkiye/_next/static/chunks/1o6ncva0_iamc.js","/turkiye/_next/static/chunks/19t65ve8b_syf.js"],""]
+3:"$Sreact.suspense"
+4:I[60753,["/turkiye/_next/static/chunks/05-c3ty_6dwfk.js","/turkiye/_next/static/chunks/14mrh2-p_w84d.js","/turkiye/_next/static/chunks/1dizhx9-2u2_o.js","/turkiye/_next/static/chunks/1o6ncva0_iamc.js","/turkiye/_next/static/chunks/19t65ve8b_syf.js"],"CatalogBrowser"]
+5:I[97367,["/turkiye/_next/static/chunks/05-c3ty_6dwfk.js","/turkiye/_next/static/chunks/14mrh2-p_w84d.js"],"OutletBoundary"]
+0:{"rsc":["$","$1","c",{"children":[[["$","section",null,{"aria-labelledby":"search-results-heading","children":[["$","h2",null,{"id":"search-results-heading","children":"Результаты поиска"}],["$","p",null,{"children":"Здесь можно искать по названию, городу или фильтрам."}],["$","$L2",null,{"href":"/catalog","children":"Начать путешествие"}]]}],["$","$3",null,{"fallback":["$","p",null,{"role":"status","children":"Загружаем каталог…"}],"children":["$","$L4",null,{"initialFilters":{}}]}]],[["$","script","script-0",{"src":"/turkiye/_next/static/chunks/1o6ncva0_iamc.js","async":true}],["$","script","script-1",{"src":"/turkiye/_next/static/chunks/19t65ve8b_syf.js","async":true}]],["$","$L5",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"p7emO1wZsi5EESBAlB-gi"}
+6:null

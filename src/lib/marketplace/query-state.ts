@@ -5,6 +5,7 @@ import type {
   MarketplaceLanguage,
   MarketplaceRegion,
   MarketplaceServiceType,
+  MarketplaceScenario,
 } from "@/types/marketplace";
 import { marketplaceDestinations } from "../../data/marketplace";
 
@@ -37,6 +38,12 @@ const durations = new Set<MarketplaceDuration>([
 const languages = new Set<MarketplaceLanguage>(["Русский", "Английский", "Турецкий"]);
 const regions = new Set<MarketplaceRegion>(["aegean"]);
 const destinationIds = new Set(marketplaceDestinations.map(({ id }) => id));
+const scenarios = new Set<MarketplaceScenario>([
+  "experience",
+  "transfer",
+  "self-service",
+  "support",
+]);
 
 function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -63,17 +70,26 @@ function isDemoDate(value: string | undefined): value is MarketplaceDemoDate {
 export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
   const text = firstValue(searchParams.q)?.trim();
   const category = firstValue(searchParams.category);
+  const scenarioValue = firstValue(searchParams.scenario);
   const destination = firstValue(searchParams.destination)?.trim();
   const region = firstValue(searchParams.region)?.trim();
   const date = firstValue(searchParams.date);
   const duration = firstValue(searchParams.duration);
   const language = firstValue(searchParams.language);
 
+  const scenario =
+    scenarioValue && scenarios.has(scenarioValue as MarketplaceScenario)
+      ? (scenarioValue as MarketplaceScenario)
+      : category === "transfers" || category === "taxi"
+        ? "transfer"
+        : undefined;
+
   return {
     ...(text ? { text } : {}),
     ...(category && categories.has(category as MarketplaceServiceType)
       ? { category: category as MarketplaceServiceType }
       : {}),
+    ...(scenario ? { scenario } : {}),
     ...(destination && destinationIds.has(destination) ? { destination } : {}),
     ...(region && regions.has(region as MarketplaceRegion) ? { region: region as MarketplaceRegion } : {}),
     ...(isDemoDate(date) ? { date } : {}),
@@ -93,6 +109,20 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
     ...(isEnabled(firstValue(searchParams.kids)) ? { children: true } : {}),
     ...(isEnabled(firstValue(searchParams.digital)) ? { digital: true } : {}),
     ...(isEnabled(firstValue(searchParams.today)) ? { orderToday: true } : {}),
+    ...(firstValue(searchParams.from)?.trim() ? { from: firstValue(searchParams.from)?.trim() } : {}),
+    ...(firstValue(searchParams.to)?.trim() ? { to: firstValue(searchParams.to)?.trim() } : {}),
+    ...(firstValue(searchParams.time)?.trim() ? { time: firstValue(searchParams.time)?.trim() } : {}),
+    ...(numberValue(firstValue(searchParams.passengers)) !== undefined
+      ? { passengers: numberValue(firstValue(searchParams.passengers)) }
+      : {}),
+    ...(numberValue(firstValue(searchParams.luggage)) !== undefined
+      ? { luggage: numberValue(firstValue(searchParams.luggage)) }
+      : {}),
+    ...(isEnabled(firstValue(searchParams.childSeat)) ? { childSeat: true } : {}),
+    ...(firstValue(searchParams.flightNumber)?.trim()
+      ? { flightNumber: firstValue(searchParams.flightNumber)?.trim() }
+      : {}),
+    ...(isEnabled(firstValue(searchParams.returnTrip)) ? { returnTrip: true } : {}),
   };
 }
 
@@ -112,6 +142,15 @@ export function serializeCatalogQuery(filters: CatalogFilters): string {
   if (filters.children) query.set("kids", "1");
   if (filters.digital) query.set("digital", "1");
   if (filters.orderToday) query.set("today", "1");
+  if (filters.scenario) query.set("scenario", filters.scenario);
+  if (filters.from?.trim()) query.set("from", filters.from.trim());
+  if (filters.to?.trim()) query.set("to", filters.to.trim());
+  if (filters.time?.trim()) query.set("time", filters.time.trim());
+  if (Number.isFinite(filters.passengers)) query.set("passengers", String(filters.passengers));
+  if (Number.isFinite(filters.luggage)) query.set("luggage", String(filters.luggage));
+  if (filters.childSeat) query.set("childSeat", "1");
+  if (filters.flightNumber?.trim()) query.set("flightNumber", filters.flightNumber.trim());
+  if (filters.returnTrip) query.set("returnTrip", "1");
 
   return query.toString();
 }

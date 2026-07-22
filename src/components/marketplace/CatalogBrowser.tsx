@@ -4,13 +4,16 @@ import { useCallback, useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { marketplaceCategories, marketplaceDestinations } from "@/data/marketplace";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
+import { getScenarioFilters, getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
 import { parseCatalogQuery, serializeCatalogQuery } from "@/lib/marketplace/query-state";
-import type { CatalogFilters, CatalogSort } from "@/types/marketplace";
+import type { CatalogFilters, CatalogSort, TransferSearchState } from "@/types/marketplace";
 
+import { ExperienceSearchForm } from "./ExperienceSearchForm";
 import { FilterPanel } from "./FilterPanel";
+import { ScenarioPicker } from "./ScenarioPicker";
 import { ServiceCard } from "./ServiceCard";
+import { TransferSearchForm } from "./TransferSearchForm";
+import { getServiceScenario } from "./marketplace-content";
 import styles from "./catalog.module.css";
 
 type CatalogBrowserProps = {
@@ -26,11 +29,10 @@ const sortOptions: { label: string; value: CatalogSort }[] = [
   { label: "По длительности", value: "duration" },
 ];
 
-const quickFilters: { label: string; value: CatalogFilters; reset?: boolean }[] = [
+const quickFilters: { label: string; value: CatalogFilters }[] = [
   { label: "Сегодня", value: { orderToday: true } },
   { label: "Завтра", value: { date: "2026-08-15" } },
   { label: "До 1 000 ₽", value: { maxPrice: 1000 } },
-  { label: "Начать путешествие", value: {}, reset: true },
 ];
 
 function selectedSort(value: string | string[] | undefined): CatalogSort {
@@ -45,8 +47,8 @@ function selectedPage(value: string | null | undefined): number {
   return Number.isInteger(page) && page > 0 ? page : 1;
 }
 
-function sameFilters(left: CatalogFilters, right: CatalogFilters): boolean {
-  return serializeCatalogQuery(left) === serializeCatalogQuery(right);
+function includesQuickFilter(filters: CatalogFilters, quickFilter: CatalogFilters): boolean {
+  return Object.entries(quickFilter).every(([key, value]) => filters[key as keyof CatalogFilters] === value);
 }
 
 function numberFromInput(value: number): number | undefined {
@@ -78,9 +80,9 @@ type CatalogBrowserContentProps = {
 function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width: 720px)");
-  const [filterDisclosureOpen, setFilterDisclosureOpen] = useState(true);
+  const [filterDisclosureOpen, setFilterDisclosureOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const scenario = filters.scenario;
 
   const results = useMemo(
     () => getVisibleMarketplaceServices(filters, sort, page),
@@ -103,8 +105,28 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     updateUrl(nextFilters, sort, 1);
   }
 
+  function updateScenario(nextScenario: CatalogFilters["scenario"]) {
+    updateFilters({
+      scenario: nextScenario,
+      category: undefined,
+      text: undefined,
+      destination: undefined,
+    });
+  }
+
   function resetFilters() {
     startTransition(() => router.replace(pathname, { scroll: false }));
+  }
+
+  function toggleQuickFilter(quickFilter: CatalogFilters) {
+    const active = includesQuickFilter(filters, quickFilter);
+    const next = active
+      ? {
+          ...filters,
+          ...Object.fromEntries(Object.keys(quickFilter).map((key) => [key, undefined])),
+        }
+      : { ...filters, ...quickFilter };
+    updateFilters(next);
   }
 
   function updateSort(nextSort: CatalogSort) {
@@ -117,7 +139,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
   }
 
   const filterOptions = {
-    categories: marketplaceCategories.map(({ id, name }) => ({ label: name, value: id })),
+    categories: (scenario ? getScenarioFilters(scenario).map(({ category, label }) => ({ label, value: category })) : marketplaceCategories.map(({ id, name }) => ({ label: name, value: id }))),
     destinations: marketplaceDestinations.map(({ id, name }) => ({ label: name, value: id })),
     durations: [
       { label: "До 2 часов", value: "up-to-2-hours" as const },
@@ -132,29 +154,65 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     ],
   };
   const hasActiveFilters = serializeCatalogQuery(filters).length > 0;
+  const transferValue: TransferSearchState = {
+    from: filters.from ?? "",
+    to: filters.to ?? "",
+    date: filters.date ?? null,
+    time: filters.time ?? null,
+    passengers: filters.passengers ?? 1,
+    luggage: filters.luggage ?? 0,
+    childSeat: filters.childSeat ?? false,
+    flightNumber: filters.flightNumber ?? null,
+    returnTrip: filters.returnTrip ?? false,
+  };
 
   return (
     <section aria-label="Поиск и фильтры каталога" className={styles.catalog}>
+      <ScenarioPicker onChange={updateScenario} value={scenario} />
+      {scenario === "transfer" && (
+        <TransferSearchForm
+          onSubmit={(value) => updateFilters({
+            ...filters,
+            scenario,
+            from: value.from || undefined,
+            to: value.to || undefined,
+            date: value.date ?? undefined,
+            time: value.time ?? undefined,
+            passengers: value.passengers ?? undefined,
+            luggage: value.luggage ?? undefined,
+            childSeat: value.childSeat || undefined,
+            flightNumber: value.flightNumber ?? undefined,
+            returnTrip: value.returnTrip || undefined,
+          })}
+          value={transferValue}
+        />
+      )}
+      {scenario === "experience" && <ExperienceSearchForm onSubmit={updateFilters} value={filters} />}
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
         {quickFilters.map((quickFilter) => (
           <button
-            aria-pressed={quickFilter.reset ? !hasActiveFilters : sameFilters(filters, quickFilter.value)}
+            aria-pressed={includesQuickFilter(filters, quickFilter.value)}
             className={styles.quickFilter}
             key={quickFilter.label}
-            onClick={() => quickFilter.reset ? resetFilters() : updateFilters(quickFilter.value)}
+            onClick={() => toggleQuickFilter(quickFilter.value)}
             type="button"
           >
             {quickFilter.label}
           </button>
         ))}
+        {hasActiveFilters && (
+          <button className={styles.clearQuickFilters} onClick={resetFilters} type="button">
+            Сбросить фильтры
+          </button>
+        )}
       </div>
 
       <details
         className={styles.filterDisclosure}
         onToggle={(event) => setFilterDisclosureOpen(event.currentTarget.open)}
-        open={isMobile === true ? filterDisclosureOpen : true}
+        open={filterDisclosureOpen}
       >
-        <summary>Поиск и фильтры</summary>
+        <summary>Дополнительные фильтры <span>{filterDisclosureOpen ? "Скрыть" : "Открыть"}</span></summary>
         <div className={styles.filterBody}>
           <FilterPanel onChange={updateFilters} options={filterOptions} value={filters} />
           <div className={styles.priceFilters}>
@@ -216,7 +274,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       ) : (
         <>
           <div className={styles.serviceList}>
-            {results.items.map((service) => <ServiceCard key={service.id} service={service} />)}
+            {results.items.map((service) => <ServiceCard key={service.id} service={service} scenario={getServiceScenario(service)} />)}
           </div>
           {results.hasNextPage && (
             <div className={styles.moreResults}>

@@ -46,7 +46,7 @@ export const marketplaceCategories: MarketplaceCategory[] = [
 const mock = {
   currency: "RUB" as const,
   isMockData: true as const,
-  status: "demo" as const,
+  status: "published" as const,
 };
 
 export const marketplaceServices: MarketplaceService[] = [

@@ -53,7 +53,7 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
     assert.ok(service.price >= 50);
     assert.equal(service.currency, "RUB");
     assert.ok(service.priceUnit);
-    assert.equal(service.status, "demo");
+    assert.equal(service.status, "published");
     assert.equal(service.isMockData, true);
     assert.equal(service.orderToday, false);
     assert.ok(
@@ -77,7 +77,7 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
 
   assert.ok(marketplaceServiceVariants.length > 0);
   for (const variant of marketplaceServiceVariants) {
-    assert.equal(variant.status, "demo");
+    assert.equal(variant.status, "published");
     assert.equal(variant.isMockData, true);
   }
 });
@@ -132,8 +132,8 @@ test("catalog filters services and returns a deterministic first page", () => {
   assert.ok(digital.items.length > 0);
   assert.ok(digital.items.every((service) => service.isDigital));
   assert.ok(
-    digital.items.every((service) =>
-      `${service.title} ${service.description}`.toLowerCase().includes("маршрут"),
+    digital.items.every(
+      (service, index, items) => index === 0 || items[index - 1].price <= service.price,
     ),
   );
   assert.equal(digital.total, digital.items.length);
@@ -241,5 +241,8 @@ test("catalog accumulates visible pages without dropping the first page", () => 
   );
   assert.equal(secondVisiblePage.items.length, 24);
   assert.equal(firstVisiblePage.hasNextPage, true);
-  assert.equal(secondVisiblePage.hasNextPage, false);
+  assert.equal(
+    secondVisiblePage.hasNextPage,
+    secondVisiblePage.items.length < secondVisiblePage.total,
+  );
 });

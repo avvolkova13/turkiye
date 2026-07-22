@@ -24,7 +24,7 @@ export function MarketplaceShell({
       </a>
       <MarketplaceHeader currentPath={currentPath} />
       <main className={styles.marketplaceMain} id="marketplace-content">
-        <header className={styles.pageIntro}>
+        <header className={`${styles.pageIntro} ${currentPath === "/catalog" ? styles.catalogPageIntro : ""}`}>
           <p>Faro · Турция</p>
           <h1>{title}</h1>
           <p>{description}</p>

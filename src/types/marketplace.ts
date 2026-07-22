@@ -20,7 +20,7 @@ export type MarketplaceServiceType =
  * This catalog is seeded for interface development only. It intentionally
  * communicates no live inventory or purchase availability.
  */
-export type MarketplaceServiceStatus = "demo";
+export type MarketplaceServiceStatus = "published";
 export type MarketplaceCurrency = "RUB";
 export type MarketplaceLanguage = "Русский" | "Английский" | "Турецкий";
 export type MarketplaceDuration =
@@ -30,6 +30,28 @@ export type MarketplaceDuration =
   | "multi-day";
 export type MarketplaceDemoDate = `${number}-${number}-${number}`;
 export type MarketplaceRegion = "aegean";
+export type MarketplaceScenario = "experience" | "transfer" | "self-service" | "support";
+
+export interface TransferSearchState {
+  from: string;
+  to: string;
+  date: MarketplaceDemoDate | null;
+  time: string | null;
+  passengers: number | null;
+  luggage: number | null;
+  childSeat: boolean;
+  flightNumber: string | null;
+  returnTrip: boolean;
+}
+
+export interface BookingIntent {
+  serviceId: string;
+  variantId?: string;
+  date: MarketplaceDemoDate | null;
+  quantity: number;
+  scenario: MarketplaceScenario;
+  status: "draft" | "submitted" | "confirmed";
+}
 
 export interface MarketplaceDestination {
   id: string;
@@ -117,6 +139,15 @@ export interface CatalogFilters {
   children?: boolean;
   digital?: boolean;
   orderToday?: boolean;
+  scenario?: MarketplaceScenario;
+  from?: string;
+  to?: string;
+  time?: string;
+  passengers?: number;
+  luggage?: number;
+  childSeat?: boolean;
+  flightNumber?: string;
+  returnTrip?: boolean;
 }
 
 export type CatalogSort =

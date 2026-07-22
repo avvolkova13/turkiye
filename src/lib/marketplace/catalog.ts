@@ -8,6 +8,7 @@ import type {
   MarketplaceLanguage,
   MarketplaceService,
   MarketplaceServiceType,
+  MarketplaceScenario,
 } from "../../types/marketplace";
 
 const PAGE_SIZE = 12;
@@ -38,6 +39,13 @@ const sortValues = new Set<CatalogSort>([
   "price-desc",
   "duration",
 ]);
+
+const scenarioCategories: Record<MarketplaceScenario, MarketplaceServiceType[]> = {
+  experience: ["excursions", "activities", "guides", "tickets", "yachts", "spa"],
+  transfer: ["transfers", "taxi"],
+  "self-service": ["digital", "connectivity", "insurance", "rental"],
+  support: ["services", "visa", "airline-tickets", "shopping"],
+};
 
 const destinationNames = new Map(
   marketplaceDestinations.map(({ id, name }) => [id, name]),
@@ -128,9 +136,12 @@ function sortedMarketplaceServices(
   const duration = isKnownDuration(filters.duration) ? filters.duration : undefined;
   const language = isKnownLanguage(filters.language) ? filters.language : undefined;
   const selectedSort = sortValues.has(sort) ? sort : "relevance";
+  const scenario = filters.scenario;
+  const scenarioTypes = scenario ? scenarioCategories[scenario] : undefined;
 
   const filtered = marketplaceServices.filter((service) => {
     if (query && !searchText(service).includes(query)) return false;
+    if (scenarioTypes && !scenarioTypes.includes(service.type)) return false;
     if (category && service.categoryId !== category) return false;
     if (destination && service.destinationId !== destination) return false;
     if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;
@@ -161,6 +172,13 @@ function sortedMarketplaceServices(
   });
 
   return indexed.map(({ service }) => service);
+}
+
+export function getScenarioFilters(scenario: MarketplaceScenario) {
+  return scenarioCategories[scenario].map((category) => ({
+    category,
+    label: categoryNames.get(category) ?? category,
+  }));
 }
 
 export function filterMarketplaceServices(

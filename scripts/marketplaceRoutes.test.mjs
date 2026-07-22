@@ -38,6 +38,11 @@ test("catalog query state parses typed filters and serializes supported values",
     parseCatalogQuery({ date: "2026-02-30", minPrice: "not-a-number", maxPrice: "Infinity" }),
     {},
   );
+  assert.deepEqual(
+    parseCatalogQuery({ destination: "not-a-real-place" }),
+    {},
+    "unknown destination filters must be discarded before they reach the catalog UI",
+  );
 
   const filters = {
     text: "Каппадокия",
@@ -276,6 +281,196 @@ test("search entry points use real paths instead of hash-only targets", () => {
     "the marketplace search quick action should start in the catalog",
   );
   assert.doesNotMatch(searchPage, /href="#/, "search should not add hash-only links");
+  assert.doesNotMatch(
+    searchPage,
+    /searchParams|Показываем варианты по запросу/,
+    "static search HTML must not depend on a query value that is unavailable during export",
+  );
+  assert.match(
+    searchPage,
+    /Здесь можно искать по названию, городу или фильтрам/,
+    "search should keep a generic export-safe introduction",
+  );
+});
+
+test("home collections navigate to filtered marketplace routes and keep full hover galleries alive", () => {
+  const homeData = readFileSync(resolve(projectRoot, "src/data/home.ts"), "utf8");
+  const collections = readFileSync(resolve(projectRoot, "src/components/home/Collections.tsx"), "utf8");
+
+  for (const route of [
+    "/catalog?destination=istanbul",
+    "/catalog?destination=antalya",
+    "/catalog?destination=cappadocia",
+    "/catalog?region=aegean",
+    "/catalog?category=services",
+  ]) {
+    assert.ok(homeData.includes(`href: "${route}"`), `${route} must be a real filtered catalog target`);
+  }
+  assert.match(collections, /<Link[\s\S]*href=\{item\.href\}/, "collection rows must navigate as links");
+  assert.doesNotMatch(collections, /onMouseLeave=\{stopPreview\}/, "row hover must not stop the gallery during layout movement");
+  assert.match(collections, /setInterval\(/, "collection hover must rotate through the complete image sequence");
+  assert.equal((homeData.match(/\/images\//g) ?? []).length > 20, true, "collections must have a substantial local image gallery");
+});
+
+test("home idea cards navigate to free travel guides", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+
+  for (const route of [
+    "/guides/istanbul-first-trip",
+    "/guides/antalya-without-rush",
+    "/guides/cappadocia-without-car",
+  ]) {
+    assert.ok(homePage.includes(`href="${route}"`), `${route} must be a real guide destination`);
+  }
+  assert.doesNotMatch(homePage, /href="#bundles"[^>]*aria-label="Стамбул впервые/, "Istanbul card must not be a section anchor");
+  assert.doesNotMatch(homePage, /href="#services"[^>]*aria-label="Что забронировать/, "Antalya card must not be a section anchor");
+  assert.doesNotMatch(homePage, /href="#collections"[^>]*aria-label="Каппадокия/, "Cappadocia card must not be a section anchor");
+});
+
+test("travel guides provide useful free content and clear paid next steps", () => {
+  const guidesData = readFileSync(resolve(projectRoot, "src/data/guides.ts"), "utf8");
+  const guidePage = readFileSync(resolve(projectRoot, "src/app/guides/[slug]/page.tsx"), "utf8");
+
+  for (const phrase of ["Анталья без суеты", "Стамбул впервые", "Каппадокия без автомобиля"]) {
+    assert.ok(guidesData.includes(phrase), `${phrase} must have a guide`);
+  }
+  assert.match(guidePage, /generateStaticParams/);
+  assert.match(guidesData, /Посмотреть услуги|Заказать трансфер/);
+  assert.match(guidePage, /guide\.actions\.map/);
+  assert.match(guidesData, /href: "\/services\/antalya-airport-transfer"/);
+});
+
+test("home service rows navigate to product themes instead of section anchors", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+  const serviceIndexStart = homePage.indexOf('<div className="service-index">');
+  const serviceIndexEnd = homePage.indexOf("<Collections />", serviceIndexStart);
+  const serviceIndex = homePage.slice(serviceIndexStart, serviceIndexEnd);
+
+  for (const route of [
+    "/catalog?q=Босфор&destination=istanbul",
+    "/catalog?category=transfers&destination=antalya",
+    "/catalog?category=excursions&destination=cappadocia",
+    "/catalog?category=connectivity",
+  ]) {
+    assert.ok(homePage.includes(`href: "${route}"`), `${route} must be a working service destination`);
+  }
+  assert.doesNotMatch(serviceIndex, /href="#collections"/, "service rows must not jump to the collections section");
+});
+
+test("airport transfer entry opens the transfer order page", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+
+  assert.match(homePage, /name: "Трансфер из аэропорта"[\s\S]*?href: "\/services\/antalya-airport-transfer"/);
+  assert.match(homePage, /bundle: "Спокойный прилёт"[\s\S]*?href: "\/services\/antalya-airport-transfer"/);
+});
+
+test("Antalya collection places its preview between the wave icon and the title", () => {
+  const collections = readFileSync(resolve(projectRoot, "src/components/home/Collections.tsx"), "utf8");
+
+  assert.match(collections, /\{index === 1 && <CollectionThumb[\s\S]*?<span className="collection-icon-wrap">/, "Antalya must render its preview before the shared icon/title flow");
+  assert.match(collections, /index !== 3 && index !== 2 && index !== 1/, "the generic trailing preview must skip Antalya");
+});
+
+test("marketplace cards disclose pricing and meaningful image alternatives", () => {
+  const serviceCard = readFileSync(resolve(projectRoot, "src/components/marketplace/ServiceCard.tsx"), "utf8");
+  const destinationCard = readFileSync(resolve(projectRoot, "src/components/marketplace/DestinationCard.tsx"), "utf8");
+  const destinationPage = readFileSync(resolve(projectRoot, "src/app/destinations/[slug]/page.tsx"), "utf8");
+
+  assert.match(serviceCard, /Цена/, "service cards must visibly label prices");
+  assert.match(serviceCard, /alt=\{service\.title\}/, "service card image alt must name the service");
+  assert.match(destinationCard, /alt="Декоративная текстура травертина"/, "destination cards need a truthful image alternative");
+  assert.match(destinationPage, /alt="Декоративная текстура травертина"/, "destination detail needs a truthful image alternative");
+});
+
+test("affordable homepage items open real product pages with purchase actions", () => {
+  const homeData = readFileSync(resolve(projectRoot, "src/data/home.ts"), "utf8");
+  const productPage = readFileSync(resolve(projectRoot, "src/app/services/[slug]/page.tsx"), "utf8");
+  const actions = readFileSync(resolve(projectRoot, "src/components/marketplace/ProductActions.tsx"), "utf8");
+
+  for (const slug of [
+    "pre-trip-checklist",
+    "language-cheatsheet",
+    "istanbul-walk-map",
+    "emergency-contacts",
+    "istanbul-audioguide",
+    "turkey-ready-route",
+    "esim-help",
+  ]) {
+    assert.ok(homeData.includes(`slug: "${slug}"`), `${slug} must have a product target`);
+  }
+  assert.match(productPage, /generateStaticParams/, "product pages must be statically exported");
+  assert.match(actions, /Добавить в корзину/, "product pages must expose a cart action");
+  assert.match(actions, /Купить сейчас/, "product pages must expose a purchase action");
+});
+
+test("homepage bundles open the catalog with the matching theme filters", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+
+  for (const route of [
+    "/catalog?category=transfers",
+    "/catalog?destination=istanbul",
+    "/catalog?destination=antalya&kids=1",
+    "/catalog?category=excursions&destination=cappadocia",
+  ]) {
+    assert.ok(homePage.includes(`href: "${route}"`), `${route} must be a thematic bundle filter`);
+  }
+  assert.doesNotMatch(homePage, /href="#final-cta"/, "bundles must not jump to the final CTA anchor");
+});
+
+test("final CTA starts the journey in the real catalog", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+  const ctaStart = homePage.indexOf('className="final-cta-copy"');
+  const ctaEnd = homePage.indexOf('className="newsletter-section"', ctaStart);
+  const cta = homePage.slice(ctaStart, ctaEnd);
+
+  assert.match(cta, /<a className="primary-action light-action" href="\/catalog">\s*Начать путешествие/, "final CTA must open the catalog");
+  assert.doesNotMatch(cta, /href="#directions"/, "final CTA must not point to a missing homepage anchor");
+});
+
+test("direction screens use truthful, screen-specific CTA destinations", () => {
+  const homeData = readFileSync(resolve(projectRoot, "src/data/home.ts"), "utf8");
+  const directionStory = readFileSync(resolve(projectRoot, "src/components/home/DirectionStory.tsx"), "utf8");
+
+  for (const route of [
+    "/catalog?category=excursions",
+    "/catalog?category=activities&region=aegean",
+    "/catalog?category=excursions&destination=cappadocia",
+    "/services/antalya-airport-transfer",
+    "/catalog?category=services",
+  ]) {
+    assert.ok(homeData.includes(`href: "${route}"`), `${route} must match the screen theme`);
+  }
+  assert.match(directionStory, /href=\{scene\.href\}/, "direction CTA must use the current screen destination");
+  assert.doesNotMatch(directionStory, /href="#services"/, "direction screens must not share one generic anchor");
+});
+
+test("catalog keeps marketplace quick filters without URL-driven remounts", () => {
+  const browser = readFileSync(resolve(projectRoot, "src/components/marketplace/CatalogBrowser.tsx"), "utf8");
+
+  for (const label of ["Сегодня", "Завтра", "До 1 000 ₽", "Начать путешествие"]) {
+    assert.match(browser, new RegExp(`label: "${label}"`), `${label} must be available in marketplace quick filters`);
+  }
+  assert.doesNotMatch(browser, /key=\{query\}/, "query updates must not remount the catalog browser");
+  assert.match(browser, /filterDisclosureOpen/, "mobile filter disclosure must retain its own open state");
+  assert.match(browser, /onToggle=/, "mobile filter disclosure must keep its user-controlled state");
+});
+
+test("freeze verifier protects the full homepage baseline and exact price label", () => {
+  const verifier = readFileSync(resolve(projectRoot, "scripts/verify-marketplace-foundation.mjs"), "utf8");
+
+  assert.match(verifier, /HOMEPAGE_BASE_REF \?\? "af3c2c5"/, "freeze baseline must predate marketplace work");
+  assert.match(verifier, /public\/images/, "homepage image assets must be part of freeze checks");
+  assert.match(verifier, /Цена/, "browser verification must assert the exact visible price label");
+  assert.match(verifier, /diff-tree", "--no-commit-id", "--name-only", "-r", "-m"/, "freeze verification must remain merge-aware");
+});
+
+test("marketplace error content does not nest another main landmark or page title", () => {
+  const errorBoundary = readFileSync(resolve(projectRoot, "src/app/marketplace-error.tsx"), "utf8");
+
+  assert.doesNotMatch(errorBoundary, /<main/, "route errors render inside the marketplace shell main");
+  assert.doesNotMatch(errorBoundary, /<h1/, "route errors must not duplicate the shell page heading");
+  assert.match(errorBoundary, /<section/, "route errors should use a section landmark");
+  assert.match(errorBoundary, /<h2/, "route errors should use a subordinate heading");
 });
 
 test("destination cards use real detail paths instead of hash-only targets", () => {

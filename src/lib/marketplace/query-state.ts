@@ -3,8 +3,10 @@ import type {
   MarketplaceDemoDate,
   MarketplaceDuration,
   MarketplaceLanguage,
+  MarketplaceRegion,
   MarketplaceServiceType,
 } from "@/types/marketplace";
+import { marketplaceDestinations } from "../../data/marketplace";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -12,6 +14,12 @@ const categories = new Set<MarketplaceServiceType>([
   "excursions",
   "tickets",
   "transfers",
+  "taxi",
+  "visa",
+  "yachts",
+  "shopping",
+  "spa",
+  "airline-tickets",
   "guides",
   "activities",
   "digital",
@@ -27,6 +35,8 @@ const durations = new Set<MarketplaceDuration>([
   "multi-day",
 ]);
 const languages = new Set<MarketplaceLanguage>(["Русский", "Английский", "Турецкий"]);
+const regions = new Set<MarketplaceRegion>(["aegean"]);
+const destinationIds = new Set(marketplaceDestinations.map(({ id }) => id));
 
 function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -54,6 +64,7 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
   const text = firstValue(searchParams.q)?.trim();
   const category = firstValue(searchParams.category);
   const destination = firstValue(searchParams.destination)?.trim();
+  const region = firstValue(searchParams.region)?.trim();
   const date = firstValue(searchParams.date);
   const duration = firstValue(searchParams.duration);
   const language = firstValue(searchParams.language);
@@ -63,7 +74,8 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
     ...(category && categories.has(category as MarketplaceServiceType)
       ? { category: category as MarketplaceServiceType }
       : {}),
-    ...(destination ? { destination } : {}),
+    ...(destination && destinationIds.has(destination) ? { destination } : {}),
+    ...(region && regions.has(region as MarketplaceRegion) ? { region: region as MarketplaceRegion } : {}),
     ...(isDemoDate(date) ? { date } : {}),
     ...(numberValue(firstValue(searchParams.minPrice)) !== undefined
       ? { minPrice: numberValue(firstValue(searchParams.minPrice)) }
@@ -90,6 +102,7 @@ export function serializeCatalogQuery(filters: CatalogFilters): string {
   if (filters.text?.trim()) query.set("q", filters.text.trim());
   if (filters.category) query.set("category", filters.category);
   if (filters.destination) query.set("destination", filters.destination);
+  if (filters.region) query.set("region", filters.region);
   if (filters.date) query.set("date", filters.date);
   if (Number.isFinite(filters.minPrice)) query.set("minPrice", String(filters.minPrice));
   if (Number.isFinite(filters.maxPrice)) query.set("maxPrice", String(filters.maxPrice));

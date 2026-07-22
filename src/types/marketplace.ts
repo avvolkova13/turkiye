@@ -8,7 +8,13 @@ export type MarketplaceServiceType =
   | "connectivity"
   | "insurance"
   | "rental"
-  | "services";
+  | "services"
+  | "taxi"
+  | "visa"
+  | "yachts"
+  | "shopping"
+  | "spa"
+  | "airline-tickets";
 
 /**
  * This catalog is seeded for interface development only. It intentionally
@@ -23,6 +29,7 @@ export type MarketplaceDuration =
   | "full-day"
   | "multi-day";
 export type MarketplaceDemoDate = `${number}-${number}-${number}`;
+export type MarketplaceRegion = "aegean";
 
 export interface MarketplaceDestination {
   id: string;
@@ -86,6 +93,7 @@ export type CatalogFilterKey =
   | "text"
   | "category"
   | "destination"
+  | "region"
   | "minPrice"
   | "maxPrice"
   | "duration"
@@ -99,6 +107,7 @@ export interface CatalogFilters {
   text?: string;
   category?: MarketplaceServiceType;
   destination?: string;
+  region?: MarketplaceRegion;
   date?: MarketplaceDemoDate;
   minPrice?: number;
   maxPrice?: number;

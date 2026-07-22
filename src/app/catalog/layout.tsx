@@ -6,8 +6,8 @@ export default function CatalogLayout({ children }: Readonly<{ children: ReactNo
   return (
     <MarketplaceShell
       currentPath="/catalog"
-      description="Экскурсии, трансферы и полезные сервисы для спокойного начала путешествия."
-      title="Каталог для поездки в Турцию"
+      description="Экскурсии, трансферы, билеты и полезные сервисы — соберите маршрут по Турции в одном месте."
+      title="Соберите поездку в Турцию"
     >
       {children}
     </MarketplaceShell>

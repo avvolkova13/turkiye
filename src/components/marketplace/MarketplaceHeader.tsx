@@ -14,7 +14,7 @@ export function MarketplaceHeader({ currentPath }: MarketplaceHeaderProps) {
   return (
     <header className={styles.marketplaceHeader}>
       <div className={styles.headerInner}>
-        <Link aria-label="Faro — каталог путешествий" className={styles.brand} href="/catalog">
+        <Link aria-label="Faro — главная страница" className={styles.brand} href="/">
           <Image alt="Faro" height={46} priority src={sitePath("/faro-logo.svg")} width={109} />
         </Link>
         <nav aria-label="Основная навигация" className={styles.primaryNav}>

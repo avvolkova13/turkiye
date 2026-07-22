@@ -14,10 +14,10 @@ import { sitePath } from "@/lib/sitePath";
 const brandName = siteConfig.publicBrandName ?? "Türkiye";
 
 const services = [
-  ["Круиз по Босфору", "Стамбул", "от 2 900 ₽"],
-  ["Трансфер из аэропорта", "Анталья", "от 3 700 ₽"],
-  ["Воздушный шар", "Каппадокия", "от 14 900 ₽"],
-  ["Туристическая eSIM", "Вся Турция", "от 790 ₽"],
+  { name: "Круиз по Босфору", place: "Стамбул", price: "от 2 900 ₽", href: "/catalog?q=Босфор&destination=istanbul" },
+  { name: "Трансфер из аэропорта", place: "Анталья", price: "от 3 700 ₽", href: "/services/antalya-airport-transfer" },
+  { name: "Воздушный шар", place: "Каппадокия", price: "от 14 900 ₽", href: "/catalog?category=excursions&destination=cappadocia" },
+  { name: "Туристическая eSIM", place: "Вся Турция", price: "от 790 ₽", href: "/catalog?category=connectivity" },
 ] as const;
 
 export default function HomePage() {
@@ -109,7 +109,7 @@ export default function HomePage() {
           </div>
           <div className="ideas-composition">
             <article className="idea idea-lead" data-reveal>
-              <a href="#bundles" aria-label="Стамбул впервые: готовый маршрут на три дня">
+              <a href="/guides/istanbul-first-trip" aria-label="Стамбул впервые: бесплатный маршрут на три дня">
                 <div className="idea-media">
                   <Image
                     alt="Тёплый свод и ритм арок стамбульского базара"
@@ -126,7 +126,7 @@ export default function HomePage() {
               </a>
             </article>
             <article className="idea idea-offset" data-reveal>
-              <a href="#services" aria-label="Что забронировать до прилёта в Анталью">
+              <a href="/guides/antalya-without-rush" aria-label="Анталья без суеты: пять решений до прилёта">
                 <div className="idea-media">
                   <Image
                     alt="Белые минеральные террасы Памуккале"
@@ -142,7 +142,7 @@ export default function HomePage() {
               </a>
             </article>
             <article className="idea idea-note" data-reveal>
-              <a href="#collections" aria-label="Каппадокия без автомобиля">
+              <a href="/guides/cappadocia-without-car" aria-label="Каппадокия без автомобиля: бесплатный план поездки">
                 <div className="idea-media">
                   <Image
                     alt="Воздушные шары над мягкими утренними долинами Каппадокии"
@@ -177,8 +177,8 @@ export default function HomePage() {
             </div>
           </div>
           <div className="service-index">
-            {services.map(([name, place, price], index) => (
-              <a href="#collections" key={name} data-reveal>
+            {services.map(({ name, place, price, href }, index) => (
+              <a href={href} key={name} data-reveal>
                 <span className="service-number">0{index + 1}</span>
                 <span className="service-name">{name}</span>
                 <span className="service-place">{place}</span>
@@ -203,8 +203,8 @@ export default function HomePage() {
             </h2>
           </div>
           <div className="affordable-list">
-            {affordableItems.map(([name, price], index) => (
-              <a href="#newsletter" key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
+            {affordableItems.map(({ name, price, slug }, index) => (
+              <a href={`/services/${slug}`} key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{name}</strong>
                 <b>{price}</b>
@@ -237,12 +237,12 @@ export default function HomePage() {
             </div>
             <div className="bundle-links">
               {[
-                ["Спокойный прилёт", "трансфер · связь · поддержка"],
-                ["Стамбул впервые", "3 дня · маршрут · Босфор"],
-                ["Анталья с ребёнком", "7 дней · море · семейный ритм"],
-                ["Каппадокия без забот", "2 дня · трансфер · рассвет"],
-              ].map(([bundle, details]) => (
-                <a href="#final-cta" key={bundle}>
+                { bundle: "Спокойный прилёт", details: "трансфер · связь · поддержка", href: "/services/antalya-airport-transfer" },
+                { bundle: "Стамбул впервые", details: "3 дня · маршрут · Босфор", href: "/catalog?destination=istanbul" },
+                { bundle: "Анталья с ребёнком", details: "7 дней · море · семейный ритм", href: "/catalog?destination=antalya&kids=1" },
+                { bundle: "Каппадокия без забот", details: "2 дня · трансфер · рассвет", href: "/catalog?category=excursions&destination=cappadocia" },
+              ].map(({ bundle, details, href }) => (
+                <a href={href} key={bundle}>
                   <span className="bundle-name">
                     <strong>{bundle}</strong>
                     <small>{details}</small>
@@ -300,7 +300,7 @@ export default function HomePage() {
             <span>Ваше следующее место</span>
             <h2>С чего начнём вашу Турцию?</h2>
             <p>Выберите город, услугу или готовый план — остальное соберём по шагам.</p>
-            <a className="primary-action light-action" href="#directions">
+            <a className="primary-action light-action" href="/catalog">
               Начать путешествие
             </a>
           </div>

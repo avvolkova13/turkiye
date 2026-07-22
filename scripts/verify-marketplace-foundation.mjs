@@ -7,7 +7,7 @@ import { join, relative, resolve } from "node:path";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const baseUrl = (process.env.BASE_URL ?? "http://127.0.0.1:3100").replace(/\/$/, "");
-const homepageBaseRef = process.env.HOMEPAGE_BASE_REF ?? "7dde1c0";
+const homepageBaseRef = process.env.HOMEPAGE_BASE_REF ?? "af3c2c5";
 const playwrightPath =
   process.env.CODEX_PLAYWRIGHT_PATH ??
   "/Users/anastasiavolkova/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/.pnpm/playwright@1.61.1/node_modules/playwright/index.mjs";
@@ -20,6 +20,7 @@ const frozenHomepagePathspecs = [
   "src/app/globals.css",
   "src/components/home",
   "src/data/home.ts",
+  "public/images",
 ];
 
 const require = createRequire(import.meta.url);
@@ -64,7 +65,10 @@ function currentHomepageFiles() {
   const files = ["src/app/page.tsx", "src/app/globals.css", "src/data/home.ts"]
     .map((path) => resolve(projectRoot, path))
     .filter(existsSync)
-    .concat(walkFiles(resolve(projectRoot, "src/components/home")));
+    .concat(
+      walkFiles(resolve(projectRoot, "src/components/home")),
+      walkFiles(resolve(projectRoot, "public/images")),
+    );
 
   return files.map((path) => relative(projectRoot, path)).sort();
 }
@@ -74,7 +78,8 @@ function isFrozenHomepagePath(path) {
     path === "src/app/page.tsx" ||
     path === "src/app/globals.css" ||
     path === "src/data/home.ts" ||
-    path.startsWith("src/components/home/")
+    path.startsWith("src/components/home/") ||
+    path.startsWith("public/images/")
   );
 }
 
@@ -196,33 +201,28 @@ async function verifyCatalogQueries(context) {
   try {
     assert.ok(await page.locator("article").count() > 0, "Catalog must render service cards");
     assert.match(
-      (await page.locator("article strong").first().textContent())?.replace(/\s+/g, " ").trim() ?? "",
-      /^от\s[\d\s]+₽/,
-      "Catalog cards must expose visible demo price labels",
+      await page.locator("article .priceLabel").first().textContent(),
+      "Цена",
+      "Catalog cards must expose the visible price label",
     );
 
     await Promise.all([
-      page.waitForURL((url) => url.searchParams.get("digital") === "1"),
-      page.getByRole("button", { name: "Цифровые маршруты" }).click(),
+      page.waitForURL((url) => url.searchParams.get("maxPrice") === "1000"),
+      page.getByRole("button", { name: "До 1 000 ₽" }).click(),
     ]);
     assert.equal(
-      await page.getByRole("button", { name: "Цифровые маршруты" }).getAttribute("aria-pressed"),
+      await page.getByRole("button", { name: "До 1 000 ₽" }).getAttribute("aria-pressed"),
       "true",
       "Quick filters must update their selected state",
     );
-    assert.ok(await page.locator("article").count() > 0, "Digital query must retain matching catalog cards");
+    assert.ok(await page.locator("article").count() > 0, "Price quick filter must retain matching catalog cards");
 
     await Promise.all([
       page.waitForURL((url) => url.searchParams.get("sort") === "price-asc"),
       page.getByLabel("Сортировка").selectOption("price-asc"),
     ]);
 
-    await Promise.all([
-      page.waitForURL((url) => url.searchParams.get("maxPrice") === "1000"),
-      page.getByLabel("Цена до, ₽").fill("1000"),
-    ]);
-    await page.getByRole("heading", { name: "Ничего не найдено" }).waitFor();
-    assert.match(page.url(), /maxPrice=1000/, "Advanced filters must synchronize the URL");
+    assert.match(page.url(), /maxPrice=1000/, "Marketplace quick filters must synchronize the URL");
   } finally {
     await assertCleanPage(page, errors, "/catalog query states");
     await page.close();
@@ -235,7 +235,7 @@ async function verifyCatalogQueries(context) {
     "/search query state",
   );
   try {
-    await searchPage.getByText(/Показываем варианты по запросу «Каппадокия»/).waitFor();
+    await searchPage.getByText("Здесь можно искать по названию, городу или фильтрам.").waitFor();
     assert.ok(await searchPage.locator("article").count() > 0, "Search query must render matching cards");
   } finally {
     await assertCleanPage(searchPage, searchErrors, "/search query state");

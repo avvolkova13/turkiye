@@ -30,6 +30,7 @@ export type DirectionScene = {
   titleLines?: string[];
   description: string;
   cta: string;
+  href: string;
   image: string;
   imageAlt: string;
   focalPoint: string;
@@ -46,6 +47,7 @@ const baseDirectionScenes = [
     description:
       "Стамбул, Эфес, Троя, Памуккале и десятки исторических маршрутов с профессиональными гидами.",
     cta: "История и культура",
+    href: "/catalog?category=excursions",
     image: "/images/istanbul-waterfront-heritage.webp",
     imageAlt: "Живописная терраса у Босфора и исторический Стамбул на закате",
     focalPoint: "54% 54%",
@@ -57,6 +59,7 @@ const baseDirectionScenes = [
     description:
       "Морские прогулки, яхты, острова и поездки вдоль побережья Антальи, Бодрума, Мармариса и Фетхие.",
     cta: "Море и яхты",
+    href: "/catalog?category=activities&region=aegean",
     image: "/images/kas-coast.jpg",
     imageAlt: "Скалистая бухта и прозрачное море у побережья Каша",
     focalPoint: "51% 64%",
@@ -68,6 +71,7 @@ const baseDirectionScenes = [
     description:
       "Воздушные шары Каппадокии, каньоны, горные маршруты, рафтинг и природные парки.",
     cta: "Найти приключение",
+    href: "/catalog?category=excursions&destination=cappadocia",
     image: "/images/cappadocia-dawn.jpg",
     imageAlt: "Воздушные шары над каменными долинами Каппадокии",
     focalPoint: "50% 54%",
@@ -79,6 +83,7 @@ const baseDirectionScenes = [
     description:
       "Трансферы из аэропортов, аренда автомобилей, поездки между городами и персональный водитель.",
     cta: "Заказать трансфер",
+    href: "/services/antalya-airport-transfer",
     image: "/images/turkey-transfer-coast.png",
     imageAlt: "Премиальный трансфер по живописной дороге вдоль побережья Турции",
     focalPoint: "58% 58%",
@@ -91,6 +96,7 @@ const baseDirectionScenes = [
     description:
       "Связь, страховка, переводчики, аренда оборудования, помощь с документами и поддержка туристов.",
     cta: "Полезные услуги",
+    href: "/catalog?category=services",
     image: "/images/istanbul-support-neighborhood.webp",
     imageAlt: "Солнечная живая улица Стамбула с видом на Босфор",
     focalPoint: "58% 54%",
@@ -325,9 +331,12 @@ export const collectionItems = [
   {
     name: "Стамбул",
     count: "84 идеи",
+    href: "/catalog?destination=istanbul",
     images: [
       "/images/istanbul-street.jpg",
       "/images/istanbul-contrast.jpg",
+      "/images/galata-night.jpg",
+      "/images/galata-moon.jpg",
       "/images/home-canvas/istanbul-legacy-hotel.webp",
     ],
     alt: "Историческая улица Стамбула",
@@ -335,9 +344,12 @@ export const collectionItems = [
   {
     name: "Анталья",
     count: "51 идея",
+    href: "/catalog?destination=antalya",
     images: [
       "/images/istanbul-waterfront-heritage.webp",
       "/images/antalya-ruins.jpg",
+      "/images/perge-ruins.jpg",
+      "/images/kas-coast.jpg",
       "/images/home-canvas/bodrum-amanruya.webp",
     ],
     alt: "Босфор и историческая архитектура Стамбула",
@@ -345,9 +357,12 @@ export const collectionItems = [
   {
     name: "Каппадокия",
     count: "29 идей",
+    href: "/catalog?destination=cappadocia",
     images: [
       "/images/cappadocia-rocks.jpg",
       "/images/cappadocia-dawn.jpg",
+      "/images/cappadocia-soft.jpg",
+      "/images/travertine-texture.jpg",
       "/images/home-canvas/cappadocia-cave-hotel.webp",
     ],
     alt: "Каменные долины Каппадокии на рассвете",
@@ -355,19 +370,25 @@ export const collectionItems = [
   {
     name: "Эгейское море",
     count: "37 идей",
+    href: "/catalog?region=aegean",
     images: [
       "/images/aegean-bodrum.jpg",
       "/images/home-canvas/aegean-bodrum.webp",
       "/images/kas-coast.jpg",
+      "/images/pamukkale.jpg",
+      "/images/home-canvas/bodrum-amanruya.webp",
     ],
     alt: "Парусная лодка в тихой бухте Бодрума",
   },
   {
     name: "Услуги",
     count: "46 решений",
+    href: "/catalog?category=services",
     images: [
       "/images/istanbul-motion.jpg",
       "/images/modern-downtown.jpg",
+      "/images/istanbul-support-neighborhood.webp",
+      "/images/home-kits/arrival-kit.webp",
       "/images/home-canvas/istanbul-modern.webp",
     ],
     alt: "Современное городское пространство Стамбула",
@@ -375,11 +396,11 @@ export const collectionItems = [
 ] as const;
 
 export const affordableItems = [
-  ["Чек-лист перед поездкой", "от 50 ₽"],
-  ["Языковая шпаргалка", "от 99 ₽"],
-  ["Карта самостоятельной прогулки", "от 149 ₽"],
-  ["Экстренные контакты", "от 199 ₽"],
-  ["Аудиогид по Стамбулу", "от 249 ₽"],
-  ["Готовый маршрут", "от 390 ₽"],
-  ["Помощь с eSIM", "от 490 ₽"],
+  { name: "Чек-лист перед поездкой", price: "от 50 ₽", slug: "pre-trip-checklist" },
+  { name: "Языковая шпаргалка", price: "от 99 ₽", slug: "language-cheatsheet" },
+  { name: "Карта самостоятельной прогулки", price: "от 149 ₽", slug: "istanbul-walk-map" },
+  { name: "Экстренные контакты", price: "от 199 ₽", slug: "emergency-contacts" },
+  { name: "Аудиогид по Стамбулу", price: "от 249 ₽", slug: "istanbul-audioguide" },
+  { name: "Готовый маршрут", price: "от 390 ₽", slug: "turkey-ready-route" },
+  { name: "Помощь с eSIM", price: "от 490 ₽", slug: "esim-help" },
 ] as const;

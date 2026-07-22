@@ -40,12 +40,12 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
           <h2>{destination.name}</h2>
           <div>
             <p>{destination.description}</p>
-            <p>Количество демо-услуг: {services.length}.</p>
+            <p>Доступно услуг: {services.length}.</p>
           </div>
         </div>
         <div className={styles.destinationHeroImage}>
           <Image
-            alt=""
+            alt="Декоративная текстура травертина"
             fill
             priority
             sizes="(max-width: 960px) 100vw, 50vw"
@@ -57,7 +57,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
       <div className={styles.destinationServices}>
         <header className={styles.destinationServicesHeader}>
           <div>
-            <p>Демо-подборка</p>
+            <p>Подборка для поездки</p>
             <h3>Услуги для поездки</h3>
           </div>
           <Link className={styles.catalogLink} href={catalogHref}>
@@ -71,7 +71,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
           </div>
         ) : (
           <p className={styles.emptyDestinationServices}>
-            Для этого направления пока нет демо-услуг. Посмотрите другие варианты в общем каталоге.
+            Для этого направления пока нет доступных услуг. Посмотрите другие варианты в общем каталоге.
           </p>
         )}
       </div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { marketplaceCategories } from "@/data/marketplace";
 import type { MarketplaceService } from "@/types/marketplace";
 import { sitePath } from "@/lib/sitePath";
 
@@ -20,18 +21,19 @@ function formatDuration(minutes: number | null) {
 export function ServiceCard({ service }: ServiceCardProps) {
   const duration = formatDuration(service.durationMinutes);
   const price = new Intl.NumberFormat("ru-RU").format(service.price);
+  const categoryName = marketplaceCategories.find(({ id }) => id === service.categoryId)?.name ?? service.type;
 
   return (
     <article className={styles.serviceCard}>
       <Link aria-label={`Подробнее: ${service.title}`} className={styles.serviceCardLink} href={`/services/${service.slug}`}>
         <div className={styles.serviceCardMedia}>
           <Image
-            alt=""
+            alt={service.title}
             fill
             sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
             src={sitePath(service.imagePath)}
           />
-          <span className={styles.serviceType}>{service.type}</span>
+          <span className={styles.serviceType}>{categoryName}</span>
         </div>
         <div className={styles.serviceCardContent}>
           <div>
@@ -41,7 +43,8 @@ export function ServiceCard({ service }: ServiceCardProps) {
           <div className={styles.serviceMeta}>
             <span>{duration ?? service.deliveryMethod}</span>
             <strong>
-              от {price} ₽ <small>{service.priceUnit}</small>
+              <span className={styles.priceLabel}>Цена</span>
+              {" "}от {price} ₽ <small>{service.priceUnit}</small>
             </strong>
           </div>
         </div>

@@ -26,11 +26,11 @@ const sortOptions: { label: string; value: CatalogSort }[] = [
   { label: "По длительности", value: "duration" },
 ];
 
-const quickFilters: { label: string; value: CatalogFilters }[] = [
-  { label: "Все варианты", value: {} },
-  { label: "Цифровые маршруты", value: { digital: true } },
-  { label: "С трансфером", value: { transfer: true } },
-  { label: "Подходит детям", value: { children: true } },
+const quickFilters: { label: string; value: CatalogFilters; reset?: boolean }[] = [
+  { label: "Сегодня", value: { orderToday: true } },
+  { label: "Завтра", value: { date: "2026-08-15" } },
+  { label: "До 1 000 ₽", value: { maxPrice: 1000 } },
+  { label: "Начать путешествие", value: {}, reset: true },
 ];
 
 function selectedSort(value: string | string[] | undefined): CatalogSort {
@@ -62,21 +62,24 @@ export function CatalogBrowser({ initialFilters, initialSort }: CatalogBrowserPr
 
   return (
     <CatalogBrowserContent
-      initialFilters={resolvedFilters}
-      initialPage={selectedPage(searchParams.get("page"))}
-      initialSort={resolvedSort}
-      key={query}
+      filters={resolvedFilters}
+      page={selectedPage(searchParams.get("page"))}
+      sort={selectedSort(resolvedSort)}
     />
   );
 }
 
-function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }: CatalogBrowserProps) {
+type CatalogBrowserContentProps = {
+  filters: CatalogFilters;
+  page: number;
+  sort: CatalogSort;
+};
+
+function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 720px)");
-  const [filters, setFilters] = useState(initialFilters);
-  const [page, setPage] = useState(initialPage);
-  const [sort, setSort] = useState<CatalogSort>(() => selectedSort(initialSort));
+  const [filterDisclosureOpen, setFilterDisclosureOpen] = useState(true);
   const [isPending, startTransition] = useTransition();
 
   const results = useMemo(
@@ -97,20 +100,19 @@ function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }:
   );
 
   function updateFilters(nextFilters: CatalogFilters) {
-    setFilters(nextFilters);
-    setPage(1);
     updateUrl(nextFilters, sort, 1);
   }
 
+  function resetFilters() {
+    startTransition(() => router.replace(pathname, { scroll: false }));
+  }
+
   function updateSort(nextSort: CatalogSort) {
-    setSort(nextSort);
-    setPage(1);
     updateUrl(filters, nextSort, 1);
   }
 
   function showMore() {
     const nextPage = page + 1;
-    setPage(nextPage);
     updateUrl(filters, sort, nextPage);
   }
 
@@ -136,10 +138,10 @@ function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }:
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
         {quickFilters.map((quickFilter) => (
           <button
-            aria-pressed={sameFilters(filters, quickFilter.value)}
+            aria-pressed={quickFilter.reset ? !hasActiveFilters : sameFilters(filters, quickFilter.value)}
             className={styles.quickFilter}
             key={quickFilter.label}
-            onClick={() => updateFilters(quickFilter.value)}
+            onClick={() => quickFilter.reset ? resetFilters() : updateFilters(quickFilter.value)}
             type="button"
           >
             {quickFilter.label}
@@ -147,7 +149,11 @@ function CatalogBrowserContent({ initialFilters, initialPage = 1, initialSort }:
         ))}
       </div>
 
-      <details className={styles.filterDisclosure} open={isMobile !== true}>
+      <details
+        className={styles.filterDisclosure}
+        onToggle={(event) => setFilterDisclosureOpen(event.currentTarget.open)}
+        open={isMobile === true ? filterDisclosureOpen : true}
+      >
         <summary>Поиск и фильтры</summary>
         <div className={styles.filterBody}>
           <FilterPanel onChange={updateFilters} options={filterOptions} value={filters} />

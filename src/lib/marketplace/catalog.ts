@@ -16,6 +16,11 @@ const categoryIds = new Set<MarketplaceServiceType>(
   marketplaceCategories.map(({ id }) => id),
 );
 const destinationIds = new Set(marketplaceDestinations.map(({ id }) => id));
+const aegeanDestinationIds = new Set(
+  marketplaceDestinations
+    .filter(({ region }) => region.includes("Эгейское"))
+    .map(({ id }) => id),
+);
 const durationValues = new Set<MarketplaceDuration>([
   "up-to-2-hours",
   "half-day",
@@ -116,6 +121,7 @@ function sortedMarketplaceServices(
     typeof filters.destination === "string" && destinationIds.has(filters.destination)
       ? filters.destination
       : undefined;
+  const region = filters.region === "aegean" ? filters.region : undefined;
   const date = isDemoDate(filters.date) ? filters.date : undefined;
   const minPrice = isFiniteNumber(filters.minPrice) ? filters.minPrice : undefined;
   const maxPrice = isFiniteNumber(filters.maxPrice) ? filters.maxPrice : undefined;
@@ -127,6 +133,7 @@ function sortedMarketplaceServices(
     if (query && !searchText(service).includes(query)) return false;
     if (category && service.categoryId !== category) return false;
     if (destination && service.destinationId !== destination) return false;
+    if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;
     if (date && !service.demoDates?.includes(date)) return false;
     if (minPrice !== undefined && service.price < minPrice) return false;
     if (maxPrice !== undefined && service.price > maxPrice) return false;

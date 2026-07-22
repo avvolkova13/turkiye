@@ -16,7 +16,7 @@ export function DestinationCard({ destination }: DestinationCardProps) {
       <Link className={styles.destinationCardLink} href={`/destinations/${destination.slug}`}>
         <div className={styles.destinationCardMedia}>
           <Image
-            alt=""
+            alt="Декоративная текстура травертина"
             fill
             sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
             src={sitePath(destination.imagePath)}

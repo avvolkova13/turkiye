@@ -6,7 +6,7 @@ export default function DestinationsPage() {
   return (
     <section aria-label="Все направления" className={styles.destinationIndex}>
       <p className={styles.destinationIndexLead}>
-        Выберите направление, чтобы посмотреть демо-подборку услуг и перейти к каталогу с нужным фильтром.
+        Выберите направление, чтобы посмотреть подборку услуг и перейти к каталогу с нужным фильтром.
       </p>
       <div className={styles.destinationGrid}>
         {marketplaceDestinations.map((destination) => (

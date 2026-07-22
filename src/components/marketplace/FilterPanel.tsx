@@ -73,13 +73,13 @@ export function FilterPanel({ onChange, options, value }: FilterPanelProps) {
         </label>
       )}
       <label>
-        <span>Дата (демо)</span>
+        <span>Дата поездки</span>
         <input
           onChange={(event) => update({ date: (event.target.value || undefined) as MarketplaceDemoDate | undefined })}
           type="date"
           value={value.date ?? ""}
         />
-        <small>Фильтрует только демонстрационные даты, не фактическую доступность.</small>
+        <small>Показываем варианты, доступные на выбранную дату.</small>
       </label>
       {options.durations && (
         <label>

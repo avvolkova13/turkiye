@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { collectionItems } from "@/data/home";
@@ -28,29 +29,31 @@ export function Collections() {
   const [activePreviewIndex, setActivePreviewIndex] = useState(0);
   const previewTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const stopPreview = () => {
-    if (previewTimer.current) {
-      clearInterval(previewTimer.current);
-      previewTimer.current = null;
-    }
-  };
-
   const activateCollection = (index: number) => {
-    stopPreview();
+    if (activeIndex !== index) setActivePreviewIndex(0);
     setActiveIndex(index);
     setIsInteracting(true);
-    setActivePreviewIndex(0);
-    previewTimer.current = setInterval(() => {
-      setActivePreviewIndex((current) => (current + 1) % collectionItems[index].images.length);
-    }, 900);
   };
 
   const deactivateCollection = () => {
-    stopPreview();
     setIsInteracting(false);
+    setActiveIndex(null);
   };
 
-  useEffect(() => stopPreview, []);
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    previewTimer.current = setInterval(() => {
+      setActivePreviewIndex((current) => (current + 1) % collectionItems[activeIndex].images.length);
+    }, 750);
+
+    return () => {
+      if (previewTimer.current) {
+        clearInterval(previewTimer.current);
+        previewTimer.current = null;
+      }
+    };
+  }, [activeIndex]);
 
   return (
     <section
@@ -72,29 +75,28 @@ export function Collections() {
       </div>
       <div className="collection-list">
         {collectionItems.map((item, index) => (
-          <button
-            aria-pressed={isInteracting && activeIndex === index}
+          <Link
             className={`collection-row collection-row-${index + 1}`}
             data-active={isInteracting && activeIndex === index}
             data-reveal
             data-reveal-step={String((index % 4) + 1)}
+            href={item.href}
             key={item.name}
-            onBlur={deactivateCollection}
             onClick={() => activateCollection(index)}
             onFocus={() => activateCollection(index)}
             onMouseEnter={() => activateCollection(index)}
-            onMouseLeave={stopPreview}
           >
             <span className="collection-index">0{index + 1}</span>
             <span className="collection-content">
               {index === 3 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
               <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
+              {index === 1 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
               <span className="collection-name-main">{item.name}</span>
-              {index !== 3 && index !== 2 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
+              {index !== 3 && index !== 2 && index !== 1 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
               <span className="collection-count">({item.count.replace(/ .*/, "")})</span>
               {index === 2 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
             </span>
-          </button>
+          </Link>
         ))}
       </div>
     </section>

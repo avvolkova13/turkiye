@@ -23,7 +23,7 @@ const headerItems = [
   ["Направления", "#directions"],
   ["Впечатления", "#ideas"],
   ["Сервис", "#services"],
-  ["Журнал", "#newsletter"],
+  ["Советы", "#newsletter"],
 ] as const;
 
 export function Header({ brandName }: HeaderProps) {

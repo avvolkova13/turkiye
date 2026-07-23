@@ -1,10 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { Collections } from "@/components/home/Collections";
 import { DirectionStory } from "@/components/home/DirectionStory";
 import { Header } from "@/components/home/Header";
 import { HeroCanvasScene } from "@/components/home/HeroCanvasScene";
 import { MotionProvider } from "@/components/home/motion/MotionProvider";
+import { ManifestoCards } from "@/components/home/ManifestoCards";
 import { Newsletter } from "@/components/home/Newsletter";
 import { RevealObserver } from "@/components/home/RevealObserver";
 import { siteConfig } from "@/config/site";
@@ -61,32 +63,7 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="manifesto-cards" data-reveal>
-              <article data-reveal data-reveal-step="2">
-                <div className="manifesto-card-image">
-                  <Image
-                    alt="Бухта у побережья Каша"
-                    fill
-                    sizes="(max-width: 760px) 100vw, 15vw"
-                    src={sitePath("/images/kas-coast.jpg")}
-                  />
-                </div>
-                <strong>Маршруты, которые остаются</strong>
-                <span>Эгейское побережье</span>
-              </article>
-              <article data-reveal data-reveal-step="3">
-                <div className="manifesto-card-image">
-                  <Image
-                    alt="Свет раннего утра в Каппадокии"
-                    fill
-                    sizes="(max-width: 760px) 100vw, 15vw"
-                    src={sitePath("/images/cappadocia-rocks.jpg")}
-                  />
-                </div>
-                <strong>Места вне привычного списка</strong>
-                <span>Каппадокия · на рассвете</span>
-              </article>
-            </div>
+            <ManifestoCards />
             <div className="manifesto-main" data-reveal data-reveal-step="2">
               <p className="manifesto-copy">
                 Здесь можно купить карту прогулки, подключить связь, заказать трансфер
@@ -109,7 +86,7 @@ export default function HomePage() {
           </div>
           <div className="ideas-composition">
             <article className="idea idea-lead" data-reveal>
-              <a href="/guides/istanbul-first-trip" aria-label="Стамбул впервые: бесплатный маршрут на три дня">
+              <Link href="/guides/istanbul-first-trip" aria-label="Стамбул впервые: бесплатный маршрут на три дня">
                 <div className="idea-media">
                   <Image
                     alt="Тёплый свод и ритм арок стамбульского базара"
@@ -123,10 +100,10 @@ export default function HomePage() {
                   <h3>Стамбул впервые</h3>
                   <p>Город не по списку достопримечательностей, а по смене света и районов.</p>
                 </div>
-              </a>
+              </Link>
             </article>
             <article className="idea idea-offset" data-reveal>
-              <a href="/guides/antalya-without-rush" aria-label="Анталья без суеты: пять решений до прилёта">
+              <Link href="/guides/antalya-without-rush" aria-label="Анталья без суеты: пять решений до прилёта">
                 <div className="idea-media">
                   <Image
                     alt="Белые минеральные террасы Памуккале"
@@ -139,10 +116,10 @@ export default function HomePage() {
                   <span>До прилёта · 5 решений</span>
                   <h3>Анталья без суеты</h3>
                 </div>
-              </a>
+              </Link>
             </article>
             <article className="idea idea-note" data-reveal>
-              <a href="/guides/cappadocia-without-car" aria-label="Каппадокия без автомобиля: бесплатный план поездки">
+              <Link href="/guides/cappadocia-without-car" aria-label="Каппадокия без автомобиля: бесплатный план поездки">
                 <div className="idea-media">
                   <Image
                     alt="Воздушные шары над мягкими утренними долинами Каппадокии"
@@ -155,7 +132,7 @@ export default function HomePage() {
                   <span>Самостоятельно · 2 дня</span>
                   <h3>Каппадокия без автомобиля</h3>
                 </div>
-              </a>
+              </Link>
             </article>
           </div>
         </section>

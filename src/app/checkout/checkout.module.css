@@ -11,7 +11,15 @@
 .selectionRow small { color: #60645b; font-weight: 400; }
 .contact { display: grid; align-content: start; gap: 1rem; background: #e9e2d6; }
 .contact label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
-.contact input, .contact select, .contact textarea { min-height: 2.8rem; padding: .75rem; border: 1px solid rgba(36,39,33,.24); background: #f4f0e8; font: inherit; resize: vertical; }
+.contact input, .contact select, .contact textarea { width: 100%; min-width: 0; }
+.contact select { appearance: none; padding: .75rem 2.75rem .75rem .9rem; background-color: #f4f0e8; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%23242721' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-position: right .85rem center; background-repeat: no-repeat; background-size: 1rem; color-scheme: light; cursor: pointer; }
+.contact input, .contact textarea { padding: .75rem .9rem; background: #f4f0e8; }
+.contact input, .contact select, .contact textarea { transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease; }
+.contact input:hover, .contact select:hover, .contact textarea:hover { border-color: rgba(165,78,51,.48); background: #fffdf8; }
+.contact input:focus, .contact select:focus, .contact textarea:focus { outline: none; border-color: #a54e33; background: #fffdf8; box-shadow: 0 0 0 3px rgba(165,78,51,.12); }
+.contact input[type="number"] { appearance: textfield; }
+.contact input[type="number"]::-webkit-inner-spin-button, .contact input[type="number"]::-webkit-outer-spin-button { margin: 0; appearance: none; }
+.contact input[type="date"]::-webkit-calendar-picker-indicator { opacity: .62; cursor: pointer; }
 .contact button { min-height: 2.8rem; margin-top: .75rem; border: 0; border-radius: 999px; background: #242721; color: #fffdf8; cursor: pointer; }
 .contact button:disabled { opacity: .45; cursor: not-allowed; }
 .confirmation { max-width: 45rem; background: #e9e2d6; }

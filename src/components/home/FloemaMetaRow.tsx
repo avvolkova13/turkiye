@@ -3,6 +3,7 @@
 import { ReactNode, useCallback, useLayoutEffect, useRef, useState } from "react";
 
 type Rect = { x: number; y: number; width: number; height: number };
+type Measurement = { width: number; height: number; rects: Rect[] };
 
 function roundedRectPath(rect: Rect, radius = 12) {
   const r = Math.min(radius, rect.width / 2, rect.height / 2);
@@ -52,7 +53,7 @@ function floemaLabelPath(rect: Rect, height: number) {
 export function FloemaMetaRow({ icon, label }: { icon: ReactNode; label: ReactNode }) {
   const rowRef = useRef<HTMLSpanElement>(null);
   const nodeRefs = useRef<Array<HTMLSpanElement | null>>([]);
-  const [rects, setRects] = useState<Rect[]>([]);
+  const [measurement, setMeasurement] = useState<Measurement>({ width: 1, height: 44, rects: [] });
 
   const measure = useCallback(() => {
     const row = rowRef.current;
@@ -68,12 +69,12 @@ export function FloemaMetaRow({ icon, label }: { icon: ReactNode; label: ReactNo
         height: rect.height,
       };
     }).filter((rect): rect is Rect => rect !== null);
-    setRects((current) => {
-      if (current.length === next.length && current.every((rect, index) => {
+    setMeasurement((current) => {
+      if (Math.abs(current.width - rowRect.width) < 0.1 && Math.abs(current.height - rowRect.height) < 0.1 && current.rects.length === next.length && current.rects.every((rect, index) => {
         const candidate = next[index];
         return candidate && Object.keys(rect).every((key) => Math.abs(rect[key as keyof Rect] - candidate[key as keyof Rect]) < 0.1);
       })) return current;
-      return next;
+      return { width: rowRect.width || 1, height: rowRect.height || 44, rects: next };
     });
   }, []);
 
@@ -87,8 +88,7 @@ export function FloemaMetaRow({ icon, label }: { icon: ReactNode; label: ReactNo
     return () => observer.disconnect();
   }, [measure]);
 
-  const width = rowRef.current?.getBoundingClientRect().width ?? 1;
-  const height = rowRef.current?.getBoundingClientRect().height ?? 44;
+  const { width, height, rects } = measurement;
   const iconRect = rects[0] ?? { x: 0, y: 0, width: 44, height: 44 };
   const labelRect = rects[1] ?? { x: 44, y: 0, width: 120, height: 44 };
   const shape = roundedRectPath(iconRect, 14.96);

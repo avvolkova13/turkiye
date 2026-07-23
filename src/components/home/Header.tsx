@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { sitePath } from "@/lib/sitePath";
@@ -98,20 +98,11 @@ export function Header({ brandName }: HeaderProps) {
     setStatus("Готово. Подходящие предложения собраны по разделам главной.");
   }
 
-  function handleUtility(event: KeyboardEvent<HTMLButtonElement> | React.MouseEvent<HTMLButtonElement>) {
-    const label = event.currentTarget.textContent?.trim() ?? "Раздел";
-    setStatus(
-      label.includes("Профиль")
-        ? "Войдите, чтобы сохранять маршруты и бронирования."
-        : `${label.replace(/\d+$/, "").trim()} пока пусто.`,
-    );
-  }
-
   return (
     <>
       <header className="site-header" data-site-header>
         <div className="header-brand-cluster">
-          <a className="wordmark" href="#hero" aria-label="На начало главной">
+          <a className="wordmark" href="#hero" aria-label={`${brandName} — на начало главной`}>
             <Image alt="Faro" height={68} priority src={sitePath("/faro-logo.svg")} width={161} />
           </a>
           <span className="header-divider" aria-hidden="true" />
@@ -193,16 +184,10 @@ export function Header({ brandName }: HeaderProps) {
                   <span>Поиск</span>
                   <span>Открыть</span>
                 </button>
-                {[
-                  ["Избранное", "0"],
-                  ["Профиль", "Войти"],
-                  ["Корзина", "0"],
-                ].map(([label, value]) => (
-                  <button key={label} onClick={handleUtility}>
-                    <span>{label}</span>
-                    <span>{value}</span>
-                  </button>
-                ))}
+                <a href={sitePath("/checkout")} onClick={closePanel}>
+                  <span>Корзина</span>
+                  <span>Открыть</span>
+                </a>
               </div>
             </div>
           )}

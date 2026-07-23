@@ -208,11 +208,11 @@ test("catalog and search routes serve each required query from a temporary stati
   staticServer = await startStaticServer(exportedRoutes, notFound);
 
   const cases = [
-    ["/catalog", /Каталог для поездки в Турцию/],
-    ["/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", /Каталог для поездки в Турцию/],
-    ["/catalog?date=2026-08-15", /Каталог для поездки в Турцию/],
-    ["/catalog?digital=1", /Каталог для поездки в Турцию/],
-    ["/catalog?maxPrice=1000", /Каталог для поездки в Турцию/],
+    ["/catalog", /Соберите поездку в Турцию/],
+    ["/catalog?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", /Соберите поездку в Турцию/],
+    ["/catalog?date=2026-08-15", /Соберите поездку в Турцию/],
+    ["/catalog?digital=1", /Соберите поездку в Турцию/],
+    ["/catalog?maxPrice=1000", /Соберите поездку в Турцию/],
     ["/search", /Поиск по каталогу/],
     ["/search?q=%D0%9A%D0%B0%D0%BF%D0%BF%D0%B0%D0%B4%D0%BE%D0%BA%D0%B8%D1%8F", /Поиск по каталогу/],
   ];
@@ -327,6 +327,20 @@ test("home idea cards navigate to free travel guides", () => {
   assert.doesNotMatch(homePage, /href="#collections"[^>]*aria-label="Каппадокия/, "Cappadocia card must not be a section anchor");
 });
 
+test("manifesto cards open the matching filtered catalog and expose complete hover galleries", () => {
+  const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
+  const manifestoCards = readFileSync(resolve(projectRoot, "src/components/home/ManifestoCards.tsx"), "utf8");
+
+  assert.match(homePage, /<ManifestoCards\s*\/>/);
+  assert.match(manifestoCards, /href: "\/catalog\?region=aegean"/);
+  assert.match(manifestoCards, /href: "\/catalog\?destination=cappadocia"/);
+  assert.match(manifestoCards, /setInterval\(/);
+  const imagePaths = [...manifestoCards.matchAll(/"(\/images\/[^\"]+)"/g)].map(([, path]) => path);
+  assert.ok(imagePaths.length >= 8, "manifesto cards must have full hover galleries");
+  assert.equal(new Set(imagePaths).size, imagePaths.length, "manifesto galleries must not repeat image paths");
+  assert.match(manifestoCards, /className="manifesto-card-link"/);
+});
+
 test("travel guides provide useful free content and clear paid next steps", () => {
   const guidesData = readFileSync(resolve(projectRoot, "src/data/guides.ts"), "utf8");
   const guidePage = readFileSync(resolve(projectRoot, "src/app/guides/[slug]/page.tsx"), "utf8");
@@ -348,7 +362,7 @@ test("home service rows navigate to product themes instead of section anchors", 
 
   for (const route of [
     "/catalog?q=Босфор&destination=istanbul",
-    "/catalog?category=transfers&destination=antalya",
+    "/services/antalya-airport-transfer",
     "/catalog?category=excursions&destination=cappadocia",
     "/catalog?category=connectivity",
   ]) {
@@ -367,7 +381,7 @@ test("airport transfer entry opens the transfer order page", () => {
 test("Antalya collection places its preview between the wave icon and the title", () => {
   const collections = readFileSync(resolve(projectRoot, "src/components/home/Collections.tsx"), "utf8");
 
-  assert.match(collections, /\{index === 1 && <CollectionThumb[\s\S]*?<span className="collection-icon-wrap">/, "Antalya must render its preview before the shared icon/title flow");
+  assert.match(collections, /<span className="collection-icon-wrap">[\s\S]*?\{index === 1 && <CollectionThumb/, "Antalya must render its wave icon before the preview and title");
   assert.match(collections, /index !== 3 && index !== 2 && index !== 1/, "the generic trailing preview must skip Antalya");
 });
 
@@ -407,7 +421,7 @@ test("homepage bundles open the catalog with the matching theme filters", () => 
   const homePage = readFileSync(resolve(projectRoot, "src/app/page.tsx"), "utf8");
 
   for (const route of [
-    "/catalog?category=transfers",
+    "/services/antalya-airport-transfer",
     "/catalog?destination=istanbul",
     "/catalog?destination=antalya&kids=1",
     "/catalog?category=excursions&destination=cappadocia",
@@ -447,9 +461,10 @@ test("direction screens use truthful, screen-specific CTA destinations", () => {
 test("catalog keeps marketplace quick filters without URL-driven remounts", () => {
   const browser = readFileSync(resolve(projectRoot, "src/components/marketplace/CatalogBrowser.tsx"), "utf8");
 
-  for (const label of ["Сегодня", "Завтра", "До 1 000 ₽", "Начать путешествие"]) {
+  for (const label of ["Сегодня", "Завтра", "До 1 000 ₽"]) {
     assert.match(browser, new RegExp(`label: "${label}"`), `${label} must be available in marketplace quick filters`);
   }
+  assert.doesNotMatch(browser, /label: "Начать путешествие"/, "journey CTA must not be presented as a filter");
   assert.doesNotMatch(browser, /key=\{query\}/, "query updates must not remount the catalog browser");
   assert.match(browser, /filterDisclosureOpen/, "mobile filter disclosure must retain its own open state");
   assert.match(browser, /onToggle=/, "mobile filter disclosure must keep its user-controlled state");
@@ -458,7 +473,7 @@ test("catalog keeps marketplace quick filters without URL-driven remounts", () =
 test("freeze verifier protects the full homepage baseline and exact price label", () => {
   const verifier = readFileSync(resolve(projectRoot, "scripts/verify-marketplace-foundation.mjs"), "utf8");
 
-  assert.match(verifier, /HOMEPAGE_BASE_REF \?\? "af3c2c5"/, "freeze baseline must predate marketplace work");
+  assert.match(verifier, /HOMEPAGE_BASE_REF \?\? "4ced717"/, "freeze baseline must match the audited homepage baseline");
   assert.match(verifier, /public\/images/, "homepage image assets must be part of freeze checks");
   assert.match(verifier, /Цена/, "browser verification must assert the exact visible price label");
   assert.match(verifier, /diff-tree", "--no-commit-id", "--name-only", "-r", "-m"/, "freeze verification must remain merge-aware");

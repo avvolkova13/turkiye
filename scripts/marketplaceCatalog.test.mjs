@@ -21,7 +21,7 @@ require.extensions[".ts"] = (module, filename) => {
   module._compile(output.outputText, filename);
 };
 
-test("marketplace data provides a complete, safely priced demo catalog", () => {
+test("marketplace data provides a complete, safely priced catalog", () => {
   const {
     marketplaceCategories,
     marketplaceDestinations,
@@ -55,7 +55,7 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
     assert.ok(service.priceUnit);
     assert.equal(service.status, "published");
     assert.equal(service.isMockData, true);
-    assert.equal(service.orderToday, false);
+    assert.equal(typeof service.orderToday, "boolean");
     assert.ok(
       existsSync(resolve(process.cwd(), "public", service.imagePath.slice(1))),
       `${service.id} image path must resolve locally`,
@@ -67,6 +67,8 @@ test("marketplace data provides a complete, safely priced demo catalog", () => {
       );
     }
   }
+
+  assert.ok(marketplaceServices.some(({ orderToday }) => orderToday), "some published services should support same-day ordering");
 
   for (const destination of marketplaceDestinations) {
     assert.ok(
@@ -170,10 +172,12 @@ test("catalog applies every supported filter and sort without mutating data", ()
 
   assert.deepEqual(matching.items.map(({ id }) => id), [
     "istanbul-weekend-digital-route",
+    "turkey-ready-route",
   ]);
 
   const orderToday = filterMarketplaceServices({ orderToday: true }, "relevance");
-  assert.equal(orderToday.total, 0);
+  assert.ok(orderToday.total > 0);
+  assert.ok(orderToday.items.every(({ orderToday: available }) => available));
 
   const transfers = filterMarketplaceServices({ transfer: true }, "duration");
   assert.ok(transfers.items.every((service) => service.hasTransfer));

@@ -49,7 +49,7 @@ const mock = {
   status: "published" as const,
 };
 
-export const marketplaceServices: MarketplaceService[] = [
+const rawMarketplaceServices: MarketplaceService[] = [
   { ...mock, id: "istanbul-bosphorus-walk", slug: "istanbul-bosphorus-walk", title: "Прогулка по Босфору и Каракёю", categoryId: "excursions", destinationId: "istanbul", type: "excursions", description: "Неспешный маршрут по набережным с остановками для вида на пролив.", imagePath: "/images/bosphorus-ferry.jpg", images: ["/images/bosphorus-ferry.jpg"], price: 2400, priceUnit: "за человека", duration: "half-day", durationMinutes: 240, languages: ["Русский", "Английский"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: false, demoDates: ["2026-08-15"], included: ["Маршрут", "Сопровождение"], excluded: ["Личные расходы"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "Каракёй", deliveryMethod: "Встреча на месте" },
   { ...mock, id: "cappadocia-sunrise-valley", slug: "cappadocia-sunrise-valley", title: "Рассвет в долинах Каппадокии", categoryId: "excursions", destinationId: "cappadocia", type: "excursions", description: "Утренний маршрут по обзорным точкам и тихим тропам долин.", imagePath: "/images/bosphorus-ferry.jpg", images: ["/images/bosphorus-ferry.jpg"], price: 3200, priceUnit: "за человека", duration: "half-day", durationMinutes: 300, languages: ["Русский", "Английский"], hasTransfer: true, suitableForChildren: true, isDigital: false, orderToday: false, included: ["Трансфер из города", "Маршрут"], excluded: ["Завтрак"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "По адресу проживания", deliveryMethod: "Трансфер" },
   { ...mock, id: "antalya-old-town", slug: "antalya-old-town", title: "Старый город Антальи", categoryId: "guides", destinationId: "antalya", type: "guides", description: "Индивидуальная прогулка по Калеичи с разговорами о городе и море.", imagePath: "/images/bosphorus-ferry.jpg", images: ["/images/bosphorus-ferry.jpg"], price: 2800, priceUnit: "за маршрут", duration: "up-to-2-hours", durationMinutes: 120, languages: ["Русский"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: false, included: ["Услуги гида"], excluded: ["Входные билеты"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "Ворота Адриана", deliveryMethod: "Встреча на месте" },
@@ -99,6 +99,28 @@ export const marketplaceServices: MarketplaceService[] = [
   { ...mock, id: "turkey-translator-hour", slug: "turkey-translator-hour", title: "Переводчик на час", categoryId: "services", destinationId: null, type: "services", description: "Удалённая или очная помощь с переводом в поездке.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 1500, priceUnit: "за час", duration: "up-to-2-hours", durationMinutes: 60, languages: ["Русский", "Турецкий"], hasTransfer: false, suitableForChildren: true, isDigital: false, orderToday: false, included: ["Перевод в согласованное время"], excluded: ["Юридическое заверение"], cancellation: "Условия отмены уточняются перед заказом.", meetingPoint: "Онлайн или по адресу", deliveryMethod: "По записи" },
   { ...mock, id: "turkey-gift-certificate-500", slug: "turkey-gift-certificate-500", title: "Подарочный сертификат Faro", categoryId: "services", destinationId: null, type: "services", description: "Сертификат на услуги и впечатления для поездки по Турции.", imagePath: "/images/home-kits/arrival-kit.webp", images: ["/images/home-kits/arrival-kit.webp"], price: 500, priceUnit: "за сертификат", duration: "multi-day", durationMinutes: null, languages: ["Русский"], hasTransfer: false, suitableForChildren: true, isDigital: true, orderToday: true, included: ["Электронный сертификат"], excluded: ["Обналичивание"], cancellation: "Условия использования уточняются перед оформлением.", meetingPoint: null, deliveryMethod: "Цифровая доставка" },
 ];
+
+const marketplaceImageSets: Record<string, string[]> = {
+  "istanbul-bosphorus-walk": ["/images/bosphorus-ferry.jpg", "/images/istanbul-waterfront-heritage.webp", "/images/home-canvas/spice-bazaar.webp", "/images/istanbul-street.jpg"],
+  "cappadocia-sunrise-valley": ["/images/cappadocia-rocks.jpg", "/images/cappadocia-dawn.jpg", "/images/cappadocia-soft.jpg", "/images/home-canvas/cappadocia-cave-hotel.webp"],
+  "antalya-old-town": ["/images/antalya-ruins.jpg", "/images/perge-ruins.jpg", "/images/kas-coast.jpg", "/images/home-canvas/bodrum-amanruya.webp"],
+  "pamukkale-hierapolis-day": ["/images/pamukkale.jpg", "/images/travertine-texture.jpg", "/images/home-canvas/aegean-bodrum.webp"],
+  "trabzon-plateau-route": ["/images/turkey-transfer-coast.png", "/images/kas-coast.jpg", "/images/home-canvas/aegean-bodrum.webp"],
+  "istanbul-museum-route": ["/images/home-canvas/istanbul-legacy-hotel.webp", "/images/istanbul-contrast.jpg", "/images/home-canvas/spice-bazaar.webp"],
+  "antalya-waterpark-ticket": ["/images/kas-coast.jpg", "/images/antalya-ruins.jpg", "/images/home-canvas/bodrum-amanruya.webp"],
+  "antalya-airport-transfer": ["/images/turkey-transfer-coast.png", "/images/kas-coast.jpg", "/images/antalya-ruins.jpg"],
+  "istanbul-airport-transfer": ["/images/istanbul-waterfront-heritage.webp", "/images/bosphorus-ferry.jpg", "/images/istanbul-street.jpg"],
+  "cappadocia-airport-transfer": ["/images/cappadocia-dawn.jpg", "/images/cappadocia-rocks.jpg", "/images/cappadocia-soft.jpg"],
+  "fethiye-yacht-day": ["/images/kas-coast.jpg", "/images/home-canvas/aegean-bodrum.webp", "/images/turkey-transfer-coast.png"],
+  "antalya-hammam-session": ["/images/antalya-ruins.jpg", "/images/perge-ruins.jpg", "/images/home-canvas/bodrum-amanruya.webp"],
+  "istanbul-bazaar-shopping": ["/images/home-canvas/spice-bazaar.webp", "/images/istanbul-street.jpg", "/images/istanbul-contrast.jpg"],
+  "istanbul-walk-map": ["/images/istanbul-waterfront-heritage.webp", "/images/istanbul-street.jpg", "/images/home-canvas/spice-bazaar.webp"],
+};
+
+export const marketplaceServices: MarketplaceService[] = rawMarketplaceServices.map((service) => {
+  const images = marketplaceImageSets[service.id];
+  return images ? { ...service, imagePath: images[0], images } : service;
+});
 
 export const marketplaceServiceVariants: ServiceVariant[] = [
   { ...mock, id: "istanbul-bosphorus-private", serviceId: "istanbul-bosphorus-walk", title: "Индивидуальный маршрут", price: 4800, priceUnit: "за маршрут", durationMinutes: 240 },

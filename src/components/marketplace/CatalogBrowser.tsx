@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { marketplaceCategories, marketplaceDestinations } from "@/data/marketplace";
@@ -58,16 +58,28 @@ function numberFromInput(value: number): number | undefined {
 
 export function CatalogBrowser({ initialFilters, initialSort }: CatalogBrowserProps) {
   const searchParams = useSearchParams();
-  const query = searchParams.toString();
-  const filtersFromUrl = parseCatalogQuery(Object.fromEntries(searchParams.entries()));
-  const resolvedFilters = query ? filtersFromUrl : initialFilters;
-  const resolvedSort = searchParams.get("sort") ?? initialSort;
+  const [urlState, setUrlState] = useState(() => ({
+    filters: initialFilters,
+    page: 1,
+    sort: selectedSort(initialSort),
+  }));
+
+  useEffect(() => {
+    const query = searchParams.toString();
+    // URL state is external input; defer its first read until after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setUrlState({
+      filters: query ? parseCatalogQuery(Object.fromEntries(searchParams.entries())) : initialFilters,
+      page: selectedPage(searchParams.get("page")),
+      sort: selectedSort(searchParams.get("sort") ?? initialSort),
+    });
+  }, [initialFilters, initialSort, searchParams]);
 
   return (
     <CatalogBrowserContent
-      filters={resolvedFilters}
-      page={selectedPage(searchParams.get("page"))}
-      sort={selectedSort(resolvedSort)}
+      filters={urlState.filters}
+      page={urlState.page}
+      sort={urlState.sort}
     />
   );
 }
@@ -155,6 +167,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     ],
   };
   const hasActiveFilters = serializeCatalogQuery(filters).length > 0;
+  const activeFilterCount = new URLSearchParams(serializeCatalogQuery(filters)).size;
   const transferValue: TransferSearchState = {
     from: filters.from ?? "",
     to: filters.to ?? "",
@@ -195,6 +208,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       {scenario === "experience" && <ExperienceSearchForm onSubmit={updateFilters} value={filters} />}
       {(scenario === "self-service" || scenario === "support") && <ServiceRequestForm onSubmit={updateFilters} scenario={scenario} value={filters} />}
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
+        <span className={styles.quickFiltersLabel}>Быстрый выбор</span>
         {quickFilters.map((quickFilter) => (
           <button
             aria-pressed={includesQuickFilter(filters, quickFilter.value)}
@@ -218,7 +232,13 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
         onToggle={(event) => setFilterDisclosureOpen(event.currentTarget.open)}
         open={filterDisclosureOpen}
       >
-        <summary>Дополнительные фильтры <span>{filterDisclosureOpen ? "Скрыть" : "Открыть"}</span></summary>
+        <summary>
+          <span className={styles.filterSummaryTitle}>Фильтры</span>
+          <span className={styles.filterSummaryMeta}>
+            {activeFilterCount > 0 && <span>{activeFilterCount} выбрано</span>}
+            <span>{filterDisclosureOpen ? "Скрыть" : "Настроить"}</span>
+          </span>
+        </summary>
         <div className={styles.filterBody}>
           <FilterPanel onChange={updateFilters} options={filterOptions} value={filters} />
           <div className={styles.priceFilters}>
@@ -248,11 +268,6 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
                 value={filters.maxPrice ?? ""}
               />
             </label>
-            {hasActiveFilters && (
-              <button className={styles.clearButton} onClick={() => updateFilters({})} type="button">
-                Сбросить фильтры
-              </button>
-            )}
           </div>
         </div>
       </details>

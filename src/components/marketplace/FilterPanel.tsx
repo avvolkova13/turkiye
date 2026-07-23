@@ -40,8 +40,8 @@ export function FilterPanel({ onChange, options, value }: FilterPanelProps) {
   }
 
   return (
-    <fieldset className={styles.filterPanel}>
-      <legend>Фильтры</legend>
+    <fieldset aria-label="Параметры поиска" className={styles.filterPanel}>
+      <legend>Параметры поиска</legend>
       <label>
         <span>Что ищете</span>
         <input

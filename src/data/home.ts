@@ -96,24 +96,24 @@ const baseDirectionScenes = [
 
 const directionEnhancements = [
   {
-    canvasImage: "/turkiye/images/istanbul-waterfront-heritage.webp",
+    canvasImage: "/turkiye/images/home-canvas/istanbul-legacy-hotel.webp",
     contextPanel: {
       eyebrow: "Кураторский выбор",
       title: "48 исторических маршрутов",
       detail: "От античных городов до утреннего Стамбула",
     },
   },
-  { canvasImage: "/turkiye/images/home-canvas/kas-coast.webp", contextPanel: null },
+  { canvasImage: "/turkiye/images/home-canvas/bodrum-amanruya.webp", contextPanel: null },
   {
-    canvasImage: "/turkiye/images/home-canvas/cappadocia-dawn.webp",
+    canvasImage: "/turkiye/images/home-canvas/cappadocia-cave-hotel.webp",
     contextPanel: null,
   },
   {
-    canvasImage: "/turkiye/images/turkey-transfer-coast.webp",
+    canvasImage: "/turkiye/images/home-canvas/ankara-alley.webp",
     contextPanel: null,
   },
   {
-    canvasImage: "/turkiye/images/istanbul-support-neighborhood.webp",
+    canvasImage: "/turkiye/images/home-canvas/istanbul-modern.webp",
     contextPanel: {
       eyebrow: "Уже на месте",
       title: "Поддержка путешественника",
@@ -149,7 +149,7 @@ export const serviceKits: ServiceKit[] = [
 
 export const heroFragments: HeroFragment[] = [
   {
-    image: "/turkiye/images/home-kits/bosphorus-kit.webp",
+    image: "/turkiye/images/home-canvas/perge-ruins.webp",
     x: 0.04,
     y: 0.12,
     width: 0.09,
@@ -157,7 +157,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.48, 0.5],
   },
   {
-    image: "/turkiye/images/istanbul-waterfront-heritage.webp",
+    image: "/turkiye/images/home-sources/istanbul-legacy-hotel.avif",
     x: 0.28,
     y: 0.06,
     width: 0.08,
@@ -173,7 +173,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.56, 0.58],
   },
   {
-    image: "/turkiye/images/home-canvas/cappadocia-dawn.webp",
+    image: "/turkiye/images/home-sources/cappadocia-cave-hotel.avif",
     x: 0.69,
     y: 0.17,
     width: 0.08,
@@ -181,7 +181,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.5, 0.46],
   },
   {
-    image: "/turkiye/images/turkey-transfer-coast.webp",
+    image: "/turkiye/images/home-canvas/ankara-alley.webp",
     x: 0.87,
     y: 0.1,
     width: 0.13,
@@ -189,7 +189,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.55, 0.5],
   },
   {
-    image: "/turkiye/images/istanbul-support-neighborhood.webp",
+    image: "/turkiye/images/home-canvas/istanbul-modern.webp",
     x: 0.12,
     y: 0.39,
     width: 0.08,
@@ -229,7 +229,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.46, 0.5],
   },
   {
-    image: "/turkiye/images/home-canvas/cappadocia-dawn.webp",
+    image: "/turkiye/images/cappadocia-rocks.jpg",
     x: 0.44,
     y: 0.68,
     width: 0.06,
@@ -237,7 +237,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.62, 0.52],
   },
   {
-    image: "/turkiye/images/home-kits/arrival-kit.webp",
+    image: "/turkiye/images/turkey-transfer-coast.webp",
     x: 0.63,
     y: 0.59,
     width: 0.07,
@@ -245,7 +245,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.38, 0.5],
   },
   {
-    image: "/turkiye/images/home-canvas/kas-coast.webp",
+    image: "/turkiye/images/home-sources/bodrum-amanruya.avif",
     x: 0.88,
     y: 0.65,
     width: 0.1,
@@ -253,7 +253,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.4, 0.62],
   },
   {
-    image: "/turkiye/images/istanbul-waterfront-heritage.webp",
+    image: "/turkiye/images/ankara-alley.jpg",
     x: 0.08,
     y: 0.79,
     width: 0.09,
@@ -261,7 +261,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.6, 0.48],
   },
   {
-    image: "/turkiye/images/home-canvas/spice-bazaar.webp",
+    image: "/turkiye/images/home-canvas/cappadocia-dawn.webp",
     x: 0.38,
     y: 0.84,
     width: 0.1,
@@ -269,7 +269,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.54, 0.4],
   },
   {
-    image: "/turkiye/images/home-canvas/aegean-bodrum.webp",
+    image: "/turkiye/images/modern-downtown.jpg",
     x: 0.72,
     y: 0.81,
     width: 0.09,
@@ -277,7 +277,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.6, 0.5],
   },
   {
-    image: "/turkiye/images/home-canvas/bodrum-amanruya.webp",
+    image: "/turkiye/images/galata-moon.jpg",
     x: 0.04,
     y: 0.48,
     width: 0.16,
@@ -285,7 +285,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.48, 0.56],
   },
   {
-    image: "/turkiye/images/home-canvas/cappadocia-cave-hotel.webp",
+    image: "/turkiye/images/istanbul-contrast.jpg",
     x: 0.81,
     y: 0.52,
     width: 0.11,
@@ -293,7 +293,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.5, 0.52],
   },
   {
-    image: "/turkiye/images/home-canvas/istanbul-legacy-hotel.webp",
+    image: "/turkiye/images/galata-night.jpg",
     x: 0.52,
     y: 0.92,
     width: 0.07,
@@ -301,7 +301,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.52, 0.5],
   },
   {
-    image: "/turkiye/images/home-kits/arrival-kit.webp",
+    image: "/turkiye/images/istanbul-motion.jpg",
     x: 0.91,
     y: 0.42,
     width: 0.17,
@@ -309,7 +309,7 @@ export const heroFragments: HeroFragment[] = [
     crop: [0.5, 0.5],
   },
   {
-    image: "/turkiye/images/home-kits/bosphorus-kit.webp",
+    image: "/turkiye/images/aegean-bodrum.jpg",
     x: 0.17,
     y: 0.73,
     width: 0.15,
@@ -328,8 +328,8 @@ export const collectionItems = [
   {
     name: "Анталья и побережье",
     count: "51 идея",
-    image: "/turkiye/images/istanbul-waterfront-heritage.webp",
-    alt: "Босфор и историческая архитектура Стамбула",
+    image: "/turkiye/images/antalya-ruins.jpg",
+    alt: "Древние руины Перге и средиземноморский берег Антальи",
   },
   {
     name: "Каппадокия",

@@ -1,22 +1,25 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { Collections } from "@/components/home/Collections";
 import { DirectionStory } from "@/components/home/DirectionStory";
 import { Header } from "@/components/home/Header";
 import { HeroCanvasScene } from "@/components/home/HeroCanvasScene";
 import { MotionProvider } from "@/components/home/motion/MotionProvider";
+import { ManifestoCards } from "@/components/home/ManifestoCards";
 import { Newsletter } from "@/components/home/Newsletter";
 import { RevealObserver } from "@/components/home/RevealObserver";
 import { siteConfig } from "@/config/site";
 import { affordableItems, directionScenes, heroFragments } from "@/data/home";
+import { sitePath } from "@/lib/sitePath";
 
 const brandName = siteConfig.publicBrandName ?? "Türkiye";
 
 const services = [
-  ["Круиз по Босфору", "Стамбул", "от 2 900 ₽"],
-  ["Трансфер из аэропорта", "Анталья", "от 3 700 ₽"],
-  ["Воздушный шар", "Каппадокия", "от 14 900 ₽"],
-  ["Туристическая eSIM", "Вся Турция", "от 790 ₽"],
+  { name: "Круиз по Босфору", place: "Стамбул", price: "от 2 900 ₽", href: "/catalog?q=Босфор&destination=istanbul" },
+  { name: "Трансфер из аэропорта", place: "Анталья", price: "от 3 700 ₽", href: "/services/antalya-airport-transfer" },
+  { name: "Воздушный шар", place: "Каппадокия", price: "от 14 900 ₽", href: "/catalog?category=excursions&destination=cappadocia" },
+  { name: "Туристическая eSIM", place: "Вся Турция", price: "от 790 ₽", href: "/catalog?category=connectivity" },
 ] as const;
 
 export default function HomePage() {
@@ -43,12 +46,12 @@ export default function HomePage() {
           data-reveal
         >
           <h2 className="visually-hidden">О сервисе путешествий по Турции</h2>
-          <div className="manifesto-heading">
+          <div className="manifesto-heading" data-reveal>
             <p>Один сервис для всей поездки</p>
             <span>От 50 ₽ до маршрута, который меняет всё</span>
           </div>
           <div className="manifesto-layout">
-            <div className="manifesto-aside">
+            <div className="manifesto-aside" data-reveal data-reveal-step="1">
               <p>Türkiye</p>
               <strong>Est. 2026</strong>
               <div className="manifesto-aside-image">
@@ -56,48 +59,23 @@ export default function HomePage() {
                   alt="Деталь утреннего Стамбула у воды"
                   fill
                   sizes="(max-width: 760px) 34vw, 12vw"
-                  src="/turkiye/images/istanbul-motion.jpg"
+                  src={sitePath("/images/istanbul-motion.jpg")}
                 />
               </div>
             </div>
-            <div className="manifesto-main">
+            <ManifestoCards />
+            <div className="manifesto-main" data-reveal data-reveal-step="2">
               <p className="manifesto-copy">
                 Здесь можно купить карту прогулки, подключить связь, заказать трансфер
                 или собрать поездку на несколько дней — без пяти сайтов и десятка
                 переписок.
               </p>
             </div>
-            <div className="manifesto-cards">
-              <article>
-                <div className="manifesto-card-image">
-                  <Image
-                    alt="Бухта у побережья Каша"
-                    fill
-                    sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/turkiye/images/kas-coast.jpg"
-                  />
-                </div>
-                <strong>Маршруты, которые остаются</strong>
-                <span>Эгейское побережье</span>
-              </article>
-              <article>
-                <div className="manifesto-card-image">
-                  <Image
-                    alt="Свет раннего утра в Каппадокии"
-                    fill
-                    sizes="(max-width: 760px) 100vw, 15vw"
-                    src="/turkiye/images/cappadocia-rocks.jpg"
-                  />
-                </div>
-                <strong>Места вне привычного списка</strong>
-                <span>Каппадокия · на рассвете</span>
-              </article>
-            </div>
           </div>
-          <div className="manifesto-signature">
-            <span>Один сервис</span>
-            <span>Вся Турция</span>
-            <span>Любой масштаб</span>
+          <div className="manifesto-signature" data-reveal>
+            <span data-reveal data-reveal-step="1">Один сервис</span>
+            <span data-reveal data-reveal-step="2">Вся Турция</span>
+            <span data-reveal data-reveal-step="3">Любой масштаб</span>
           </div>
         </section>
 
@@ -108,13 +86,13 @@ export default function HomePage() {
           </div>
           <div className="ideas-composition">
             <article className="idea idea-lead" data-reveal>
-              <a href="#bundles" aria-label="Стамбул впервые: готовый маршрут на три дня">
+              <Link href="/guides/istanbul-first-trip" aria-label="Стамбул впервые: бесплатный маршрут на три дня">
                 <div className="idea-media">
                   <Image
                     alt="Тёплый свод и ритм арок стамбульского базара"
                     fill
                     sizes="(max-width: 760px) 100vw, 58vw"
-                    src="/turkiye/images/spice-bazaar.jpg"
+                src={sitePath("/images/spice-bazaar.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
@@ -122,69 +100,66 @@ export default function HomePage() {
                   <h3>Стамбул впервые</h3>
                   <p>Город не по списку достопримечательностей, а по смене света и районов.</p>
                 </div>
-              </a>
+              </Link>
             </article>
             <article className="idea idea-offset" data-reveal>
-              <a href="#services" aria-label="Что забронировать до прилёта в Анталью">
+              <Link href="/guides/antalya-without-rush" aria-label="Анталья без суеты: пять решений до прилёта">
                 <div className="idea-media">
                   <Image
                     alt="Белые минеральные террасы Памуккале"
                     fill
                     sizes="(max-width: 760px) 100vw, 30vw"
-                    src="/turkiye/images/pamukkale.jpg"
+                src={sitePath("/images/pamukkale.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
                   <span>До прилёта · 5 решений</span>
                   <h3>Анталья без суеты</h3>
                 </div>
-              </a>
+              </Link>
             </article>
             <article className="idea idea-note" data-reveal>
-              <a href="#collections" aria-label="Каппадокия без автомобиля">
+              <Link href="/guides/cappadocia-without-car" aria-label="Каппадокия без автомобиля: бесплатный план поездки">
                 <div className="idea-media">
                   <Image
                     alt="Воздушные шары над мягкими утренними долинами Каппадокии"
                     fill
                     sizes="(max-width: 760px) 100vw, 22vw"
-                    src="/turkiye/images/cappadocia-soft.jpg"
+                src={sitePath("/images/cappadocia-soft.jpg")}
                   />
                 </div>
                 <div className="idea-copy">
                   <span>Самостоятельно · 2 дня</span>
                   <h3>Каппадокия без автомобиля</h3>
                 </div>
-              </a>
+              </Link>
             </article>
           </div>
         </section>
 
         <section className="services-section" id="services" data-header-tone="light">
           <div className="services-stage" data-reveal>
-            <div className="services-image">
+            <div className="services-image" data-reveal>
               <Image
                 alt="Паром на Босфоре в золотом вечернем свете"
                 fill
                 sizes="(max-width: 760px) 100vw, 52vw"
-                src="/turkiye/images/bosphorus-ferry.jpg"
+                src={sitePath("/images/bosphorus-ferry.jpg")}
               />
               <span>Сейчас выбирают</span>
             </div>
-            <div className="services-intro">
+            <div className="services-intro" data-reveal>
               <p>Выберите первый шаг</p>
               <h2>Услуги для ближайшей поездки</h2>
             </div>
           </div>
           <div className="service-index">
-            {services.map(([name, place, price], index) => (
-              <a href="#collections" key={name} data-reveal>
+            {services.map(({ name, place, price, href }, index) => (
+              <a href={href} key={name} data-reveal>
                 <span className="service-number">0{index + 1}</span>
                 <span className="service-name">{name}</span>
                 <span className="service-place">{place}</span>
                 <span className="service-price">{price}</span>
-                <span className="service-arrow" aria-hidden="true">
-                  ↗
-                </span>
               </a>
             ))}
           </div>
@@ -198,15 +173,15 @@ export default function HomePage() {
           data-header-tone="dark"
           data-reveal
         >
-          <div className="affordable-title">
+          <div className="affordable-title" data-reveal>
             <span>Полезные вещи, которые лучше купить заранее</span>
             <h2>
               Для поездки — <em>от 50 ₽</em>
             </h2>
           </div>
           <div className="affordable-list">
-            {affordableItems.map(([name, price], index) => (
-              <a href="#newsletter" key={name}>
+            {affordableItems.map(({ name, price, slug }, index) => (
+              <a href={`/services/${slug}`} key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{name}</strong>
                 <b>{price}</b>
@@ -221,7 +196,7 @@ export default function HomePage() {
               alt="Современная архитектура Стамбула в вечернем свете"
               fill
               sizes="(max-width: 760px) 70vw, 16vw"
-              src="/turkiye/images/istanbul-modern.jpg"
+              src={sitePath("/images/istanbul-modern.jpg")}
             />
           </div>
           <div className="bundle-visual bundle-visual-right" data-reveal>
@@ -229,7 +204,7 @@ export default function HomePage() {
               alt="Тихая бухта Эгейского побережья Турции"
               fill
               sizes="(max-width: 760px) 92vw, 42vw"
-              src="/turkiye/images/aegean-bodrum.jpg"
+              src={sitePath("/images/aegean-bodrum.jpg")}
             />
           </div>
           <div className="bundles-copy" data-reveal>
@@ -239,17 +214,16 @@ export default function HomePage() {
             </div>
             <div className="bundle-links">
               {[
-                ["Спокойный прилёт", "трансфер · связь · поддержка"],
-                ["Стамбул впервые", "3 дня · маршрут · Босфор"],
-                ["Анталья с ребёнком", "7 дней · море · семейный ритм"],
-                ["Каппадокия без забот", "2 дня · трансфер · рассвет"],
-              ].map(([bundle, details]) => (
-                <a href="#final-cta" key={bundle}>
+                { bundle: "Спокойный прилёт", details: "трансфер · связь · поддержка", href: "/services/antalya-airport-transfer" },
+                { bundle: "Стамбул впервые", details: "3 дня · маршрут · Босфор", href: "/catalog?destination=istanbul" },
+                { bundle: "Анталья с ребёнком", details: "7 дней · море · семейный ритм", href: "/catalog?destination=antalya&kids=1" },
+                { bundle: "Каппадокия без забот", details: "2 дня · трансфер · рассвет", href: "/catalog?category=excursions&destination=cappadocia" },
+              ].map(({ bundle, details, href }) => (
+                <a href={href} key={bundle}>
                   <span className="bundle-name">
                     <strong>{bundle}</strong>
                     <small>{details}</small>
                   </span>
-                  <span className="bundle-arrow" aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>
@@ -296,14 +270,14 @@ export default function HomePage() {
             alt="Ночная панорама Галатской башни и огней Стамбула"
             fill
             sizes="100vw"
-            src="/turkiye/images/galata-night.jpg"
+            src={sitePath("/images/galata-night.jpg")}
           />
           <div className="final-cta-shade" />
           <div className="final-cta-copy" data-reveal>
             <span>Ваше следующее место</span>
             <h2>С чего начнём вашу Турцию?</h2>
             <p>Выберите город, услугу или готовый план — остальное соберём по шагам.</p>
-            <a className="primary-action light-action" href="#directions">
+            <a className="primary-action light-action" href="/catalog">
               Начать путешествие
             </a>
           </div>
@@ -315,38 +289,42 @@ export default function HomePage() {
           data-header-tone="dark"
           data-reveal
         >
-          <div>
+          <div data-reveal>
             <p>Полезные идеи перед следующей поездкой</p>
             <h2>Маршруты, места и практичные советы — без рекламного шума.</h2>
           </div>
-          <Newsletter />
+          <div data-reveal>
+            <Newsletter />
+          </div>
         </section>
       </main>
 
       <footer className="page-footer" id="page-footer" data-header-tone="light">
-        <div className="footer-wordmark">{brandName}</div>
+        <div className="footer-wordmark">
+          <Image alt="Faro" height={68} src={sitePath("/faro-logo.svg")} width={161} />
+        </div>
         <div className="footer-grid">
-          <nav aria-label="Направления в Турции">
+          <nav aria-label="Направления в Турции" data-reveal>
             <span>Направления</span>
             <a href="#directions">Стамбул</a>
             <a href="#directions">Анталья</a>
             <a href="#directions">Каппадокия</a>
             <a href="#collections">Эгейское море</a>
           </nav>
-          <nav aria-label="Сервисы в путешествии">
+          <nav aria-label="Сервисы в путешествии" data-reveal>
             <span>В путешествии</span>
             <a href="#services">Впечатления</a>
             <a href="#services">Транспорт</a>
             <a href="#affordable">Связь и помощь</a>
             <a href="#bundles">Наборы</a>
           </nav>
-          <nav aria-label="Информация о сервисе">
+          <nav aria-label="Информация о сервисе" data-reveal>
             <span>Сервис</span>
             <a href="#statement">О подходе</a>
             <a href="#principles">Как это работает</a>
             <a href="#newsletter">Поддержка</a>
           </nav>
-          <div className="footer-meta">
+          <div className="footer-meta" data-reveal>
             <span>Язык и валюта</span>
             <strong>Русский · RUB</strong>
             <small>Поддержка ежедневно · 09:00–21:00</small>

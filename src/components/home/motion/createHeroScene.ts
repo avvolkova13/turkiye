@@ -3,6 +3,7 @@
 import * as THREE from "three";
 
 import type { HeroFragment } from "@/data/home";
+import { sitePath } from "@/lib/sitePath";
 
 import type { HeroSceneController, RendererOptions } from "./types";
 
@@ -103,7 +104,7 @@ export function createHeroScene(
     };
 
     const texture = loader.load(
-      fragment.image,
+      sitePath(fragment.image),
       (loadedTexture) => {
         if (destroyed || failed) return;
         const image = loadedTexture.image as { width?: number; height?: number };

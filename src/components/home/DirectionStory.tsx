@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import type { DirectionScene } from "@/data/home";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { sitePath } from "@/lib/sitePath";
+
+import { gsap } from "./motion/gsap";
+import { FloemaMetaRow } from "./FloemaMetaRow";
 
 function DirectionIcon({ index }: { index: number }) {
   const paths = [
@@ -23,8 +28,30 @@ function DirectionIcon({ index }: { index: number }) {
 
 export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [directionsVisible, setDirectionsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const sceneRefs = useRef<(HTMLElement | null)[]>([]);
   const sceneRatios = useRef(new Map<Element, number>());
+  const previousIndex = useRef(-1);
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const directionMotionState =
+    reducedMotion === true
+      ? "reduced"
+      : reducedMotion === false && directionsVisible
+        ? "full"
+        : "pending";
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setDirectionsVisible(entry?.isIntersecting ?? false),
+      { threshold: 0.15 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,8 +71,84 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
     return () => observer.disconnect();
   }, []);
 
+  useLayoutEffect(() => {
+    if (reducedMotion === null || !directionsVisible) return;
+
+    const activeScene = sceneRefs.current[activeIndex];
+    if (!activeScene) return;
+
+    const parts = Array.from(
+      activeScene.querySelectorAll<HTMLElement>("[data-direction-part]"),
+    );
+    if (!parts.length) return;
+
+    const previous = previousIndex.current;
+    previousIndex.current = activeIndex;
+    const section = sectionRef.current;
+    section?.setAttribute("data-direction-animation", "active");
+
+    const part = (name: string) =>
+      activeScene.querySelector<HTMLElement>(`[data-direction-part="${name}"]`);
+
+    const context = gsap.context(() => {
+      if (reducedMotion) {
+        gsap.set(parts, { clearProps: "all" });
+        return;
+      }
+
+      const direction = previous < 0 || activeIndex >= previous ? 1 : -1;
+      const fromX = direction * 72;
+      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      timeline
+        .fromTo(
+          part("meta"),
+          { x: fromX, y: 10, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.34 },
+          0,
+        )
+        .fromTo(
+          part("badge"),
+          { x: fromX * 0.72, y: 8, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.38 },
+          "-=0.24",
+        )
+        .fromTo(
+          part("title"),
+          { x: fromX * 0.52, y: 18, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.56 },
+          "-=0.22",
+        )
+        .fromTo(
+          part("description"),
+          { x: fromX * 0.34, y: 12, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.42 },
+          "-=0.3",
+        )
+        .fromTo(
+          part("cta"),
+          { x: fromX * 0.22, y: 8, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.34 },
+          "-=0.24",
+        );
+    }, activeScene);
+
+    return () => {
+      context.revert();
+      if (section?.dataset.directionAnimation === "active") {
+        section.removeAttribute("data-direction-animation");
+      }
+    };
+  }, [activeIndex, directionsVisible, reducedMotion]);
+
   return (
-    <section className="directions-story" id="directions" data-header-tone="light">
+    <section
+      className="directions-story"
+      data-header-tone="light"
+      data-direction-motion={directionMotionState}
+      id="directions"
+      ref={sectionRef}
+    >
       <div className="direction-media-stage" aria-hidden="true">
         {scenes.map((scene, index) => (
           <div
@@ -59,7 +162,7 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
               priority={index === 0}
               loading={index > 0 && index < 3 ? "eager" : undefined}
               sizes="100vw"
-              src={scene.image}
+              src={sitePath(scene.image)}
               style={{ objectPosition: scene.focalPoint }}
             />
           </div>
@@ -87,24 +190,33 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
                 alt={scene.imageAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 1px"
-                src={scene.image}
+                src={sitePath(scene.image)}
                 style={{ objectPosition: scene.focalPoint }}
               />
             </div>
             <div className="direction-copy">
               <div className="direction-meta">
-                <span>{scene.number}</span>
-                <span className="direction-badge">
+                <span data-direction-part="meta">{scene.number}</span>
+                <span className="direction-badge" data-direction-part="badge">
                   <DirectionIcon index={index} />
                   {scene.label}
                 </span>
               </div>
-              <h2>{scene.title}</h2>
-              <p>{scene.description}</p>
-              <a className="text-link light-link" href="#services">
-                <span className="text-link-icon"><DirectionIcon index={index} /></span>
-                <span className="text-link-label">{scene.cta}</span>
-                <span className="text-link-arrow" aria-hidden="true">↗</span>
+              <h2 data-direction-part="title">
+                {scene.titleLines
+                  ? scene.titleLines.map((line) => (
+                      <span className="direction-title-line" key={line}>
+                        {line}
+                      </span>
+                    ))
+                  : scene.title}
+              </h2>
+              <p data-direction-part="description">{scene.description}</p>
+              <a className="text-link light-link" data-direction-part="cta" href={scene.href}>
+                <FloemaMetaRow
+                  icon={<DirectionIcon index={index} />}
+                  label={scene.cta}
+                />
               </a>
             </div>
           </article>

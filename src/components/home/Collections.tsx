@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 import { collectionItems } from "@/data/home";
+import { sitePath } from "@/lib/sitePath";
 
 function CollectionIcon({ index }: { index: number }) {
   const paths = [
@@ -22,14 +24,45 @@ function CollectionIcon({ index }: { index: number }) {
 }
 
 export function Collections() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [activePreviewIndex, setActivePreviewIndex] = useState(0);
+  const previewTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const activateCollection = (index: number) => {
+    if (activeIndex !== index) setActivePreviewIndex(0);
+    setActiveIndex(index);
+    setIsInteracting(true);
+  };
+
+  const deactivateCollection = () => {
+    setIsInteracting(false);
+    setActiveIndex(null);
+  };
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    previewTimer.current = setInterval(() => {
+      setActivePreviewIndex((current) => (current + 1) % collectionItems[activeIndex].images.length);
+    }, 750);
+
+    return () => {
+      if (previewTimer.current) {
+        clearInterval(previewTimer.current);
+        previewTimer.current = null;
+      }
+    };
+  }, [activeIndex]);
 
   return (
     <section
       className="collections-section"
+      data-interaction={isInteracting ? "open" : "list"}
       id="collections"
       data-header-tone="dark"
       data-reveal
+      onMouseLeave={deactivateCollection}
     >
       <div className="collections-atmosphere" aria-hidden="true">
         <span />
@@ -38,31 +71,60 @@ export function Collections() {
         <span />
       </div>
       <div className="collections-intro">
-        <p>Пять способов увидеть Турцию</p>
-        <h2>Выберите свой темп</h2>
+        <p>The Collections</p>
       </div>
       <div className="collection-list">
         {collectionItems.map((item, index) => (
-          <button
-            aria-pressed={activeIndex === index}
-            className="collection-row"
-            data-active={activeIndex === index}
+          <Link
+            className={`collection-row collection-row-${index + 1}`}
+            data-active={isInteracting && activeIndex === index}
+            data-reveal
+            data-reveal-step={String((index % 4) + 1)}
+            href={item.href}
             key={item.name}
-            onFocus={() => setActiveIndex(index)}
-            onMouseEnter={() => setActiveIndex(index)}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => activateCollection(index)}
+            onFocus={() => activateCollection(index)}
+            onMouseEnter={() => activateCollection(index)}
           >
             <span className="collection-index">0{index + 1}</span>
-            <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
-            <span className="collection-name">
-              {item.name} <small>({item.count.replace(/ .*/, "")})</small>
+            <span className="collection-content">
+              {index === 3 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
+              <span className="collection-icon-wrap"><CollectionIcon index={index} /></span>
+              {index === 1 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
+              <span className="collection-name-main">{item.name}</span>
+              {index !== 3 && index !== 2 && index !== 1 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
+              <span className="collection-count">({item.count.replace(/ .*/, "")})</span>
+              {index === 2 && <CollectionThumb item={item} index={index} activeIndex={activeIndex} activePreviewIndex={activePreviewIndex} />}
             </span>
-            <span className="collection-thumb">
-              <Image alt={item.alt} fill sizes="8rem" src={item.image} />
-            </span>
-          </button>
+          </Link>
         ))}
       </div>
     </section>
+  );
+}
+
+function CollectionThumb({
+  item,
+  index,
+  activeIndex,
+  activePreviewIndex,
+}: {
+  item: (typeof collectionItems)[number];
+  index: number;
+  activeIndex: number | null;
+  activePreviewIndex: number;
+}) {
+  const isActive = activeIndex === index;
+
+  return (
+    <span className="collection-thumb">
+      <Image
+        alt={item.alt}
+        fill
+        key={`${item.name}-${isActive ? activePreviewIndex : 0}`}
+        sizes="(max-width: 760px) 7rem, 16rem"
+        src={sitePath(item.images[isActive ? activePreviewIndex : 0])}
+      />
+    </span>
   );
 }

@@ -2,9 +2,11 @@
 
 import { type CSSProperties, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import type { HeroFragment } from "@/data/home";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { sitePath } from "@/lib/sitePath";
 
 import { createHeroScene } from "./motion/createHeroScene";
 import { gsap, ScrollTrigger } from "./motion/gsap";
@@ -123,7 +125,7 @@ export function HeroCanvasScene({
               } as CSSProperties
             }
           >
-            <Image alt="" fill sizes="20vw" src={fragment.image} />
+            <Image alt="" fill sizes="20vw" src={sitePath(fragment.image)} />
           </div>
         ))}
       </div>
@@ -135,6 +137,9 @@ export function HeroCanvasScene({
         <p>
           Экскурсии, трансферы, билеты, связь и полезные услуги — до поездки и уже на месте.
         </p>
+        <Link className="hero-catalog-link" href="/catalog">
+          Перейти в каталог
+        </Link>
       </div>
     </section>
   );

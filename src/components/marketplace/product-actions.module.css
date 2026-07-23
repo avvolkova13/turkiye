@@ -1,0 +1,5 @@
+.actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.actions button { padding: 0.8rem 1rem; border: 1px solid #242721; cursor: pointer; font-size: 0.85rem; }
+.primary { background: #242721; color: #fffdf8; }
+.secondary { background: transparent; color: #242721; }
+.actions button:hover { background: #a54e33; border-color: #a54e33; color: #fffdf8; }

@@ -167,7 +167,7 @@ async function verifyViewport(width, height) {
     await search.click();
     assert.equal(await page.getByRole("dialog").getAttribute("aria-modal"), "true");
     await page.keyboard.press("Escape");
-    assert.equal(await page.locator(":focus").textContent(), "Поиск");
+    assert.equal(await page.locator(":focus").getAttribute("aria-label"), "Поиск");
 
     await page.locator("#newsletter").scrollIntoViewIfNeeded();
     await page.getByLabel("Ваш email").fill("reader@example.com");
@@ -208,6 +208,14 @@ async function verifyFullMotionLifecycle() {
   );
 
   const heroCanvas = motionPage.locator("canvas[data-hero-canvas]");
+  const activeDirection = motionPage.locator('[data-direction-scene][data-active="true"]');
+  for (const part of ["meta", "badge", "title", "description", "cta"]) {
+    assert.equal(
+      await activeDirection.locator(`[data-direction-part="${part}"]`).count(),
+      1,
+      `Active direction scene must expose one ${part} animation part`,
+    );
+  }
   await motionPage.waitForFunction(
     () => Boolean(document.querySelector("canvas[data-hero-canvas]")?.getAttribute("data-stream-sample")),
   );
@@ -218,6 +226,14 @@ async function verifyFullMotionLifecycle() {
   await motionPage.waitForTimeout(700);
   const secondSample = await heroCanvas.getAttribute("data-stream-sample");
   assert.notEqual(firstSample, secondSample, "Hero stream must move autonomously at rest");
+
+  await motionPage.locator('[data-direction-scene][data-index="0"]').scrollIntoViewIfNeeded();
+  await motionPage.waitForTimeout(180);
+  assert.equal(
+    await motionPage.locator("#directions").getAttribute("data-direction-animation"),
+    "active",
+    "The first direction scene animation must start when the section enters the viewport",
+  );
 
   await motionPage.emulateMedia({ reducedMotion: "reduce" });
   await motionPage.waitForFunction(

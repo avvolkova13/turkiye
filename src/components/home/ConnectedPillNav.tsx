@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -31,34 +32,37 @@ type Geometry = {
 
 const emptyGeometry: Geometry = { width: 0, height: 0, rects: [] };
 
-const FLOEMA_RADIUS = 14.0409375;
-
-function roundedRectPath({ x, y, width, height }: MeasuredRect, radius = FLOEMA_RADIUS) {
-  const r = Math.min(radius, width / 2, height / 2);
+function floemaLabelPath(rect: MeasuredRect) {
+  const y = (rect.height - 41.296875) / 2;
+  const bottom = y + 41.296875;
+  const radius = Math.min(14.0409375, rect.width / 2, 20.6484375);
   return [
-    `M ${x + r} ${y}`,
-    `H ${x + width - r}`,
-    `Q ${x + width} ${y} ${x + width} ${y + r}`,
-    `V ${y + height - r}`,
-    `Q ${x + width} ${y + height} ${x + width - r} ${y + height}`,
-    `H ${x + r}`,
-    `Q ${x} ${y + height} ${x} ${y + height - r}`,
-    `V ${y + r}`,
-    `Q ${x} ${y} ${x + r} ${y}`,
+    `M${rect.x} ${y + radius}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + radius} ${y}`,
+    `L${rect.x + rect.width - radius} ${y}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + rect.width} ${y + radius}`,
+    `L${rect.x + rect.width} ${bottom - radius}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x + rect.width - radius} ${bottom}`,
+    `L${rect.x + radius} ${bottom}`,
+    `A${radius} ${radius} 0 0 1 ${rect.x} ${bottom - radius}`,
     "Z",
   ].join(" ");
 }
 
 function bridgePath(left: MeasuredRect, right: MeasuredRect) {
-  const boundary = (left.x + left.width + right.x) / 2;
-  const top = Math.max(left.y, right.y);
-  const scale = Math.min(left.height, right.height) / 44;
+  const leftEdge = left.x + left.width;
+  const rightEdge = right.x;
+  const middle = (leftEdge + rightEdge) / 2;
+  const top = Math.max(left.y, right.y) + 9.96788665631135;
+  const bottom = Math.min(left.y + left.height, right.y + right.height) - 9.96788665631135;
+  const leftPoint = middle - (rightEdge - leftEdge) / 2 - 1.0818500254605;
+  const rightPoint = middle + (rightEdge - leftEdge) / 2 + 1.0358437839447;
 
   return [
-    `M ${boundary - 1.081850025 * scale} ${top + 34.0321133437 * scale}`,
-    `C ${boundary - 0.4771708075 * scale} ${top + 33.1065010089 * scale}, ${boundary + 0.4477699721 * scale} ${top + 32.8467178281 * scale}, ${boundary + 1.0358437839 * scale} ${top + 33.7016933067 * scale}`,
-    `L ${boundary + 1.0358437839 * scale} ${top + 10.2983066933 * scale}`,
-    `C ${boundary + 0.4477699721 * scale} ${top + 11.1532821719 * scale}, ${boundary - 0.4771708075 * scale} ${top + 10.8934989911 * scale}, ${boundary - 1.081850025 * scale} ${top + 9.9678866563 * scale}`,
+    `M ${leftPoint} ${bottom}`,
+    `C ${leftPoint + 0.6046792} ${bottom - 0.9256123} ${rightPoint - 0.5889258} ${bottom - 1.1853955} ${rightPoint} ${bottom - 0.33042}`,
+    `L ${rightPoint} ${top + 0.33042}`,
+    `C ${rightPoint - 0.5889258} ${top + 1.1853955} ${leftPoint + 0.6046792} ${top + 0.9256123} ${leftPoint} ${top}`,
     "Z",
   ].join(" ");
 }
@@ -70,9 +74,14 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
   const [geometry, setGeometry] = useState<Geometry>(emptyGeometry);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const coarsePointer = useMediaQuery("(pointer: coarse)");
+  const canExpand = reducedMotion === false && coarsePointer === false;
   const visualIndex = hoveredIndex ?? focusedIndex ?? 0;
+  const uniqueId = useId().replace(/:/g, "");
+  const clipId = `pill-clip-${uniqueId}`;
+  const glowId = `pill-glow-${uniqueId}`;
 
   const measure = useCallback(() => {
     const nav = navRef.current;
@@ -139,7 +148,7 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
   }, [measure, items]);
 
   const shapePath = useMemo(() => {
-    const segments = geometry.rects.map((rect) => roundedRectPath(rect));
+    const segments = geometry.rects.map((rect) => floemaLabelPath(rect));
     const bridges = geometry.rects
       .slice(0, -1)
       .map((rect, index) => bridgePath(rect, geometry.rects[index + 1]));
@@ -156,6 +165,12 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
       data-returning={hoveredIndex === null ? "true" : "false"}
       onPointerLeave={() => {
         setHoveredIndex(null);
+        setPointer(null);
+      }}
+      onPointerMove={(event) => {
+        if (coarsePointer !== false || !navRef.current) return;
+        const rect = navRef.current.getBoundingClientRect();
+        setPointer({ x: event.clientX - rect.left, y: event.clientY - rect.top });
       }}
       ref={navRef}
     >
@@ -167,7 +182,26 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
           preserveAspectRatio="none"
           viewBox={`0 0 ${geometry.width} ${geometry.height}`}
         >
+          <defs>
+            <clipPath id={clipId}>
+              <path d={shapePath} />
+            </clipPath>
+            <radialGradient id={glowId}>
+              <stop offset="20%" stopColor="#9c8cff88" />
+              <stop offset="100%" stopColor="#9c8cff00" />
+            </radialGradient>
+          </defs>
           <path className="pill-surface" d={shapePath} />
+          {pointer ? (
+            <circle
+              className="pill-pointer-glow"
+              clipPath={`url(#${clipId})`}
+              cx={pointer.x}
+              cy={pointer.y}
+              fill={`url(#${glowId})`}
+              r="30"
+            />
+          ) : null}
           {dotRect ? (
             <circle
               className="pill-active-dot"
@@ -180,15 +214,17 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
       ) : null}
 
       {items.map(([label, href], index) => {
+        const expanded = canExpand && hoveredIndex === index;
         return (
           <a
             data-active={visualIndex === index ? "true" : "false"}
+            data-expanded={expanded ? "true" : "false"}
             href={href}
             key={href}
             onBlur={() => setFocusedIndex(null)}
             onFocus={() => setFocusedIndex(index)}
             onPointerEnter={() => {
-              if (reducedMotion === false && coarsePointer === false) setHoveredIndex(index);
+              if (canExpand) setHoveredIndex(index);
             }}
             ref={(node) => {
               linkRefs.current[index] = node;

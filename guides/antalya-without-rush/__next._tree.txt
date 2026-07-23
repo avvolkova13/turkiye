@@ -1,3 +1,3 @@
-:HL["/turkiye/_next/static/chunks/04xn6c73pzjq4.css","style"]
-:HL["/turkiye/_next/static/chunks/1msbrqi9_d2yk.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"guides","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"antalya-without-rush","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"h3Qo9GNPof32hqLdM9HRA"}
+:HL["/turkiye/_next/static/chunks/1_0s9aj3_3icq.css","style"]
+:HL["/turkiye/_next/static/chunks/24h-ngmihf63p.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"guides","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"antalya-without-rush","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"lSQoqjIsO0dqFRrhRP0j2"}

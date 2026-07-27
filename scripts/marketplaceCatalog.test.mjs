@@ -99,21 +99,10 @@ test("calendar-date validation rejects impossible snapshot dates", () => {
   assert.equal(isCalendarDate("2026-7-27"), false);
 });
 
-test("local covers are explicit when an image is shared", () => {
+test("catalog cards use a unique local cover per service", () => {
   const { marketplaceServices } = require("../src/data/marketplace.ts");
-  const images = new Map();
-
-  for (const service of marketplaceServices) {
-    const sameImageServices = images.get(service.imagePath) ?? [];
-    sameImageServices.push(service);
-    images.set(service.imagePath, sameImageServices);
-  }
-
-  for (const services of images.values()) {
-    if (services.length > 1) {
-      assert.ok(services.every(({ imageSource }) => imageSource.includes("Нейтральная локальная обложка")));
-    }
-  }
+  const imagePaths = marketplaceServices.map(({ imagePath }) => imagePath);
+  assert.equal(new Set(imagePaths).size, imagePaths.length, "each catalog service must have its own cover image");
 });
 
 test("marketplace links and images remain local and unambiguous", () => {

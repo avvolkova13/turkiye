@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { marketplaceCategories, marketplaceDestinations } from "@/data/marketplace";
-import { getScenarioFilters, getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
+import { getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
 import { parseCatalogQuery, serializeCatalogQuery } from "@/lib/marketplace/query-state";
 import type { CatalogFilters, CatalogSort, TransferSearchState } from "@/types/marketplace";
 
@@ -146,7 +146,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
   }
 
   const filterOptions = {
-    categories: (scenario ? getScenarioFilters(scenario).map(({ category, label }) => ({ label, value: category })) : marketplaceCategories.map(({ id, name }) => ({ label: name, value: id }))),
+    categories: marketplaceCategories.map(({ id, name }) => ({ label: name, value: id })),
     destinations: marketplaceDestinations.map(({ id, name }) => ({ label: name, value: id })),
     durations: [
       { label: "До 2 часов", value: "up-to-2-hours" as const },

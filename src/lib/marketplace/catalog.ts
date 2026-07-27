@@ -142,7 +142,10 @@ function sortedMarketplaceServices(
 
   const filtered = marketplaceServices.filter((service) => {
     if (query && !searchText(service).includes(query)) return false;
-    if (scenarioTypes && !scenarioTypes.includes(service.type)) return false;
+    // A selected catalog category is more specific than the broad entry scenario.
+    // This keeps category navigation useful even when the user arrived through
+    // a scenario such as "experience" that does not include every section.
+    if (!category && scenarioTypes && !scenarioTypes.includes(service.type)) return false;
     if (section && service.catalogSection !== section) return false;
     if (category && service.categoryId !== category) return false;
     if (destination && service.destinationId && service.destinationId !== destination) return false;

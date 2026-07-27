@@ -152,6 +152,15 @@ test("catalog sorting and non-availability date queries preserve the snapshot da
   assert.ok(byDuration.items.every((service, index, items) => index === 0 || (items[index - 1].durationMinutes ?? Infinity) <= (service.durationMinutes ?? Infinity)));
 });
 
+test("restaurant category remains visible from an experience scenario", () => {
+  const { filterMarketplaceServices } = require("../src/lib/marketplace/catalog.ts");
+  const result = filterMarketplaceServices({ scenario: "experience", category: "restaurants" }, "relevance", 1);
+
+  assert.equal(result.total, 5);
+  assert.ok(result.items.length > 0);
+  assert.ok(result.items.every((service) => service.type === "restaurants"));
+});
+
 test("catalog accumulates visible pages without dropping the first page", () => {
   const { getVisibleMarketplaceServices, filterMarketplaceServices } = require("../src/lib/marketplace/catalog.ts");
   const firstPage = filterMarketplaceServices({}, "relevance", 1);

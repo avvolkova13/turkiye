@@ -21,6 +21,10 @@
 .selection > .nextButton { margin-top: 1.4rem; }
 .checkoutCard { display: grid; gap: 1rem; max-width: 46rem; padding: clamp(1.25rem, 3vw, 2.25rem); border-top: 1px solid rgba(36,39,33,.24); border-bottom: 1px solid rgba(36,39,33,.24); background: #e9e2d6; }
 .checkoutCard h2 { margin: 0 0 .8rem; font-size: clamp(1.7rem, 4vw, 2.7rem); font-weight: 500; letter-spacing: -.06em; }
+.sectionNote { margin: 0; color: #60645b; }
+.bookingPanel { display: grid; gap: 1rem; padding: 1rem; border: 1px solid rgba(36,39,33,.16); background: rgba(255,253,248,.3); }
+.contactDivider { display: grid; gap: 1rem; padding-top: 1.25rem; border-top: 1px solid rgba(36,39,33,.2); }
+.deliveryHint { margin: 0; color: #60645b; font-size: .8rem; }
 .formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .checkoutCard label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
 .checkoutCard input, .checkoutCard select, .checkoutCard textarea { width: 100%; min-width: 0; padding: .75rem .9rem; border: 1px solid rgba(36,39,33,.22); border-radius: .7rem; background: #f4f0e8; color: #242721; font: inherit; }

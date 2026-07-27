@@ -128,6 +128,17 @@ export interface MarketplaceCartItem {
   quantity: number;
 }
 
+export interface MarketplaceBookingDetails {
+  date: string;
+  time: string;
+  participants: number;
+  language: MarketplaceLanguage | "";
+  pickup: string;
+  routeFrom: string;
+  routeTo: string;
+  activationDate: string;
+}
+
 export interface MarketplaceOrderItem {
   serviceId: string;
   title: string;
@@ -135,6 +146,7 @@ export interface MarketplaceOrderItem {
   currency: MarketplaceCurrency;
   priceUnit: string;
   quantity: number;
+  bookingDetails: MarketplaceBookingDetails;
 }
 
 export interface MarketplaceOrder {

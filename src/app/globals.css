@@ -346,6 +346,17 @@ html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
   font-size: 0.75rem;
 }
 
+.header-commerce-link {
+  color: inherit;
+  font-size: 0.74rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header-commerce-link:hover {
+  color: var(--accent);
+}
+
 .locale-switch {
   display: none;
   white-space: nowrap;
@@ -2499,7 +2510,8 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
   .header-divider,
   .header-search,
-  .locale-switch {
+  .locale-switch,
+  .header-commerce-link {
     display: none;
   }
 

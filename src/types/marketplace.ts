@@ -33,6 +33,8 @@ export type MarketplaceSourceName = MarketplaceProvider;
 export type MarketplaceSourceCurrency = "TRY" | "EUR" | "USD" | "RUB";
 export type MarketplaceAvailability = "snapshot";
 export type MarketplaceProviderStatus = "awaiting_provider";
+export type MarketplaceDeliveryChannel = "email" | "whatsapp" | "phone";
+export type MarketplaceOrderStatus = "paid" | "processing" | "delivered";
 export type MarketplaceLanguage = "Русский" | "Английский" | "Турецкий";
 export type MarketplaceDuration =
   | "up-to-2-hours"
@@ -119,6 +121,37 @@ export interface MarketplaceService {
   meetingPoint: string | null;
   deliveryMethod: string;
   status: MarketplaceServiceStatus;
+}
+
+export interface MarketplaceCartItem {
+  serviceId: string;
+  quantity: number;
+}
+
+export interface MarketplaceOrderItem {
+  serviceId: string;
+  title: string;
+  price: number;
+  currency: MarketplaceCurrency;
+  priceUnit: string;
+  quantity: number;
+}
+
+export interface MarketplaceOrder {
+  id: string;
+  createdAt: string;
+  status: MarketplaceOrderStatus;
+  customer: {
+    name: string;
+    email: string;
+    phone: string;
+    deliveryChannel: MarketplaceDeliveryChannel;
+    deliveryAddress: string;
+    comment: string;
+  };
+  items: MarketplaceOrderItem[];
+  total: number;
+  currency: MarketplaceCurrency;
 }
 
 export interface ServiceVariant {

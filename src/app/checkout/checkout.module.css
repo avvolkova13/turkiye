@@ -4,6 +4,36 @@
 .header h1 { margin: 1rem 0; font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 500; letter-spacing: -.08em; line-height: .9; }
 .header > p:last-child { max-width: 32rem; color: #60645b; }
 .checkout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(18rem, .7fr); gap: 2rem; }
+.checkoutFlow { max-width: 62rem; }
+.steps { display: flex; flex-wrap: wrap; gap: .65rem; margin-bottom: 1.25rem; color: #777a70; font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
+.steps span { padding: .55rem .75rem; border: 1px solid rgba(36,39,33,.14); border-radius: 999px; }
+.steps .activeStep { border-color: #a54e33; color: #a54e33; background: rgba(165,78,51,.08); }
+.sectionHeading { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.sectionHeading a, .confirmation a, .confirmationActions a { color: #a54e33; font-weight: 700; text-decoration: none; }
+.lineActions { display: flex; align-items: center; gap: 1rem; }
+.quantity { display: inline-flex; align-items: center; gap: .55rem; }
+.quantity button { width: 2rem; height: 2rem; border: 1px solid rgba(36,39,33,.25); border-radius: 50%; background: transparent; color: #242721; cursor: pointer; }
+.removeButton { border: 0; background: transparent; color: #a54e33; cursor: pointer; font-size: .75rem; }
+.totalRow, .paymentSummary { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid rgba(36,39,33,.22); font-size: 1.1rem; }
+.nextButton, .backButton { min-height: 2.8rem; padding: .75rem 1.1rem; border: 1px solid #242721; border-radius: 999px; cursor: pointer; }
+.nextButton { background: #242721; color: #fffdf8; }
+.backButton { background: transparent; color: #242721; }
+.selection > .nextButton { margin-top: 1.4rem; }
+.checkoutCard { display: grid; gap: 1rem; max-width: 46rem; padding: clamp(1.25rem, 3vw, 2.25rem); border-top: 1px solid rgba(36,39,33,.24); border-bottom: 1px solid rgba(36,39,33,.24); background: #e9e2d6; }
+.checkoutCard h2 { margin: 0 0 .8rem; font-size: clamp(1.7rem, 4vw, 2.7rem); font-weight: 500; letter-spacing: -.06em; }
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.checkoutCard label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
+.checkoutCard input, .checkoutCard select, .checkoutCard textarea { width: 100%; min-width: 0; padding: .75rem .9rem; border: 1px solid rgba(36,39,33,.22); border-radius: .7rem; background: #f4f0e8; color: #242721; font: inherit; }
+.checkoutCard select { cursor: pointer; }
+.checkoutCard input:focus, .checkoutCard select:focus, .checkoutCard textarea:focus { outline: none; border-color: #a54e33; box-shadow: 0 0 0 3px rgba(165,78,51,.12); }
+.checkoutCard label small { color: #777a70; }
+.formActions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; margin-top: .75rem; }
+.formError { margin: 0; color: #a54e33; font-weight: 700; }
+.demoNotice { margin: 0; padding: .85rem 1rem; border: 1px solid rgba(165,78,51,.28); background: rgba(165,78,51,.08); color: #7c402e; }
+.paymentSummary { margin-top: .25rem; }
+.orderNumber { font-size: 1.1rem; }
+.confirmationItems { margin: 1.5rem 0; }
+.confirmationActions { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1.5rem; }
 .selection, .contact, .confirmation { padding: clamp(1.25rem, 3vw, 2.25rem); border-top: 1px solid rgba(36,39,33,.24); border-bottom: 1px solid rgba(36,39,33,.24); }
 .selection h2, .contact h2, .confirmation h2 { margin: 0 0 1.5rem; font-size: clamp(1.45rem, 3vw, 2.25rem); font-weight: 500; letter-spacing: -.05em; }
 .selectionRow { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid rgba(36,39,33,.15); }
@@ -26,4 +56,4 @@
 .contact button:disabled { opacity: .45; cursor: not-allowed; }
 .confirmation { max-width: 45rem; background: #e9e2d6; }
 .confirmation p:last-child { color: #60645b; }
-@media (max-width: 720px) { .checkout { grid-template-columns: 1fr; } .selectionRow { flex-direction: column; } }
+@media (max-width: 720px) { .checkout { grid-template-columns: 1fr; } .selectionRow { flex-direction: column; align-items: start; } .lineActions { flex-wrap: wrap; } .formGrid { grid-template-columns: 1fr; } }

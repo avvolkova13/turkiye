@@ -18,6 +18,8 @@ export function MarketplaceFooter() {
           <Link href="/catalog">Каталог</Link>
           <Link href="/destinations">Направления</Link>
           <Link href="/search">Поиск</Link>
+          <Link href="/account">Личный кабинет</Link>
+          <Link href="/checkout">Корзина</Link>
           {marketplaceCategories.map((category) => (
             <Link href={`/catalog?category=${category.id}`} key={category.id}>
               {category.name}

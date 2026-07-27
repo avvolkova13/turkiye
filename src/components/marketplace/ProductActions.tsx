@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { readCart, writeCart } from "@/lib/marketplace/local-store";
+
 import styles from "./product-actions.module.css";
 
 export function ProductActions({ serviceId }: { serviceId: string }) {
@@ -10,10 +12,11 @@ export function ProductActions({ serviceId }: { serviceId: string }) {
   const router = useRouter();
 
   function addToCart() {
-    const current = JSON.parse(window.localStorage.getItem("faro-cart") ?? "[]") as string[];
-    const next = current.includes(serviceId) ? current : [...current, serviceId];
+    const current = readCart();
+    const existing = current.find((item) => item.serviceId === serviceId);
+    const next = existing ? current : [...current, { serviceId, quantity: 1 }];
     setAdded(true);
-    window.localStorage.setItem("faro-cart", JSON.stringify(next));
+    writeCart(next);
   }
 
   return (

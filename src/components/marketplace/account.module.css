@@ -1,0 +1,25 @@
+.orders { display: grid; gap: 1rem; }
+.ordersIntro { display: flex; justify-content: space-between; align-items: end; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(36,39,33,.2); }
+.ordersIntro h2, .empty h2 { margin: .5rem 0 0; font-size: clamp(2rem, 5vw, 4rem); font-weight: 500; letter-spacing: -.07em; }
+.ordersIntro a, .empty a, .orderBody > a { color: #a54e33; font-weight: 700; text-decoration: none; }
+.eyebrow { margin: 0; color: #a54e33; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.order { border-top: 1px solid rgba(36,39,33,.18); background: #e9e2d6; }
+.order:last-child { border-bottom: 1px solid rgba(36,39,33,.18); }
+.order summary { display: flex; justify-content: space-between; gap: 1rem; padding: 1.25rem 0; cursor: pointer; list-style: none; }
+.order summary::-webkit-details-marker { display: none; }
+.order summary > span { display: grid; gap: .35rem; }
+.order summary > span:last-child { justify-items: end; }
+.order summary small { color: #60645b; }
+.order summary b { font-size: 1.1rem; }
+.status { width: fit-content; padding: .35rem .6rem; border-radius: 999px; background: rgba(165,78,51,.1); color: #a54e33; font-size: .72rem; font-style: normal; font-weight: 700; }
+.orderBody { display: grid; gap: 1.25rem; padding: 0 0 1.5rem; }
+.orderMeta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(36,39,33,.14); color: #60645b; font-size: .78rem; }
+.orderMeta span, .orderItems div { display: grid; gap: .35rem; }
+.orderMeta strong { color: #242721; font-size: .9rem; }
+.orderItems { display: grid; gap: .5rem; }
+.orderItems div { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid rgba(36,39,33,.12); }
+.orderItems small { display: block; margin-top: .25rem; color: #60645b; }
+.comment { margin: 0; color: #60645b; }
+.empty { max-width: 42rem; padding: clamp(2rem, 5vw, 4rem) 0; }
+.empty p:not(.eyebrow) { max-width: 30rem; color: #60645b; }
+@media (max-width: 720px) { .ordersIntro, .order summary { align-items: start; flex-direction: column; } .order summary > span:last-child { justify-items: start; } .orderMeta { grid-template-columns: 1fr; } }

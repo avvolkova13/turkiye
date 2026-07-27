@@ -24,7 +24,7 @@ export function ProductActions({ serviceId }: { serviceId: string }) {
       <button className={styles.primary} onClick={addToCart} type="button">
         {added ? "В корзине" : "Добавить в корзину"}
       </button>
-      <button className={styles.secondary} onClick={() => { addToCart(); router.push(`/checkout?service=${serviceId}`); }} type="button">
+      <button className={styles.secondary} onClick={() => { addToCart(); router.push("/checkout"); }} type="button">
         Купить сейчас
       </button>
       {added && <a className={styles.cartLink} href="/checkout">Перейти к оформлению</a>}

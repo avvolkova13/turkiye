@@ -50,11 +50,22 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
     return () => window.removeEventListener("faro-cart-updated", sync);
   }, []);
 
+  // Старые ссылки с ?service= не должны возвращать товар после удаления.
+  // Один раз переносим его в корзину и очищаем URL — дальше корзина является
+  // единственным источником выбранных товаров.
+  useEffect(() => {
+    if (!requestedId) return;
+    const current = readCart();
+    if (!current.some(({ serviceId }) => serviceId === requestedId)) {
+      writeCart([...current, { serviceId: requestedId, quantity: 1 }]);
+    }
+    router.replace("/checkout");
+  }, [requestedId, router]);
+
   const selected = useMemo(() => {
     const ids = new Set(cart.map(({ serviceId }) => serviceId));
-    if (requestedId) ids.add(requestedId);
     return services.filter((service) => ids.has(service.id));
-  }, [cart, requestedId, services]);
+  }, [cart, services]);
 
   const quantityFor = (serviceId: string) => cart.find((item) => item.serviceId === serviceId)?.quantity ?? 1;
   const total = selected.reduce((sum, service) => sum + service.price * quantityFor(service.id), 0);
@@ -66,9 +77,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   }
 
   function updateQuantity(serviceId: string, quantity: number) {
-    const hasCartItem = cart.some((item) => item.serviceId === serviceId);
-    const base = hasCartItem ? cart : [...cart, { serviceId, quantity: 1 }];
-    const next = base
+    const next = readCart()
       .map((item) => item.serviceId === serviceId ? { ...item, quantity } : item)
       .filter(({ quantity: nextQuantity }) => nextQuantity > 0);
     setCart(next);
@@ -76,7 +85,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   }
 
   function removeFromCart(serviceId: string) {
-    const next = cart.filter((item) => item.serviceId !== serviceId);
+    const next = readCart().filter((item) => item.serviceId !== serviceId);
     setCart(next);
     writeCart(next);
   }

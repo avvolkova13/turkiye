@@ -22,6 +22,20 @@ export type MarketplaceServiceType =
  */
 export type MarketplaceServiceStatus = "published";
 export type MarketplaceCurrency = "RUB";
+export type MarketplaceCatalogSection =
+  | "Туры"
+  | "Билеты в музеи и достопримечательности"
+  | "Впечатления и экскурсии"
+  | "Рестораны"
+  | "Красота и wellness"
+  | "eSIM"
+  | "Трансферы"
+  | "Проездные";
+export type MarketplaceProvider = "Istanbul.com" | "Trasst";
+export type MarketplaceSourceName = MarketplaceProvider;
+export type MarketplaceSourceCurrency = "TRY" | "EUR" | "USD" | "RUB";
+export type MarketplaceAvailability = "snapshot";
+export type MarketplaceProviderStatus = "awaiting_provider";
 export type MarketplaceLanguage = "Русский" | "Английский" | "Турецкий";
 export type MarketplaceDuration =
   | "up-to-2-hours"
@@ -76,6 +90,16 @@ export interface MarketplaceService {
   id: string;
   slug: string;
   title: string;
+  catalogSection: MarketplaceCatalogSection;
+  provider: MarketplaceProvider;
+  sourceUrl: string;
+  sourceName: MarketplaceSourceName;
+  capturedAt: MarketplaceDemoDate;
+  sourcePrice: number;
+  sourceCurrency: MarketplaceSourceCurrency;
+  imageSource: string;
+  availability: MarketplaceAvailability;
+  providerStatus: MarketplaceProviderStatus;
   categoryId: MarketplaceServiceType;
   destinationId: string | null;
   type: MarketplaceServiceType;
@@ -118,6 +142,7 @@ export interface ServiceVariant {
 export type CatalogFilterKey =
   | "text"
   | "category"
+  | "section"
   | "destination"
   | "region"
   | "minPrice"
@@ -132,6 +157,7 @@ export type CatalogFilterKey =
 export interface CatalogFilters {
   text?: string;
   category?: MarketplaceServiceType;
+  section?: MarketplaceCatalogSection;
   destination?: string;
   region?: MarketplaceRegion;
   date?: MarketplaceDemoDate;

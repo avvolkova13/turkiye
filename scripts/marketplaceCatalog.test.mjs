@@ -47,14 +47,39 @@ test("marketplace data provides a complete, safely priced catalog", () => {
   }
   assert.ok(marketplaceServices.length > 0);
 
+  const catalogSections = new Set(
+    marketplaceServices.map(({ catalogSection }) => catalogSection),
+  );
+  assert.deepEqual([...catalogSections].sort(), [
+    "eSIM",
+    "Билеты в музеи и достопримечательности",
+    "Впечатления и экскурсии",
+    "Красота и wellness",
+    "Проездные",
+    "Рестораны",
+    "Туры",
+    "Трансферы",
+  ].sort());
+
   for (const service of marketplaceServices) {
     assert.ok(service.id);
     assert.ok(service.slug);
     assert.ok(service.price >= 50);
     assert.equal(service.currency, "RUB");
+    assert.ok(service.price > 0, `${service.id} must have a positive RUB price`);
+    assert.ok(service.catalogSection);
+    assert.ok(service.provider);
+    assert.ok(service.sourceUrl);
+    assert.ok(service.sourceName);
+    assert.match(service.capturedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(service.sourcePrice > 0);
+    assert.ok(service.sourceCurrency);
+    assert.ok(service.imageSource);
+    assert.equal(service.availability, "snapshot");
+    assert.equal(service.providerStatus, "awaiting_provider");
     assert.ok(service.priceUnit);
     assert.equal(service.status, "published");
-    assert.equal(service.isMockData, true);
+    assert.equal("isMockData" in service, false);
     assert.equal(typeof service.orderToday, "boolean");
     assert.ok(
       existsSync(resolve(process.cwd(), "public", service.imagePath.slice(1))),
@@ -80,7 +105,6 @@ test("marketplace data provides a complete, safely priced catalog", () => {
   assert.ok(marketplaceServiceVariants.length > 0);
   for (const variant of marketplaceServiceVariants) {
     assert.equal(variant.status, "published");
-    assert.equal(variant.isMockData, true);
   }
 });
 
@@ -148,6 +172,26 @@ test("catalog filters services and returns a deterministic first page", () => {
   assert.doesNotThrow(() =>
     filterMarketplaceServices({ category: "unknown" }, "unknown"),
   );
+});
+
+test("catalog resolves section and legacy scenario filters through one mapping", () => {
+  const { filterMarketplaceServices } = require(
+    "../src/lib/marketplace/catalog.ts",
+  );
+
+  const transfers = filterMarketplaceServices(
+    { section: "Трансферы" },
+    "relevance",
+  );
+  assert.ok(transfers.items.length > 0);
+  assert.ok(transfers.items.every(({ catalogSection }) => catalogSection === "Трансферы"));
+
+  const transferScenario = filterMarketplaceServices(
+    { scenario: "transfer" },
+    "relevance",
+  );
+  assert.ok(transferScenario.items.length > 0);
+  assert.ok(transferScenario.items.every(({ catalogSection }) => catalogSection === "Трансферы"));
 });
 
 test("catalog applies every supported filter and sort without mutating data", () => {

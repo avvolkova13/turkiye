@@ -4,6 +4,7 @@ import type {
   CatalogResult,
   CatalogSort,
   MarketplaceDemoDate,
+  MarketplaceCatalogSection,
   MarketplaceDuration,
   MarketplaceLanguage,
   MarketplaceService,
@@ -45,6 +46,32 @@ const scenarioCategories: Record<MarketplaceScenario, MarketplaceServiceType[]> 
   transfer: ["transfers", "taxi"],
   "self-service": ["digital", "connectivity", "insurance", "rental"],
   support: ["services", "visa", "insurance", "airline-tickets", "shopping"],
+};
+
+const sectionByServiceType: Record<MarketplaceServiceType, MarketplaceCatalogSection> = {
+  excursions: "Туры",
+  tickets: "Билеты в музеи и достопримечательности",
+  transfers: "Трансферы",
+  guides: "Впечатления и экскурсии",
+  activities: "Впечатления и экскурсии",
+  digital: "Проездные",
+  connectivity: "eSIM",
+  insurance: "Проездные",
+  rental: "Трансферы",
+  services: "Рестораны",
+  taxi: "Трансферы",
+  visa: "Проездные",
+  yachts: "Впечатления и экскурсии",
+  shopping: "Рестораны",
+  spa: "Красота и wellness",
+  "airline-tickets": "Проездные",
+};
+
+const sectionsByScenario: Record<MarketplaceScenario, MarketplaceCatalogSection[]> = {
+  experience: [...new Set(scenarioCategories.experience.map((type) => sectionByServiceType[type]))],
+  transfer: [...new Set(scenarioCategories.transfer.map((type) => sectionByServiceType[type]))],
+  "self-service": [...new Set(scenarioCategories["self-service"].map((type) => sectionByServiceType[type]))],
+  support: [...new Set(scenarioCategories.support.map((type) => sectionByServiceType[type]))],
 };
 
 const destinationNames = new Map(
@@ -125,6 +152,7 @@ function sortedMarketplaceServices(
 ): MarketplaceService[] {
   const query = typeof filters.text === "string" ? normalized(filters.text) : "";
   const category = isKnownCategory(filters.category) ? filters.category : undefined;
+  const section = filters.section;
   const destination =
     typeof filters.destination === "string" && destinationIds.has(filters.destination)
       ? filters.destination
@@ -137,11 +165,12 @@ function sortedMarketplaceServices(
   const language = isKnownLanguage(filters.language) ? filters.language : undefined;
   const selectedSort = sortValues.has(sort) ? sort : "relevance";
   const scenario = filters.scenario;
-  const scenarioTypes = scenario ? scenarioCategories[scenario] : undefined;
+  const scenarioSections = scenario ? sectionsByScenario[scenario] : undefined;
 
   const filtered = marketplaceServices.filter((service) => {
     if (query && !searchText(service).includes(query)) return false;
-    if (scenarioTypes && !scenarioTypes.includes(service.type)) return false;
+    if (scenarioSections && !scenarioSections.includes(sectionByServiceType[service.type])) return false;
+    if (section && sectionByServiceType[service.type] !== section) return false;
     if (category && service.categoryId !== category) return false;
     if (destination && service.destinationId && service.destinationId !== destination) return false;
     if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;

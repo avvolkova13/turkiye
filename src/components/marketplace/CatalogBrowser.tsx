@@ -29,10 +29,15 @@ const sortOptions: { label: string; value: CatalogSort }[] = [
   { label: "По длительности", value: "duration" },
 ];
 
-const quickFilters: { label: string; value: CatalogFilters }[] = [
-  { label: "Сегодня", value: { orderToday: true } },
-  { label: "Завтра", value: { date: "2026-08-15" } },
-  { label: "До 1 000 ₽", value: { maxPrice: 1000 } },
+const categoryQuickFilters: { label: string; value: CatalogFilters }[] = [
+  { label: "Туры", value: { category: "excursions" } },
+  { label: "Билеты", value: { category: "tickets" } },
+  { label: "Впечатления", value: { category: "activities" } },
+  { label: "Рестораны", value: { category: "restaurants" } },
+  { label: "Wellness", value: { category: "spa" } },
+  { label: "eSIM", value: { category: "connectivity" } },
+  { label: "Трансферы", value: { category: "transfers" } },
+  { label: "Проездные", value: { category: "digital" } },
 ];
 
 function selectedSort(value: string | string[] | undefined): CatalogSort {
@@ -45,10 +50,6 @@ function selectedSort(value: string | string[] | undefined): CatalogSort {
 function selectedPage(value: string | null | undefined): number {
   const page = Number(value);
   return Number.isInteger(page) && page > 0 ? page : 1;
-}
-
-function includesQuickFilter(filters: CatalogFilters, quickFilter: CatalogFilters): boolean {
-  return Object.entries(quickFilter).every(([key, value]) => filters[key as keyof CatalogFilters] === value);
 }
 
 function numberFromInput(value: number): number | undefined {
@@ -130,15 +131,9 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     startTransition(() => router.replace(pathname, { scroll: false }));
   }
 
-  function toggleQuickFilter(quickFilter: CatalogFilters) {
-    const active = includesQuickFilter(filters, quickFilter);
-    const next = active
-      ? {
-          ...filters,
-          ...Object.fromEntries(Object.keys(quickFilter).map((key) => [key, undefined])),
-        }
-      : { ...filters, ...quickFilter };
-    updateFilters(next);
+  function toggleCategory(category: CatalogFilters) {
+    const active = filters.category === category.category;
+    updateFilters(active ? {} : { category: category.category });
   }
 
   function updateSort(nextSort: CatalogSort) {
@@ -206,13 +201,13 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       {scenario === "experience" && <ExperienceSearchForm onSubmit={updateFilters} value={filters} />}
       {(scenario === "self-service" || scenario === "support") && <ServiceRequestForm onSubmit={updateFilters} scenario={scenario} value={filters} />}
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
-        <span className={styles.quickFiltersLabel}>Быстрый выбор</span>
-        {quickFilters.map((quickFilter) => (
+        <span className={styles.quickFiltersLabel}>Разделы</span>
+        {categoryQuickFilters.map((quickFilter) => (
           <button
-            aria-pressed={includesQuickFilter(filters, quickFilter.value)}
+            aria-pressed={filters.category === quickFilter.value.category}
             className={styles.quickFilter}
             key={quickFilter.label}
-            onClick={() => toggleQuickFilter(quickFilter.value)}
+            onClick={() => toggleCategory(quickFilter.value)}
             type="button"
           >
             {quickFilter.label}

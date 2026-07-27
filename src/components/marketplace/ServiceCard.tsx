@@ -73,16 +73,9 @@ export function ServiceCard({ service, scenario = "experience" }: ServiceCardPro
               {" "}от {price} ₽ <small>{service.priceUnit}</small>
             </strong>
           </div>
-          <div className={styles.sourceMeta}>
-            <span>{service.provider} · снимок {service.capturedAt}</span>
-            <span>Доступность: {service.availability === "snapshot" ? "снимок" : service.availability}</span>
-          </div>
           <span className={styles.cardAction}>{scenarioCtas[scenario]}</span>
         </div>
       </Link>
-      <a className={styles.sourceLink} href={service.sourceUrl} rel="noreferrer" target="_blank">
-        Источник: {service.provider}
-      </a>
     </article>
   );
 }

@@ -44,7 +44,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
     }}>
       <section className={styles.selection}>
         <h2>Вы выбрали</h2>
-        {selected.length ? selected.map((service) => <div className={styles.selectionRow} key={service.id}><span>{service.title}<small>{service.provider} · цена-снимок от {service.capturedAt}</small></span><strong>от {new Intl.NumberFormat("ru-RU").format(service.price)} ₽ <small>{service.priceUnit}</small></strong></div>) : <p>Добавьте услугу из каталога, чтобы продолжить.</p>}
+        {selected.length ? selected.map((service) => <div className={styles.selectionRow} key={service.id}><span>{service.title}</span><strong>от {new Intl.NumberFormat("ru-RU").format(service.price)} ₽ <small>{service.priceUnit}</small></strong></div>) : <p>Добавьте услугу из каталога, чтобы продолжить.</p>}
       </section>
       <section className={styles.contact}>
         <h2>Контакты</h2>

@@ -61,8 +61,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
             <div><dt>Формат</dt><dd>{service.deliveryMethod}</dd></div>
             <div><dt>Срок</dt><dd>{service.duration ? durationLabels[service.duration] ?? service.duration : "по запросу"}</dd></div>
             <div><dt>В стоимость входит</dt><dd>{service.included.join(" · ")}</dd></div>
-            <div><dt>Поставщик</dt><dd>{service.provider} · цена на {service.capturedAt}</dd></div>
-            <div><dt>Статус</dt><dd>Снимок предложения · подтверждение поставщика после заказа</dd></div>
           </dl>
           <div className={styles.productPurchase}>
             <div>
@@ -71,9 +69,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </div>
             <ProductActions serviceId={service.id} />
           </div>
-          <a className={styles.sourceLink} href={service.sourceUrl} rel="noreferrer" target="_blank">
-            Источник предложения: {service.provider}
-          </a>
           <Link className={styles.backLink} href="/catalog">Вернуться в каталог</Link>
         </article>
       </div>

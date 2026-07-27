@@ -125,9 +125,6 @@
 .serviceMeta strong { color: #242721; font-size: 1rem; }
 .priceLabel { display: inline-block; margin-right: 0.3rem; color: #7a4b2f; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
 .serviceMeta small { color: #60645b; font-size: 0.75rem; font-weight: 400; }
-.sourceMeta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.45rem; color: #7a756a; font-size: 0.68rem; letter-spacing: 0.02em; }
-.sourceMeta span:last-child { color: #a54e33; font-weight: 700; text-transform: uppercase; }
-.sourceLink { display: inline-block; margin-top: 0.7rem; color: #8b3f2b; font-size: 0.72rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .galleryDots { position: absolute; right: 0.8rem; bottom: 0.8rem; left: 0.8rem; display: flex; gap: 0.3rem; }
 .galleryDots i { display: block; height: 0.2rem; flex: 1; border-radius: 999px; background: rgba(255, 253, 248, 0.6); }
 .galleryDots i.galleryDotActive { background: #fffdf8; }

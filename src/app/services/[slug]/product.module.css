@@ -15,7 +15,6 @@
 .productMeta dt { color: #60645b; font-size: 0.8rem; }
 .productMeta dd { margin: 0; font-size: 0.85rem; }
 .productMeta dd { color: #454940; }
-.sourceLink { display: inline-block; margin-top: 1.4rem; color: #8b3f2b; font-size: 0.78rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .productPurchase { display: grid; gap: 1rem; padding-top: 0.35rem; }
 .productPurchase > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .productPurchase span { color: #60645b; font-size: 0.8rem; }

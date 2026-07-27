@@ -213,17 +213,6 @@ async function verifyCatalogQueries(context) {
       /Цена/,
       "Catalog cards must expose the visible price label",
     );
-    assert.equal(
-      await page.getByRole("link", { name: /^Источник:/ }).first().count(),
-      1,
-      "Catalog cards must expose a provider/source label",
-    );
-    assert.equal(
-      await page.getByText("Доступность: снимок").first().count(),
-      1,
-      "Catalog cards must mark source availability as a snapshot",
-    );
-
     await Promise.all([
       page.waitForURL((url) => url.searchParams.get("maxPrice") === "1000"),
       page.getByRole("button", { name: "До 1 000 ₽" }).click(),

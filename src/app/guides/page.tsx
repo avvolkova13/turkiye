@@ -17,7 +17,6 @@ export default function GuidesPage() {
           <MarketplaceBreadcrumbs items={[{ label: "Советы" }]} />
         </div>
         <section className={styles.hubIntro}>
-          <p className={styles.eyebrow}>Faro · Турция</p>
           <h1 className={styles.hubTitle}>Готовые решения для поездки</h1>
           <p className={styles.hubDescription}>
             Бесплатные планы и подсказки по городам — чтобы понять следующий шаг,

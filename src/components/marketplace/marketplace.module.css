@@ -93,7 +93,6 @@
 .marketplaceMain { padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(6rem, 12vw, 11rem); }
 .pageIntro { display: grid; max-width: 62rem; gap: clamp(1.5rem, 2.4vw, 2.25rem); margin-bottom: clamp(4rem, 9vw, 8rem); }
 .pageIntro p { max-width: 38rem; margin: 0; color: #60645b; }
-.pageIntro p:first-child { color: #a54e33; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
 .pageIntro h1 { max-width: 12ch; margin: 0; font-family: "Manrope", Arial, sans-serif; font-size: clamp(3rem, 7vw, 6.8rem); font-weight: 500; letter-spacing: -0.08em; line-height: 0.9; text-wrap: balance; }
 .catalogPageIntro { max-width: none; }
 .catalogPageIntro h1 { max-width: none; font-size: clamp(3rem, 5vw, 6rem); white-space: nowrap; text-wrap: nowrap; }

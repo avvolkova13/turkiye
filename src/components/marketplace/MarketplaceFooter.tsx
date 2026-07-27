@@ -9,7 +9,6 @@ export function MarketplaceFooter() {
     <footer className={styles.marketplaceFooter}>
       <div className={styles.footerInner}>
         <div className={styles.footerBrand}>
-          <p className={styles.footerMark}>Faro · Турция</p>
           <p className={styles.footerNote}>
             Выберите маршрут и оформите заказ в удобном формате.
           </p>

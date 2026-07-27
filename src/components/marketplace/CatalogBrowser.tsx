@@ -14,7 +14,6 @@ import { ScenarioPicker } from "./ScenarioPicker";
 import { ServiceCard } from "./ServiceCard";
 import { ServiceRequestForm } from "./ServiceRequestForm";
 import { TransferSearchForm } from "./TransferSearchForm";
-import { getServiceScenario } from "./marketplace-content";
 import styles from "./catalog.module.css";
 
 type CatalogBrowserProps = {
@@ -300,7 +299,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       ) : (
         <>
           <div className={styles.serviceList}>
-            {results.items.map((service) => <ServiceCard key={service.id} service={service} scenario={getServiceScenario(service)} />)}
+            {results.items.map((service) => <ServiceCard key={service.id} service={service} />)}
           </div>
           {results.hasNextPage && (
             <div className={styles.moreResults}>

@@ -4,15 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import type { MarketplaceScenario, MarketplaceService } from "@/types/marketplace";
+import type { MarketplaceService } from "@/types/marketplace";
 import { sitePath } from "@/lib/sitePath";
 
-import { scenarioCtas } from "./marketplace-content";
 import styles from "./marketplace.module.css";
 
 type ServiceCardProps = {
   service: MarketplaceService;
-  scenario?: MarketplaceScenario;
 };
 
 function formatDuration(minutes: number | null) {
@@ -22,7 +20,7 @@ function formatDuration(minutes: number | null) {
   return `${Math.floor(minutes / 60)} ч ${minutes % 60} мин`;
 }
 
-export function ServiceCard({ service, scenario = "experience" }: ServiceCardProps) {
+export function ServiceCard({ service }: ServiceCardProps) {
   const images = service.images?.length ? service.images : [service.imagePath];
   const [imageIndex, setImageIndex] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -75,7 +73,7 @@ export function ServiceCard({ service, scenario = "experience" }: ServiceCardPro
               {" "}от {price} ₽ <small>{service.priceUnit}</small>
             </strong>
           </div>
-          <span className={styles.cardAction}>{scenarioCtas[scenario]}</span>
+          <span className={styles.cardAction}>Подробнее</span>
         </div>
       </Link>
     </article>

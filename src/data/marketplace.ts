@@ -46,6 +46,25 @@ function durationFor(minutes: number | null | undefined): MarketplaceService["du
   return "multi-day";
 }
 
+function deliveryMethodFor(product: (typeof sourceProducts)[number]) {
+  if (product.isDigital) {
+    if (product.type === "tickets") return "Электронный билет";
+    if (product.type === "digital") return "Цифровой пропуск";
+    return "Цифровая доставка";
+  }
+
+  const labels: Partial<Record<MarketplaceService["type"], string>> = {
+    excursions: "Экскурсия с гидом",
+    activities: "Впечатление на месте",
+    restaurants: "Бронирование столика",
+    spa: "Сеанс ухода",
+    transfers: "Трансфер",
+    yachts: "Круиз",
+  };
+
+  return labels[product.type] ?? "Услуга по выбранному формату";
+}
+
 export const marketplaceServices: MarketplaceService[] = sourceProducts.map((product) => {
   const provider = product.sourceUrl.includes("trasst") ? "Trasst" : "Istanbul.com";
   const imageSource = "Нейтральная локальная обложка FARO; источник товара указан отдельно";
@@ -81,10 +100,10 @@ export const marketplaceServices: MarketplaceService[] = sourceProducts.map((pro
     isDigital: product.isDigital ?? false,
     orderToday: false,
     included: product.isDigital ? ["Цифровая доставка", "Инструкция по использованию"] : ["Услуга по выбранному формату"],
-    excluded: ["Расходы, не указанные в описании", "Подтверждение поставщика в реальном времени"],
-    cancellation: "Условия отмены и подтверждение уточняются перед передачей заказа поставщику.",
+    excluded: ["Расходы, не указанные в описании", "Дополнительные услуги вне выбранной программы"],
+    cancellation: "Условия отмены указаны перед оформлением заявки.",
     meetingPoint: product.isDigital ? null : product.city ?? "Точка встречи уточняется",
-    deliveryMethod: product.isDigital ? "Цифровая доставка" : "Подтверждение поставщика",
+    deliveryMethod: deliveryMethodFor(product),
     status: "published",
   };
 });

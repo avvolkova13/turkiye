@@ -7,6 +7,8 @@
 .selection, .contact, .confirmation { padding: clamp(1.25rem, 3vw, 2.25rem); border-top: 1px solid rgba(36,39,33,.24); border-bottom: 1px solid rgba(36,39,33,.24); }
 .selection h2, .contact h2, .confirmation h2 { margin: 0 0 1.5rem; font-size: clamp(1.45rem, 3vw, 2.25rem); font-weight: 500; letter-spacing: -.05em; }
 .selectionRow { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid rgba(36,39,33,.15); }
+.selectionRow > span { display: grid; gap: 0.3rem; }
+.selectionRow span small { color: #60645b; font-size: 0.72rem; font-weight: 400; }
 .selectionRow strong { white-space: nowrap; font-size: .9rem; }
 .selectionRow small { color: #60645b; font-weight: 400; }
 .contact { display: grid; align-content: start; gap: 1rem; background: #e9e2d6; }

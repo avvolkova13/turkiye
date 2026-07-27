@@ -9,6 +9,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   const params = useSearchParams();
   const requestedId = params.get("service");
   const [submitted, setSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -21,14 +22,29 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   }, [requestedId, services]);
 
   if (submitted) {
-    return <section className={styles.confirmation}><p className={styles.eyebrow}>Заявка принята</p><h2>Мы свяжемся с вами для подтверждения деталей.</h2><p>Письмо с дальнейшими шагами отправим на {email}.</p></section>;
+    return <section className={styles.confirmation}><p className={styles.eyebrow}>Заявка принята</p><h2>Мы свяжемся с вами для подтверждения деталей.</h2><p>Заказ {orderId} сохранён со статусом «ожидает подтверждения поставщика».</p><p>Письмо с дальнейшими шагами отправим на {email}.</p></section>;
   }
 
   return (
-    <form className={styles.checkout} onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}>
+    <form className={styles.checkout} onSubmit={(event) => {
+      event.preventDefault();
+      const nextOrderId = `FARO-${Date.now().toString(36).toUpperCase()}`;
+      const existingOrders = JSON.parse(window.localStorage.getItem("faro-orders") ?? "[]") as unknown[];
+      const order = {
+        id: nextOrderId,
+        createdAt: new Date().toISOString(),
+        status: "awaiting_provider",
+        contact: { name, phone, email, contactMethod, details },
+        items: selected.map(({ id, title, price, currency, priceUnit, provider, sourceUrl, capturedAt }) => ({ id, title, price, currency, priceUnit, provider, sourceUrl, capturedAt })),
+      };
+      window.localStorage.setItem("faro-orders", JSON.stringify([...existingOrders, order]));
+      window.localStorage.removeItem("faro-cart");
+      setOrderId(nextOrderId);
+      setSubmitted(true);
+    }}>
       <section className={styles.selection}>
         <h2>Вы выбрали</h2>
-        {selected.length ? selected.map((service) => <div className={styles.selectionRow} key={service.id}><span>{service.title}</span><strong>от {new Intl.NumberFormat("ru-RU").format(service.price)} ₽ <small>{service.priceUnit}</small></strong></div>) : <p>Добавьте услугу из каталога, чтобы продолжить.</p>}
+        {selected.length ? selected.map((service) => <div className={styles.selectionRow} key={service.id}><span>{service.title}<small>{service.provider} · цена-снимок от {service.capturedAt}</small></span><strong>от {new Intl.NumberFormat("ru-RU").format(service.price)} ₽ <small>{service.priceUnit}</small></strong></div>) : <p>Добавьте услугу из каталога, чтобы продолжить.</p>}
       </section>
       <section className={styles.contact}>
         <h2>Контакты</h2>

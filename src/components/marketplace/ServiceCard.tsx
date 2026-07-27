@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { marketplaceCategories } from "@/data/marketplace";
 import type { MarketplaceScenario, MarketplaceService } from "@/types/marketplace";
 import { sitePath } from "@/lib/sitePath";
 
@@ -35,7 +34,7 @@ export function ServiceCard({ service, scenario = "experience" }: ServiceCardPro
 
   const duration = formatDuration(service.durationMinutes);
   const price = new Intl.NumberFormat("ru-RU").format(service.price);
-  const categoryName = marketplaceCategories.find(({ id }) => id === service.categoryId)?.name ?? service.type;
+  const categoryName = service.catalogSection;
 
   return (
     <article className={styles.serviceCard}>
@@ -74,9 +73,16 @@ export function ServiceCard({ service, scenario = "experience" }: ServiceCardPro
               {" "}от {price} ₽ <small>{service.priceUnit}</small>
             </strong>
           </div>
+          <div className={styles.sourceMeta}>
+            <span>{service.provider} · снимок {service.capturedAt}</span>
+            <span>Доступность: {service.availability === "snapshot" ? "снимок" : service.availability}</span>
+          </div>
           <span className={styles.cardAction}>{scenarioCtas[scenario]}</span>
         </div>
       </Link>
+      <a className={styles.sourceLink} href={service.sourceUrl} rel="noreferrer" target="_blank">
+        Источник: {service.provider}
+      </a>
     </article>
   );
 }

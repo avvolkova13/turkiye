@@ -25,18 +25,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (!service) notFound();
 
   const price = new Intl.NumberFormat("ru-RU").format(service.price);
-  const typeLabels: Record<string, string> = {
-    activities: "Активности",
-    connectivity: "Связь",
-    digital: "Цифровые маршруты",
-    excursions: "Экскурсии",
-    guides: "Гиды",
-    insurance: "Страхование",
-    rental: "Аренда",
-    services: "Полезные сервисы",
-    tickets: "Билеты",
-    transfers: "Трансферы",
-  };
   const durationLabels: Record<string, string> = {
     "up-to-2-hours": "до 2 часов",
     "half-day": "полдня",
@@ -66,13 +54,15 @@ export default async function ServicePage({ params }: ServicePageProps) {
           />
         </div>
         <article className={styles.productCopy}>
-          <p className={styles.productEyebrow}>{typeLabels[service.type] ?? service.type}</p>
+          <p className={styles.productEyebrow}>{service.catalogSection}</p>
           <h1>{service.title}</h1>
           <p className={styles.productDescription}>{service.description}</p>
           <dl className={styles.productMeta}>
             <div><dt>Формат</dt><dd>{service.deliveryMethod}</dd></div>
             <div><dt>Срок</dt><dd>{service.duration ? durationLabels[service.duration] ?? service.duration : "по запросу"}</dd></div>
             <div><dt>В стоимость входит</dt><dd>{service.included.join(" · ")}</dd></div>
+            <div><dt>Поставщик</dt><dd>{service.provider} · цена на {service.capturedAt}</dd></div>
+            <div><dt>Статус</dt><dd>Снимок предложения · подтверждение поставщика после заказа</dd></div>
           </dl>
           <div className={styles.productPurchase}>
             <div>
@@ -81,6 +71,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </div>
             <ProductActions serviceId={service.id} />
           </div>
+          <a className={styles.sourceLink} href={service.sourceUrl} rel="noreferrer" target="_blank">
+            Источник предложения: {service.provider}
+          </a>
           <Link className={styles.backLink} href="/catalog">Вернуться в каталог</Link>
         </article>
       </div>

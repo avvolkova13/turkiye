@@ -19,8 +19,9 @@
 .formChecks label { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.5rem; }
 .formChecks input { accent-color: #a54e33; }
 .primaryAction { justify-self: start; min-height: 2.8rem; padding: 0.75rem 1.1rem; border: 1px solid #242721; border-radius: 999px; background: #242721; color: #fffdf8; cursor: pointer; }
-.quickFilters { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); padding: 0; }
-.quickFiltersLabel { margin-right: 0.25rem; color: #60645b; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; }
+.quickFilters { display: grid; gap: 0.8rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); padding: 0; }
+.quickFiltersLabel { color: #60645b; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; }
+.quickFilterList { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .quickFilter, .clearButton, .emptyState button, .moreResults button { border: 1px solid rgba(36, 39, 33, 0.3); border-radius: 999px; background: transparent; color: #242721; cursor: pointer; transition: background 220ms ease, border-color 220ms ease, color 220ms ease, transform 220ms ease; }
 .quickFilter { min-height: 2.75rem; padding: 0.65rem 1rem; border-color: rgba(36, 39, 33, 0.2); background: rgba(255, 253, 248, 0.28); font-size: 0.8125rem; }
 .quickFilter:hover, .clearButton:hover, .emptyState button:hover, .moreResults button:hover { border-color: #a54e33; color: #a54e33; transform: translateY(-1px); }
@@ -60,7 +61,6 @@
   .priceFilters { grid-template-columns: 1fr; padding: 0.75rem 0 0; }
   .filterBody { padding-inline: 0; }
   .filterDisclosure summary { padding-inline: 0; }
-  .quickFiltersLabel { width: 100%; margin-right: 0; }
   .resultsToolbar { align-items: stretch; }
   .sortControl { min-width: 0; width: 100%; }
   .serviceList { grid-template-columns: 1fr; gap: 1rem; }

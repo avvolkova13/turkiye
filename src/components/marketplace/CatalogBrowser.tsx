@@ -202,17 +202,19 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       {(scenario === "self-service" || scenario === "support") && <ServiceRequestForm onSubmit={updateFilters} scenario={scenario} value={filters} />}
       <div className={styles.quickFilters} aria-label="Быстрые фильтры">
         <span className={styles.quickFiltersLabel}>Разделы</span>
-        {categoryQuickFilters.map((quickFilter) => (
-          <button
-            aria-pressed={filters.category === quickFilter.value.category}
-            className={styles.quickFilter}
-            key={quickFilter.label}
-            onClick={() => toggleCategory(quickFilter.value)}
-            type="button"
-          >
-            {quickFilter.label}
-          </button>
-        ))}
+        <div className={styles.quickFilterList}>
+          {categoryQuickFilters.map((quickFilter) => (
+            <button
+              aria-pressed={filters.category === quickFilter.value.category}
+              className={styles.quickFilter}
+              key={quickFilter.label}
+              onClick={() => toggleCategory(quickFilter.value)}
+              type="button"
+            >
+              {quickFilter.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <details

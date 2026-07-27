@@ -23,8 +23,6 @@
 .quickFiltersLabel { margin-right: 0.25rem; color: #60645b; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; }
 .quickFilter, .clearButton, .emptyState button, .moreResults button { border: 1px solid rgba(36, 39, 33, 0.3); border-radius: 999px; background: transparent; color: #242721; cursor: pointer; transition: background 220ms ease, border-color 220ms ease, color 220ms ease, transform 220ms ease; }
 .quickFilter { min-height: 2.75rem; padding: 0.65rem 1rem; border-color: rgba(36, 39, 33, 0.2); background: rgba(255, 253, 248, 0.28); font-size: 0.8125rem; }
-.clearQuickFilters { min-height: 2.75rem; margin-left: auto; padding: 0.65rem 1rem; border: 1px solid rgba(165, 78, 51, 0.4); border-radius: 999px; background: transparent; color: #a54e33; font-size: 0.8125rem; cursor: pointer; }
-.clearQuickFilters:hover { border-color: #a54e33; background: rgba(165, 78, 51, 0.08); }
 .quickFilter:hover, .clearButton:hover, .emptyState button:hover, .moreResults button:hover { border-color: #a54e33; color: #a54e33; transform: translateY(-1px); }
 .quickFilter[aria-pressed="true"] { border-color: #242721; background: #242721; color: #fffdf8; }
 .filterDisclosure { overflow: hidden; border-top: 1px solid rgba(36, 39, 33, 0.18); border-bottom: 1px solid rgba(36, 39, 33, 0.18); background: transparent; }
@@ -34,6 +32,7 @@
 .filterSummaryTitle { color: #242721; }
 .filterSummaryMeta { display: inline-flex; align-items: center; gap: 0.8rem; color: #60645b; font-size: 0.75rem; font-weight: 400; }
 .filterSummaryMeta span:first-child { color: #a54e33; font-weight: 700; }
+.filterSummaryMeta .clearButton { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
 .filterBody { display: grid; gap: 0; padding: 0 0 1.5rem; }
 .priceFilters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: 1rem; padding: 0.25rem 0 0; background: transparent; }
 .priceFilters label { display: grid; gap: 0.45rem; color: #60645b; font-size: 0.75rem; }
@@ -62,7 +61,6 @@
   .filterBody { padding-inline: 0; }
   .filterDisclosure summary { padding-inline: 0; }
   .quickFiltersLabel { width: 100%; margin-right: 0; }
-  .clearQuickFilters { margin-left: 0; }
   .resultsToolbar { align-items: stretch; }
   .sortControl { min-width: 0; width: 100%; }
   .serviceList { grid-template-columns: 1fr; gap: 1rem; }

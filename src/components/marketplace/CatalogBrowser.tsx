@@ -219,9 +219,6 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
             {quickFilter.label}
           </button>
         ))}
-        <button className={styles.clearQuickFilters} onClick={resetFilters} type="button">
-          Сбросить фильтры
-        </button>
       </div>
 
       <details
@@ -233,6 +230,17 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
           <span className={styles.filterSummaryTitle}>Фильтры</span>
           <span className={styles.filterSummaryMeta}>
             {activeFilterCount > 0 && <span>{activeFilterCount} выбрано</span>}
+            <button
+              className={styles.clearButton}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                resetFilters();
+              }}
+              type="button"
+            >
+              Сбросить фильтры
+            </button>
             <span>{filterDisclosureOpen ? "Скрыть" : "Настроить"}</span>
           </span>
         </summary>

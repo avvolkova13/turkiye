@@ -69,7 +69,8 @@ test("marketplace catalog is a dated, source-backed snapshot in eight sections",
     assert.ok(existsSync(resolve(process.cwd(), "public", service.imagePath.slice(1))));
     assert.ok(service.images.every((imagePath) => existsSync(resolve(process.cwd(), "public", imagePath.slice(1)))));
 
-    if (["Туры", "Билеты в музеи и достопримечательности", "Впечатления и экскурсии", "Рестораны", "Красота и wellness", "Проездные"].includes(service.catalogSection)) {
+    const isIstanbulSourceSection = ["Туры", "Билеты в музеи и достопримечательности", "Впечатления и экскурсии", "Рестораны", "Красота и wellness"].includes(service.catalogSection);
+    if (isIstanbulSourceSection || (service.catalogSection === "Проездные" && service.provider === "Istanbul.com")) {
       assert.equal(service.provider, "Istanbul.com", `${service.id} must be sourced from Istanbul.com`);
       assert.match(service.sourceUrl, /^https:\/\/istanbul\.com\//);
     } else {

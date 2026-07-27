@@ -34,7 +34,9 @@ export function ServiceCard({ service, scenario = "experience" }: ServiceCardPro
 
   const duration = formatDuration(service.durationMinutes);
   const price = new Intl.NumberFormat("ru-RU").format(service.price);
-  const categoryName = service.catalogSection;
+  const categoryName = service.catalogSection === "Билеты в музеи и достопримечательности"
+    ? "Билеты"
+    : service.catalogSection;
 
   return (
     <article className={styles.serviceCard}>

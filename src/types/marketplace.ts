@@ -13,13 +13,10 @@ export type MarketplaceServiceType =
   | "visa"
   | "yachts"
   | "shopping"
+  | "restaurants"
   | "spa"
   | "airline-tickets";
 
-/**
- * This catalog is seeded for interface development only. It intentionally
- * communicates no live inventory or purchase availability.
- */
 export type MarketplaceServiceStatus = "published";
 export type MarketplaceCurrency = "RUB";
 export type MarketplaceCatalogSection =
@@ -116,15 +113,12 @@ export interface MarketplaceService {
   suitableForChildren: boolean;
   isDigital: boolean;
   orderToday: boolean;
-  /** Interface-only dates for demo filtering; they are not live availability. */
-  demoDates?: MarketplaceDemoDate[];
   included: string[];
   excluded: string[];
   cancellation: string;
   meetingPoint: string | null;
   deliveryMethod: string;
   status: MarketplaceServiceStatus;
-  isMockData: true;
 }
 
 export interface ServiceVariant {
@@ -136,7 +130,15 @@ export interface ServiceVariant {
   priceUnit: string;
   durationMinutes: number | null;
   status: MarketplaceServiceStatus;
-  isMockData: true;
+  catalogSection: MarketplaceCatalogSection;
+  provider: MarketplaceProvider;
+  sourceUrl: string;
+  sourceName: MarketplaceSourceName;
+  capturedAt: MarketplaceDemoDate;
+  sourcePrice: number;
+  sourceCurrency: MarketplaceSourceCurrency;
+  availability: MarketplaceAvailability;
+  providerStatus: MarketplaceProviderStatus;
 }
 
 export type CatalogFilterKey =

@@ -166,7 +166,6 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
       { label: "Турецкий", value: "Турецкий" as const },
     ],
   };
-  const hasActiveFilters = serializeCatalogQuery(filters).length > 0;
   const activeFilterCount = new URLSearchParams(serializeCatalogQuery(filters)).size;
   const transferValue: TransferSearchState = {
     from: filters.from ?? "",
@@ -220,11 +219,9 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
             {quickFilter.label}
           </button>
         ))}
-        {hasActiveFilters && (
-          <button className={styles.clearQuickFilters} onClick={resetFilters} type="button">
-            Сбросить фильтры
-          </button>
-        )}
+        <button className={styles.clearQuickFilters} onClick={resetFilters} type="button">
+          Сбросить фильтры
+        </button>
       </div>
 
       <details

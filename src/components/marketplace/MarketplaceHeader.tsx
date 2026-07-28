@@ -31,7 +31,7 @@ export function MarketplaceHeader({ currentPath }: MarketplaceHeaderProps) {
             Поиск
           </Link>
           <Link aria-current={currentPath === "/account" ? "page" : undefined} href="/account">
-            Личный кабинет
+            {currentPath === "/account" ? "Личный кабинет" : "Войти в ЛК"}
           </Link>
           <Link aria-current={currentPath === "/checkout" ? "page" : undefined} href="/checkout">
             Корзина

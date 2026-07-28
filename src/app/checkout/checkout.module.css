@@ -34,7 +34,7 @@
 .checkoutCard label small { color: #777a70; }
 .formActions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; margin-top: .75rem; }
 .formError { margin: 0; color: #a54e33; font-weight: 700; }
-.demoNotice { margin: 0; padding: .85rem 1rem; border: 1px solid rgba(165,78,51,.28); background: rgba(165,78,51,.08); color: #7c402e; }
+.paymentNotice { margin: 0; padding: .85rem 1rem; border: 1px solid rgba(165,78,51,.28); background: rgba(165,78,51,.08); color: #7c402e; }
 .paymentSummary { margin-top: .25rem; }
 .orderNumber { font-size: 1.1rem; }
 .confirmationItems { margin: 1.5rem 0; }

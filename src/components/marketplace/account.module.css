@@ -22,4 +22,22 @@
 .comment { margin: 0; color: #60645b; }
 .empty { max-width: 42rem; padding: clamp(2rem, 5vw, 4rem) 0; }
 .empty p:not(.eyebrow) { max-width: 30rem; color: #60645b; }
+.loginCard { max-width: 36rem; padding: clamp(1.5rem, 4vw, 3rem); background: #e9e2d6; }
+.loginCard h2 { margin: .5rem 0 1rem; font-size: clamp(2rem, 5vw, 4rem); font-weight: 500; letter-spacing: -.07em; line-height: .95; }
+.loginCard > p:not(.eyebrow) { max-width: 28rem; color: #60645b; }
+.loginCard form { display: grid; gap: 1rem; margin-top: 2rem; }
+.authTabs { display: flex; gap: .35rem; margin-bottom: 1.5rem; }
+.authTabs button { min-height: 2.5rem; padding: .6rem .9rem; border: 1px solid rgba(36,39,33,.2); border-radius: 999px; background: transparent; color: #60645b; cursor: pointer; }
+.authTabs button[aria-selected="true"] { border-color: #242721; background: #242721; color: #fffdf8; }
+.loginCard label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
+.loginCard input { min-height: 3rem; padding: .75rem .9rem; border: 1px solid rgba(36,39,33,.22); border-radius: .7rem; background: #f4f0e8; color: #242721; font: inherit; }
+.loginCard input:focus { outline: none; border-color: #a54e33; box-shadow: 0 0 0 3px rgba(165,78,51,.12); }
+.loginCard button, .accountToolbar button { width: fit-content; min-height: 2.8rem; padding: .75rem 1.1rem; border: 1px solid #242721; border-radius: 999px; background: #242721; color: #fffdf8; cursor: pointer; }
+.loginCard small { display: block; margin-top: 1rem; color: #60645b; }
+.loginError { margin: 0; color: #a54e33; font-size: .8rem; font-weight: 700; }
+.accountContent { display: grid; gap: 2rem; }
+.accountToolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(36,39,33,.2); }
+.accountToolbar p { margin: 0; color: #60645b; }
+.accountToolbar strong { color: #242721; }
+.accountToolbar button { background: transparent; color: #242721; }
 @media (max-width: 720px) { .ordersIntro, .order summary { align-items: start; flex-direction: column; } .order summary > span:last-child { justify-items: start; } .orderMeta { grid-template-columns: 1fr; } }

@@ -1964,29 +1964,17 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 }
 
 .affordable-title {
-  display: grid;
-  grid-template-columns: 3fr 9fr;
-  align-items: start;
+  display: block;
   margin-bottom: clamp(5rem, 10vw, 10rem);
 }
 
-.affordable-title > span {
-  max-width: 13rem;
-  font-size: 0.74rem;
-}
-
 .affordable-title h2 {
+  max-width: 65rem;
   margin: 0;
-  font-size: clamp(4rem, 9.2vw, 10rem);
+  font-size: clamp(3.2rem, 6.5vw, 7rem);
   font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: -0.08em;
-}
-
-.affordable-title em {
-  display: block;
-  margin-left: 18%;
-  font-size: 0.72em;
+  line-height: 0.92;
+  letter-spacing: -0.07em;
 }
 
 .affordable-list {

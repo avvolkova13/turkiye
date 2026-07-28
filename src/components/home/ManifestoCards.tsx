@@ -8,15 +8,15 @@ import { sitePath } from "@/lib/sitePath";
 
 const cards = [
   {
-    title: "Маршруты, которые остаются",
-    label: "Эгейское побережье",
-    href: "/catalog?region=aegean",
-    alt: "Эгейское побережье",
+    title: "Впечатления, которые остаются",
+    label: "Впечатления и экскурсии",
+    href: "/catalog?category=activities",
+    alt: "Турецкие впечатления и прогулки",
     images: [
-      "/images/kas-coast.jpg",
-      "/images/aegean-bodrum.jpg",
-      "/images/pamukkale.jpg",
-      "/images/home-canvas/bodrum-amanruya.webp",
+      "/images/turkish-coffee-sand.png",
+      "/images/bosphorus-ferry.jpg",
+      "/images/service-legends.jpg",
+      "/images/spice-bazaar.jpg",
     ],
   },
   {

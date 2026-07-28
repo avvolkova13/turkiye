@@ -29,8 +29,8 @@ export const travelGuides: TravelGuide[] = [
       { label: "05", title: "Соберите обратный путь", body: "Сохраните адрес аэропорта и заложите запас времени на дорогу — особенно для утреннего вылета." },
     ],
     actions: [
-      { label: "Заказать трансфер", href: "/services/antalya-airport-transfer" },
-      { label: "Посмотреть услуги Антальи", href: "/catalog?destination=antalya" },
+      { label: "Выбрать трансфер", href: "/catalog?category=transfers" },
+      { label: "Посмотреть трансферы", href: "/catalog?category=transfers" },
     ],
   },
   {
@@ -47,7 +47,7 @@ export const travelGuides: TravelGuide[] = [
     ],
     actions: [
       { label: "Собрать услуги Стамбула", href: "/catalog?destination=istanbul" },
-      { label: "Выбрать прогулку по Босфору", href: "/services/istanbul-bosphorus-walk" },
+      { label: "Выбрать ужин на Босфоре", href: "/services/bosphorus-dinner-cruise" },
     ],
   },
   {
@@ -64,7 +64,7 @@ export const travelGuides: TravelGuide[] = [
     ],
     actions: [
       { label: "Выбрать экскурсии в Каппадокии", href: "/catalog?category=excursions&destination=cappadocia" },
-      { label: "Заказать трансфер из аэропорта", href: "/services/cappadocia-airport-transfer" },
+      { label: "Выбрать абонемент в Каппадокию", href: "/services/cappadocia-pass" },
     ],
   },
 ];

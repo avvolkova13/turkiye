@@ -16,10 +16,10 @@ import { sitePath } from "@/lib/sitePath";
 const brandName = siteConfig.publicBrandName ?? "Türkiye";
 
 const services = [
-  { name: "Круиз по Босфору", place: "Стамбул", price: "от 2 900 ₽", href: "/catalog?q=Босфор&destination=istanbul" },
-  { name: "Трансфер из аэропорта", place: "Анталья", price: "от 3 700 ₽", href: "/services/antalya-airport-transfer" },
-  { name: "Воздушный шар", place: "Каппадокия", price: "от 14 900 ₽", href: "/catalog?category=excursions&destination=cappadocia" },
-  { name: "Туристическая eSIM", place: "Вся Турция", price: "от 790 ₽", href: "/catalog?category=connectivity" },
+  { name: "Ужин на Босфоре с шоу", place: "Стамбул", price: "от 3 675 ₽", href: "/services/bosphorus-dinner-cruise" },
+  { name: "Шаттл из аэропорта", place: "Стамбул", price: "от 1 045 ₽", href: "/services/istanbul-shuttle-aksaray" },
+  { name: "Абонемент в Каппадокию", place: "Каппадокия", price: "от 31 500 ₽", href: "/services/cappadocia-pass" },
+  { name: "eSIM Турция: 1 ГБ", place: "Вся Турция", price: "от 104 ₽", href: "/services/trasst-esim-1gb" },
 ] as const;
 
 export default function HomePage() {
@@ -66,9 +66,8 @@ export default function HomePage() {
             <ManifestoCards />
             <div className="manifesto-main" data-reveal data-reveal-step="2">
               <p className="manifesto-copy">
-                Здесь можно купить карту прогулки, подключить связь, заказать трансфер
-                или собрать поездку на несколько дней — без пяти сайтов и десятка
-                переписок.
+                Планируйте поездку целиком: находите интересные места, бронируйте
+                услуги и собирайте всё необходимое в одном заказе.
               </p>
             </div>
           </div>
@@ -174,10 +173,7 @@ export default function HomePage() {
           data-reveal
         >
           <div className="affordable-title" data-reveal>
-            <span>Полезные вещи, которые лучше купить заранее</span>
-            <h2>
-              Для поездки — <em>от 50 ₽</em>
-            </h2>
+            <h2>Полезные вещи, которые лучше купить заранее</h2>
           </div>
           <div className="affordable-list">
             {affordableItems.map(({ name, price, slug }, index) => (
@@ -214,10 +210,10 @@ export default function HomePage() {
             </div>
             <div className="bundle-links">
               {[
-                { bundle: "Спокойный прилёт", details: "трансфер · связь · поддержка", href: "/services/antalya-airport-transfer" },
+                { bundle: "Спокойный прилёт", details: "трансфер · связь", href: "/catalog?category=transfers" },
                 { bundle: "Стамбул впервые", details: "3 дня · маршрут · Босфор", href: "/catalog?destination=istanbul" },
-                { bundle: "Анталья с ребёнком", details: "7 дней · море · семейный ритм", href: "/catalog?destination=antalya&kids=1" },
-                { bundle: "Каппадокия без забот", details: "2 дня · трансфер · рассвет", href: "/catalog?category=excursions&destination=cappadocia" },
+                { bundle: "Городской ритм", details: "рестораны · впечатления", href: "/catalog?category=restaurants" },
+                { bundle: "Каппадокия без забот", details: "проездной · связь", href: "/catalog?destination=cappadocia" },
               ].map(({ bundle, details, href }) => (
                 <a href={href} key={bundle}>
                   <span className="bundle-name">
@@ -291,7 +287,7 @@ export default function HomePage() {
         >
           <div data-reveal>
             <p>Полезные идеи перед следующей поездкой</p>
-            <h2>Маршруты, места и практичные советы — без рекламного шума.</h2>
+            <h2>Получайте идеи для путешествий, новые маршруты и полезные подборки о Турции.</h2>
           </div>
           <div data-reveal>
             <Newsletter />

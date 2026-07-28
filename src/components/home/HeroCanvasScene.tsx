@@ -97,7 +97,7 @@ export function HeroCanvasScene({
   return (
     <section
       className="hero-canvas-scene"
-      data-header-tone="dark"
+      data-header-tone="light"
       id="hero"
       ref={sectionRef}
     >

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { marketplaceNavigation } from "@/data/marketplace";
 import { sitePath } from "@/lib/sitePath";
 
+import { CartCount } from "./CartCount";
 import styles from "./marketplace.module.css";
 
 type MarketplaceHeaderProps = {
@@ -34,7 +35,7 @@ export function MarketplaceHeader({ currentPath }: MarketplaceHeaderProps) {
             {currentPath === "/account" ? "Личный кабинет" : "Войти в ЛК"}
           </Link>
           <Link aria-current={currentPath === "/checkout" ? "page" : undefined} href="/checkout">
-            Корзина
+            <span className={styles.cartLinkContents}>Корзина <CartCount className={styles.cartCount} /></span>
           </Link>
         </nav>
       </div>

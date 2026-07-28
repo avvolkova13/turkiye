@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { readCart, writeCart } from "@/lib/marketplace/local-store";
 
 import styles from "./product-actions.module.css";
 
-export function ProductActions({ serviceId }: { serviceId: string }) {
+export function ProductActions({ serviceId, serviceTitle }: { serviceId: string; serviceTitle: string }) {
   const [added, setAdded] = useState(false);
   const router = useRouter();
 
@@ -27,7 +28,16 @@ export function ProductActions({ serviceId }: { serviceId: string }) {
       <button className={styles.secondary} onClick={() => { addToCart(); router.push("/checkout"); }} type="button">
         Купить сейчас
       </button>
-      {added && <a className={styles.cartLink} href="/checkout">Перейти к оформлению</a>}
+      {added && (
+        <div aria-live="polite" className={styles.toast} role="status">
+          <div className={styles.toastCopy}>
+            <strong>Добавлено в корзину</strong>
+            <span>{serviceTitle}</span>
+          </div>
+          <Link className={styles.toastLink} href="/checkout">Перейти в корзину</Link>
+          <button aria-label="Закрыть уведомление" className={styles.toastClose} onClick={() => setAdded(false)} type="button">×</button>
+        </div>
+      )}
     </div>
   );
 }

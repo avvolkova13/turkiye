@@ -88,29 +88,41 @@ export function AccountGate() {
 
   if (!account) {
     return (
-      <section aria-labelledby="account-login-title" className={styles.loginCard}>
-        <div className={styles.authTabs} role="tablist" aria-label="Авторизация">
-          <button aria-selected={mode === "login"} onClick={() => { setMode("login"); setError(""); }} role="tab" type="button">Вход</button>
-          <button aria-selected={mode === "register"} onClick={() => { setMode("register"); setError(""); }} role="tab" type="button">Регистрация</button>
-        </div>
-        <h2 id="account-login-title">{mode === "login" ? "Войти в личный кабинет" : "Создать личный кабинет"}</h2>
-        <p>Сохраняйте заказы и быстро находите инструкции по покупке.</p>
-        <form onSubmit={submit}>
-          {mode === "register" && <label><span>Имя</span><input autoComplete="name" required value={name} onChange={(event) => setName(event.target.value)} /></label>}
-          <label><span>Email</span><input autoComplete="email" required type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></label>
-          <label><span>Пароль</span><input autoComplete={mode === "login" ? "current-password" : "new-password"} minLength={6} required type="password" value={password} onChange={(event) => setPassword(event.target.value)} /></label>
-          {mode === "register" && <label><span>Повторите пароль</span><input autoComplete="new-password" minLength={6} required type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} /></label>}
-          {error && <p className={styles.loginError}>{error}</p>}
-          <button type="submit">{mode === "login" ? "Войти" : "Зарегистрироваться"}</button>
-        </form>
-      </section>
+      <div className={styles.accountLanding}>
+        <section aria-labelledby="account-login-title" className={styles.loginCard}>
+          <div className={styles.authTabs} role="tablist" aria-label="Авторизация">
+            <button aria-selected={mode === "login"} onClick={() => { setMode("login"); setError(""); }} role="tab" type="button">Вход</button>
+            <button aria-selected={mode === "register"} onClick={() => { setMode("register"); setError(""); }} role="tab" type="button">Регистрация</button>
+          </div>
+          <p className={styles.loginEyebrow}>FARO ID</p>
+          <h2 id="account-login-title">{mode === "login" ? "С возвращением" : "Ваше место для поездок"}</h2>
+          <p>Сохраняйте заказы, инструкции и всё необходимое для поездки в одном кабинете.</p>
+          <form onSubmit={submit}>
+            {mode === "register" && <label><span>Имя</span><input autoComplete="name" required value={name} onChange={(event) => setName(event.target.value)} /></label>}
+            <label><span>Email</span><input autoComplete="email" required type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></label>
+            <label><span>Пароль</span><input autoComplete={mode === "login" ? "current-password" : "new-password"} minLength={6} required type="password" value={password} onChange={(event) => setPassword(event.target.value)} /></label>
+            {mode === "register" && <label><span>Повторите пароль</span><input autoComplete="new-password" minLength={6} required type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} /></label>}
+            {error && <p className={styles.loginError}>{error}</p>}
+            <button type="submit">{mode === "login" ? "Войти" : "Зарегистрироваться"}</button>
+          </form>
+        </section>
+        <aside className={styles.accountAside}>
+          <p className={styles.eyebrow}>Всё под рукой</p>
+          <h2>Поездка начинается с ясности.</h2>
+          <ul>
+            <li><span>01</span>Номер заказа и статус</li>
+            <li><span>02</span>Даты, маршруты и контакты</li>
+            <li><span>03</span>Инструкции и канал доставки</li>
+          </ul>
+        </aside>
+      </div>
     );
   }
 
   return (
     <div className={styles.accountContent}>
       <div className={styles.accountToolbar}>
-        <p>Вы вошли как <strong>{account.email}</strong></p>
+        <p>Ваш FARO ID · <strong>{account.email}</strong></p>
         <button onClick={signOut} type="button">Выйти</button>
       </div>
       <AccountOrders />

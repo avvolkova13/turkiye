@@ -60,7 +60,7 @@ export function Collections() {
       className="collections-section"
       data-interaction={isInteracting ? "open" : "list"}
       id="collections"
-      data-header-tone="dark"
+      data-header-tone="light"
       data-reveal
       onMouseLeave={deactivateCollection}
     >

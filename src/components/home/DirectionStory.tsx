@@ -144,7 +144,7 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
   return (
     <section
       className="directions-story"
-      data-header-tone="light"
+      data-header-tone="dark"
       data-direction-motion={directionMotionState}
       id="directions"
       ref={sectionRef}

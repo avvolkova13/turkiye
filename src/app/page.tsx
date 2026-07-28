@@ -42,7 +42,7 @@ export default function HomePage() {
         <section
           className="manifesto-section"
           id="manifesto"
-          data-header-tone="dark"
+          data-header-tone="light"
           data-reveal
         >
           <h2 className="visually-hidden">О сервисе путешествий по Турции</h2>
@@ -56,10 +56,10 @@ export default function HomePage() {
               <strong>Est. 2026</strong>
               <div className="manifesto-aside-image">
                 <Image
-                  alt="Деталь утреннего Стамбула у воды"
+                  alt="Солнечная турецкая улица с тёплой архитектурой"
                   fill
                   sizes="(max-width: 760px) 34vw, 12vw"
-                  src={sitePath("/images/istanbul-motion.jpg")}
+                  src={sitePath("/images/ankara-alley.jpg")}
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="ideas-section" id="ideas" data-header-tone="dark">
+        <section className="ideas-section" id="ideas" data-header-tone="light">
           <div className="section-heading ideas-heading" data-reveal>
             <p>Три способа начать</p>
             <h2>С чего начать поездку</h2>
@@ -136,7 +136,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="services-section" id="services" data-header-tone="light">
+        <section className="services-section" id="services" data-header-tone="dark">
           <div className="services-stage" data-reveal>
             <div className="services-image" data-reveal>
               <Image
@@ -169,7 +169,7 @@ export default function HomePage() {
         <section
           className="affordable-section"
           id="affordable"
-          data-header-tone="dark"
+          data-header-tone="light"
           data-reveal
         >
           <div className="affordable-title" data-reveal>
@@ -186,7 +186,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="bundles-section" id="bundles" data-header-tone="light" data-reveal>
+        <section className="bundles-section" id="bundles" data-header-tone="dark" data-reveal>
           <div className="bundle-visual bundle-visual-left" data-reveal>
             <Image
               alt="Современная архитектура Стамбула в вечернем свете"
@@ -229,7 +229,7 @@ export default function HomePage() {
         <section
           className="statement-section"
           id="statement"
-          data-header-tone="light"
+          data-header-tone="dark"
           data-reveal
         >
           <h2 className="visually-hidden">Наша позиция</h2>
@@ -240,7 +240,7 @@ export default function HomePage() {
           <p className="statement-signature">Команда сервиса путешествий по Турции</p>
         </section>
 
-        <section className="principles-section" id="principles" data-header-tone="dark">
+        <section className="principles-section" id="principles" data-header-tone="light">
           <h2 data-reveal>Выбирайте проще. Планируйте яснее. Путешествуйте спокойнее.</h2>
           <ol>
             <li className="principle-one" data-reveal>
@@ -261,7 +261,7 @@ export default function HomePage() {
           </ol>
         </section>
 
-        <section className="final-cta-section" id="final-cta" data-header-tone="light">
+        <section className="final-cta-section" id="final-cta" data-header-tone="dark">
           <Image
             alt="Ночная панорама Галатской башни и огней Стамбула"
             fill
@@ -282,7 +282,7 @@ export default function HomePage() {
         <section
           className="newsletter-section"
           id="newsletter"
-          data-header-tone="dark"
+          data-header-tone="light"
           data-reveal
         >
           <div data-reveal>
@@ -295,17 +295,21 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="page-footer" id="page-footer" data-header-tone="light">
+      <footer className="page-footer" id="page-footer" data-header-tone="dark">
         <div className="footer-wordmark">
           <Image alt="Faro" height={68} src={sitePath("/faro-logo.svg")} width={161} />
         </div>
         <div className="footer-grid">
-          <nav aria-label="Направления в Турции" data-reveal>
-            <span>Направления</span>
-            <a href="#directions">Стамбул</a>
-            <a href="#directions">Анталья</a>
-            <a href="#directions">Каппадокия</a>
-            <a href="#collections">Эгейское море</a>
+          <nav aria-label="Категории каталога" data-reveal>
+            <span>Категории</span>
+            <a href="/catalog?category=excursions">Туры</a>
+            <a href="/catalog?category=tickets">Билеты</a>
+            <a href="/catalog?category=activities">Впечатления</a>
+            <a href="/catalog?category=restaurants">Рестораны</a>
+            <a href="/catalog?category=spa">Красота и wellness</a>
+            <a href="/catalog?category=connectivity">eSIM</a>
+            <a href="/catalog?category=transfers">Трансферы</a>
+            <a href="/catalog?category=digital">Проездные</a>
           </nav>
           <nav aria-label="Сервисы в путешествии" data-reveal>
             <span>В путешествии</span>

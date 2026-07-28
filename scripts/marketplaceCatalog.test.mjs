@@ -70,7 +70,7 @@ test("marketplace catalog is a dated, source-backed snapshot in eight sections",
     assert.ok(service.images.every((imagePath) => existsSync(resolve(process.cwd(), "public", imagePath.slice(1)))));
 
     const isIstanbulSourceSection = ["Туры", "Билеты в музеи и достопримечательности", "Впечатления и экскурсии", "Рестораны", "Красота и wellness"].includes(service.catalogSection);
-    if (isIstanbulSourceSection || (service.catalogSection === "Проездные" && service.provider === "Istanbul.com")) {
+    if (isIstanbulSourceSection || service.provider === "Istanbul.com") {
       assert.equal(service.provider, "Istanbul.com", `${service.id} must be sourced from Istanbul.com`);
       assert.match(service.sourceUrl, /^https:\/\/istanbul\.com\//);
     } else {
@@ -160,6 +160,20 @@ test("restaurant category remains visible from an experience scenario", () => {
   assert.equal(result.total, 5);
   assert.ok(result.items.length > 0);
   assert.ok(result.items.every((service) => service.type === "restaurants"));
+});
+
+test("restaurant quick-filter query is preserved when parsed from the URL", () => {
+  const { parseCatalogQuery } = require("../src/lib/marketplace/query-state.ts");
+
+  assert.deepEqual(parseCatalogQuery({ category: "restaurants" }), { category: "restaurants" });
+});
+
+test("checkout access requires an authenticated account", () => {
+  const { canAccessCheckout } = require("../src/lib/marketplace/checkout-access.ts");
+
+  assert.equal(canAccessCheckout(null), false);
+  assert.equal(canAccessCheckout({ email: "" }), false);
+  assert.equal(canAccessCheckout({ email: "traveler@example.com" }), true);
 });
 
 test("catalog accumulates visible pages without dropping the first page", () => {

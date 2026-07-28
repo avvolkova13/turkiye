@@ -25,6 +25,7 @@ const categories = new Set<MarketplaceServiceType>([
   "airline-tickets",
   "guides",
   "activities",
+  "restaurants",
   "digital",
   "connectivity",
   "insurance",

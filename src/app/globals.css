@@ -198,6 +198,14 @@ html[data-header-tone="light"] .site-header {
   backdrop-filter: none;
 }
 
+html[data-header-tone="dark"] .site-header {
+  color: #fffdf8;
+}
+
+html[data-header-tone="dark"] .site-header .wordmark img {
+  filter: brightness(0) invert(1);
+}
+
 html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
   min-height: 4.5rem;
   background: transparent;
@@ -347,6 +355,9 @@ html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
 }
 
 .header-commerce-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   color: inherit;
   font-size: 0.74rem;
   text-decoration: none;
@@ -355,6 +366,20 @@ html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
 
 .header-commerce-link:hover {
   color: var(--accent);
+}
+
+.home-cart-count {
+  display: inline-grid;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  place-items: center;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fffdf8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .locale-switch {

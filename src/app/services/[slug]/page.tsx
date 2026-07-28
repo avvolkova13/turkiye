@@ -67,7 +67,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
               <span>Цена</span>
               <strong>от {price} ₽</strong>
             </div>
-            <ProductActions serviceId={service.id} />
+            <ProductActions serviceId={service.id} serviceTitle={service.title} />
           </div>
           <Link className={styles.backLink} href="/catalog">Вернуться в каталог</Link>
         </article>

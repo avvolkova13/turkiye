@@ -25,24 +25,24 @@ export function RevealObserver() {
     revealItems.forEach((item) => revealObserver.observe(item));
 
     const toneItems = Array.from(document.querySelectorAll<HTMLElement>("[data-header-tone]"));
-    const toneRatios = new Map<Element, number>();
-    const toneObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          toneRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+    let toneFrame = 0;
+    const updateHeaderTone = () => {
+      cancelAnimationFrame(toneFrame);
+      toneFrame = requestAnimationFrame(() => {
+        const focusY = window.innerHeight * 0.32;
+        const visible = toneItems.find((item) => {
+          const rect = item.getBoundingClientRect();
+          return rect.top <= focusY && rect.bottom >= focusY;
         });
-        const visible = Array.from(toneRatios.entries())
-          .filter(([, ratio]) => ratio > 0)
-          .sort((a, b) => b[1] - a[1])[0]?.[0] as HTMLElement | undefined;
         if (visible) {
-          document.documentElement.dataset.headerTone =
-            visible.dataset.headerTone ?? "dark";
+          document.documentElement.dataset.headerTone = visible.dataset.headerTone ?? "light";
         }
-      },
-      { rootMargin: "-40% 0px -45% 0px", threshold: [0, 0.2, 0.6] },
-    );
+      });
+    };
 
-    toneItems.forEach((item) => toneObserver.observe(item));
+    updateHeaderTone();
+    window.addEventListener("scroll", updateHeaderTone, { passive: true });
+    window.addEventListener("resize", updateHeaderTone);
 
     const hero = document.getElementById("hero");
     const headerObserver = new IntersectionObserver(
@@ -57,7 +57,9 @@ export function RevealObserver() {
 
     return () => {
       revealObserver.disconnect();
-      toneObserver.disconnect();
+      cancelAnimationFrame(toneFrame);
+      window.removeEventListener("scroll", updateHeaderTone);
+      window.removeEventListener("resize", updateHeaderTone);
       headerObserver.disconnect();
       delete document.documentElement.dataset.revealReady;
     };

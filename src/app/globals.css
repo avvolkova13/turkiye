@@ -206,6 +206,13 @@ html[data-header-tone="dark"] .site-header .wordmark img {
   filter: brightness(0) invert(1);
 }
 
+html[data-header-tone="dark"] .site-header .header-search,
+html[data-header-tone="dark"] .site-header .header-commerce-link,
+html[data-header-tone="dark"] .site-header .locale-switch,
+html[data-header-tone="dark"] .site-header .menu-trigger {
+  color: #fffdf8;
+}
+
 html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
   min-height: 4.5rem;
   background: transparent;
@@ -314,11 +321,6 @@ html[data-header-condensed="true"][data-header-tone="dark"] .site-header {
     margin-right 300ms cubic-bezier(0.19, 1, 0.22, 1),
     margin-left 300ms cubic-bezier(0.19, 1, 0.22, 1),
     color 300ms ease;
-}
-
-.desktop-nav a[data-expanded="true"] {
-  margin-right: 20px;
-  margin-left: 20px;
 }
 
 .connected-pill-shape {
@@ -1078,14 +1080,14 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 }
 
 .floema-meta-shape path {
-  fill: var(--surface);
+  fill: #fff;
+  transition: fill 0.25s ease;
 }
 
 .floema-meta-node {
   position: relative;
   z-index: 2;
   height: 2.75rem;
-  transition: margin-right 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .floema-icon-side {
@@ -1097,14 +1099,6 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
 .floema-label-side {
   padding: 0.75rem 1rem;
-}
-
-.floema-meta-bg {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  border-radius: 0.75rem;
-  background: var(--surface);
 }
 
 .floema-meta-icon,
@@ -1125,11 +1119,12 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  color: var(--ink);
+  color: #241f21;
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.4;
   white-space: nowrap;
+  transition: color 0.25s ease;
 }
 
 .direction-icon {
@@ -1143,16 +1138,16 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
   stroke-width: 1.7;
 }
 
-.text-link:hover .floema-icon-side,
-.text-link:focus-visible .floema-icon-side {
-  margin-right: 1rem;
-  transition: margin-right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.text-link:hover .floema-meta-shape path,
+.text-link:focus-visible .floema-meta-shape path {
+  fill: var(--accent);
 }
 
-.text-link:hover .floema-meta-icon,
-.text-link:focus-visible .floema-meta-icon {
-  transform: scale(1.07);
-  transition: transform 0.5s cubic-bezier(0.12, 1.2, 0.16, 2.35);
+.text-link:hover .floema-meta-label,
+.text-link:focus-visible .floema-meta-label,
+.text-link:hover .direction-icon,
+.text-link:focus-visible .direction-icon {
+  color: #fff;
 }
 
 .text-link-arrow {
@@ -1173,7 +1168,8 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
 /* Keep the direction icon's original visual token available to legacy scenes. */
 .text-link .direction-icon {
-  color: var(--ink);
+  color: #241f21;
+  transition: color 0.25s ease;
 }
 
 /* Floema special-button geometry ends here. */

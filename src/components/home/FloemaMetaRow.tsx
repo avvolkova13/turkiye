@@ -21,17 +21,13 @@ function roundedRectPath(rect: Rect, radius = 12) {
   ].join(" ");
 }
 
-function bridgePath(left: Rect, right: Rect) {
-  const leftEdge = left.x + left.width;
-  const rightEdge = right.x;
-  const centerX = (leftEdge + rightEdge) / 2;
-  const top = 9.96788665631135;
-  const bottom = 34.03211334368865;
-  const leftPoint = centerX - (rightEdge - leftEdge) / 2 - 1.0818500254605;
-  const rightPoint = centerX + (rightEdge - leftEdge) / 2 + 1.0358437839447;
-
-  return `M${leftPoint} ${bottom} C${leftPoint + 0.6046792} ${bottom - 0.9256123}, ${rightPoint - 0.5889258} ${bottom - 1.1853955}, ${rightPoint} ${bottom - 0.33042} L${rightPoint} ${top + 0.33042} C${rightPoint - 0.5889258} ${top + 1.1853955}, ${leftPoint + 0.6046792} ${top + 0.9256123}, ${leftPoint} ${top} Z`;
-}
+const floemaBridgePath = [
+  "M42.9181499745395 34.03211334368865",
+  "C43.52282919255975 33.10650100894232, 44.44776997213061 32.8467178280795, 45.035843783944706 33.701693306690366",
+  "L45.035843783944706 10.298306693309636",
+  "C44.44776997213061 11.153282171920507, 43.52282919255975 10.893498991057681, 42.9181499745395 9.96788665631135",
+  "Z",
+].join(" ");
 
 function floemaLabelPath(rect: Rect, height: number) {
   const y = (height - 41.296875) / 2;
@@ -93,7 +89,7 @@ export function FloemaMetaRow({ icon, label }: { icon: ReactNode; label: ReactNo
   const labelRect = rects[1] ?? { x: 44, y: 0, width: 120, height: 44 };
   const shape = roundedRectPath(iconRect, 14.96);
   const labelShape = floemaLabelPath(labelRect, height);
-  const bridges = bridgePath(iconRect, labelRect);
+  const bridges = floemaBridgePath;
 
   return (
     <span className="floema-meta-row" ref={rowRef}>
@@ -101,11 +97,9 @@ export function FloemaMetaRow({ icon, label }: { icon: ReactNode; label: ReactNo
         <path d={`${bridges} ${shape} ${labelShape}`} data-meta-row-shape-bridges />
       </svg>
       <span className="floema-meta-node floema-icon-side" data-meta-row-node="0" ref={(node) => { nodeRefs.current[0] = node; }}>
-        <span className="floema-meta-bg" />
         <span className="floema-meta-icon">{icon}</span>
       </span>
       <span className="floema-meta-node floema-label-side" data-meta-row-node="1" ref={(node) => { nodeRefs.current[1] = node; }}>
-        <span className="floema-meta-bg" />
         <span className="floema-meta-label">{label}</span>
       </span>
     </span>

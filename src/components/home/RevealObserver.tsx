@@ -29,11 +29,20 @@ export function RevealObserver() {
     const updateHeaderTone = () => {
       cancelAnimationFrame(toneFrame);
       toneFrame = requestAnimationFrame(() => {
+        const focusX = window.innerWidth * 0.5;
         const focusY = window.innerHeight * 0.32;
-        const visible = toneItems.find((item) => {
+        const pointTarget = document.elementFromPoint(focusX, focusY);
+        const pointSection = pointTarget?.closest<HTMLElement>("[data-header-tone]");
+        const candidates = toneItems.filter((item) => {
           const rect = item.getBoundingClientRect();
           return rect.top <= focusY && rect.bottom >= focusY;
         });
+        const visible = pointSection ?? candidates
+          .sort((a, b) => {
+            const aRect = a.getBoundingClientRect();
+            const bRect = b.getBoundingClientRect();
+            return aRect.width * aRect.height - bRect.width * bRect.height;
+          })[0];
         if (visible) {
           document.documentElement.dataset.headerTone = visible.dataset.headerTone ?? "light";
         }

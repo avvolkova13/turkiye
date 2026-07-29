@@ -214,11 +214,10 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
       ) : null}
 
       {items.map(([label, href], index) => {
-        const expanded = canExpand && hoveredIndex === index;
         return (
           <a
             data-active={visualIndex === index ? "true" : "false"}
-            data-expanded={expanded ? "true" : "false"}
+            data-expanded="false"
             href={href}
             key={href}
             onBlur={() => setFocusedIndex(null)}

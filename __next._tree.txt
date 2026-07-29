@@ -1,2 +1,2 @@
-:HL["/turkiye/_next/static/chunks/1k7tqwtg4a9tc.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"VTyZR_Z4YyrD09_OrQL1H"}
+:HL["/turkiye/_next/static/chunks/3-ibju4-y0c7e.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"66IW6CLOo6i_CYWxkpdkr"}

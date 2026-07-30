@@ -152,7 +152,7 @@ function sortedMarketplaceServices(
     if (section && service.catalogSection !== section) return false;
     if (category && service.categoryId !== category) return false;
     if (subcategory && service.subcategory !== subcategory) return false;
-    if (destination && service.destinationId && service.destinationId !== destination) return false;
+    if (destination && service.destinationId !== destination) return false;
     if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;
     if (date) return false;
     if (minPrice !== undefined && service.price < minPrice) return false;

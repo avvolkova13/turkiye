@@ -59,7 +59,7 @@ const baseDirectionScenes = [
     description:
       "Круизы по Босфору, вечерние программы и прогулки на воде.",
     cta: "Море и яхты",
-    href: "/catalog?category=activities",
+    href: "/catalog?category=yachts",
     image: "/images/kas-coast.jpg",
     imageAlt: "Скалистая бухта и прозрачное море у побережья Каша",
     focalPoint: "51% 64%",

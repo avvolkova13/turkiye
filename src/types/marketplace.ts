@@ -13,6 +13,7 @@ export type MarketplaceServiceType =
   | "visa"
   | "yachts"
   | "shopping"
+  | "vip-transport"
   | "restaurants"
   | "spa"
   | "airline-tickets";
@@ -27,8 +28,11 @@ export type MarketplaceCatalogSection =
   | "Красота и wellness"
   | "eSIM"
   | "Трансферы"
-  | "Проездные";
-export type MarketplaceProvider = "Istanbul.com" | "Trasst";
+  | "Проездные"
+  | "Шопинг"
+  | "VIP транспорт";
+export type MarketplaceSubcategory = "fur" | "jewelry" | "helicopters" | "boats";
+export type MarketplaceProvider = "Istanbul.com" | "Trasst" | "Turkishopping" | "Golden Eye Jewellery" | "Elit Homes";
 export type MarketplaceSourceName = MarketplaceProvider;
 export type MarketplaceSourceCurrency = "TRY" | "EUR" | "USD" | "RUB";
 export type MarketplaceAvailability = "snapshot";
@@ -43,7 +47,7 @@ export type MarketplaceDuration =
   | "multi-day";
 export type MarketplaceDemoDate = `${number}-${number}-${number}`;
 export type MarketplaceRegion = "aegean";
-export type MarketplaceScenario = "experience" | "transfer" | "self-service" | "support";
+export type MarketplaceScenario = "experience" | "transfer" | "self-service" | "support" | "shopping";
 export type TransferServiceMode = "private" | "shared";
 export type TransferVehicleClass = "standard" | "comfort" | "minivan";
 
@@ -100,12 +104,14 @@ export interface MarketplaceService {
   availability: MarketplaceAvailability;
   providerStatus: MarketplaceProviderStatus;
   categoryId: MarketplaceServiceType;
+  subcategory?: MarketplaceSubcategory;
   destinationId: string | null;
   type: MarketplaceServiceType;
   description: string;
   imagePath: string;
   images: string[];
   price: number;
+  priceLabel?: string;
   currency: MarketplaceCurrency;
   priceUnit: string;
   duration: MarketplaceDuration | null;
@@ -204,6 +210,7 @@ export type CatalogFilterKey =
 export interface CatalogFilters {
   text?: string;
   category?: MarketplaceServiceType;
+  subcategory?: MarketplaceSubcategory;
   section?: MarketplaceCatalogSection;
   destination?: string;
   region?: MarketplaceRegion;

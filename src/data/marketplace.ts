@@ -34,6 +34,8 @@ export const marketplaceCategories: MarketplaceCategory[] = [
   { id: "connectivity", name: "eSIM", description: "Цифровая связь для поездки по Турции." },
   { id: "transfers", name: "Трансферы", description: "Шаттлы и приватные поездки из аэропортов." },
   { id: "digital", name: "Проездные", description: "Городские карты и туристические пропуска." },
+  { id: "shopping", name: "Шопинг", description: "Шубы, кожа и ювелирные изделия из Турции." },
+  { id: "vip-transport", name: "VIP транспорт", description: "Вертолётные трансферы и панорамные полёты." },
 ];
 
 const cityIds = new Map(marketplaceDestinations.map(({ id, name }) => [name, id]));
@@ -60,15 +62,23 @@ function deliveryMethodFor(product: (typeof sourceProducts)[number]) {
     spa: "Сеанс ухода",
     transfers: "Трансфер",
     yachts: "Круиз",
+    shopping: "Покупка в магазине",
+    "vip-transport": "VIP-перелёт",
   };
 
   return labels[product.type] ?? "Услуга по выбранному формату";
 }
 
 export const marketplaceServices: MarketplaceService[] = sourceProducts.map((product) => {
-  const provider = product.sourceUrl.includes("trasst") ? "Trasst" : "Istanbul.com";
+  const provider = product.sourceUrl.includes("turkishopping.com")
+    ? "Turkishopping"
+    : product.sourceUrl.includes("goldeneyejewellery.net")
+      ? "Golden Eye Jewellery"
+      : product.sourceUrl.includes("elithomes.com")
+        ? "Elit Homes"
+        : product.sourceUrl.includes("trasst") ? "Trasst" : "Istanbul.com";
   const imageSource = "Нейтральная локальная обложка FARO; источник товара указан отдельно";
-  const price = Math.max(50, Math.round(product.sourcePrice * eurToRub));
+  const price = product.sourcePrice > 0 ? Math.round(product.sourcePrice * eurToRub) : 0;
   return {
     id: product.id,
     slug: product.id,
@@ -84,12 +94,14 @@ export const marketplaceServices: MarketplaceService[] = sourceProducts.map((pro
     availability: "snapshot",
     providerStatus: "awaiting_provider",
     categoryId: product.type,
+    subcategory: product.subcategory,
     destinationId: product.city ? cityIds.get(product.city) ?? null : null,
     type: product.type,
     description: product.description,
     imagePath: product.imagePath,
     images: [product.imagePath],
     price,
+    priceLabel: product.priceLabel,
     currency: "RUB",
     priceUnit: product.priceUnit,
     duration: durationFor(product.durationMinutes),
@@ -132,6 +144,6 @@ export const marketplaceNavigation: MarketplaceNavigationItem[] = [
   { label: "Направления", href: "/destinations" },
   { label: "Туры и впечатления", href: "/catalog?scenario=experience" },
   { label: "Трансферы", href: "/catalog?scenario=transfer" },
-  { label: "Помощь", href: "/catalog?scenario=support" },
+  { label: "VIP транспорт", href: "/catalog?category=vip-transport" },
   { label: "Самостоятельно", href: "/catalog?scenario=self-service" },
 ];

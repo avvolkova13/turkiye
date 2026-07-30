@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { sitePath } from "@/lib/sitePath";
 
 export type PillNavItem = readonly [label: string, href: string];
 
@@ -218,7 +219,7 @@ export function ConnectedPillNav({ items }: ConnectedPillNavProps) {
           <a
             data-active={visualIndex === index ? "true" : "false"}
             data-expanded="false"
-            href={href}
+            href={sitePath(href)}
             key={href}
             onBlur={() => setFocusedIndex(null)}
             onFocus={() => setFocusedIndex(index)}

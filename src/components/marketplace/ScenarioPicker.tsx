@@ -9,7 +9,7 @@ type ScenarioPickerProps = {
   onChange: (scenario: MarketplaceScenario) => void;
 };
 
-const scenarios: MarketplaceScenario[] = ["experience", "transfer", "self-service", "support"];
+const scenarios: MarketplaceScenario[] = ["experience", "transfer", "self-service", "shopping"];
 
 export function ScenarioPicker({ onChange, value }: ScenarioPickerProps) {
   return (

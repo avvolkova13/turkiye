@@ -44,7 +44,8 @@ const scenarioCategories: Record<MarketplaceScenario, MarketplaceServiceType[]> 
   experience: ["excursions", "activities", "guides", "tickets", "yachts", "spa"],
   transfer: ["transfers", "taxi"],
   "self-service": ["digital", "connectivity", "insurance", "rental"],
-  support: ["services", "visa", "insurance", "airline-tickets", "shopping"],
+  support: ["services", "visa", "insurance", "airline-tickets"],
+  shopping: ["shopping"],
 };
 
 const destinationNames = new Map(
@@ -66,6 +67,7 @@ function searchText(service: MarketplaceService): string {
       categoryNames.get(service.categoryId) ?? "",
       service.destinationId ? destinationNames.get(service.destinationId) ?? "" : "",
       ...service.included,
+      service.subcategory ?? "",
     ].join(" "),
   );
 }
@@ -125,6 +127,7 @@ function sortedMarketplaceServices(
 ): MarketplaceService[] {
   const query = typeof filters.text === "string" ? normalized(filters.text) : "";
   const category = isKnownCategory(filters.category) ? filters.category : undefined;
+  const subcategory = filters.subcategory;
   const section = filters.section;
   const destination =
     typeof filters.destination === "string" && destinationIds.has(filters.destination)
@@ -148,6 +151,7 @@ function sortedMarketplaceServices(
     if (!category && scenarioTypes && !scenarioTypes.includes(service.type)) return false;
     if (section && service.catalogSection !== section) return false;
     if (category && service.categoryId !== category) return false;
+    if (subcategory && service.subcategory !== subcategory) return false;
     if (destination && service.destinationId && service.destinationId !== destination) return false;
     if (region && (!service.destinationId || !aegeanDestinationIds.has(service.destinationId))) return false;
     if (date) return false;

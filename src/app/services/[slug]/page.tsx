@@ -24,7 +24,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
   if (!service) notFound();
 
-  const price = new Intl.NumberFormat("ru-RU").format(service.price);
+  const price = service.price > 0 ? new Intl.NumberFormat("ru-RU").format(service.price) : null;
   const durationLabels: Record<string, string> = {
     "up-to-2-hours": "до 2 часов",
     "half-day": "полдня",
@@ -65,7 +65,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <div className={styles.productPurchase}>
             <div>
               <span>Цена</span>
-              <strong>от {price} ₽</strong>
+              <strong>{service.priceLabel ?? (price ? `от ${price} ₽` : "Цена по запросу")}</strong>
             </div>
             <ProductActions serviceId={service.id} serviceTitle={service.title} />
           </div>

@@ -8,6 +8,7 @@ export const scenarioLabels: Record<MarketplaceScenario, string> = {
   transfer: "Заказать трансфер",
   "self-service": "Собрать поездку самому",
   support: "Получить помощь",
+  shopping: "Найти шопинг",
 };
 
 export const scenarioDescriptions: Record<MarketplaceScenario, string> = {
@@ -15,6 +16,7 @@ export const scenarioDescriptions: Record<MarketplaceScenario, string> = {
   transfer: "Маршрут, дата и автомобиль — оставьте заявку на поездку.",
   "self-service": "Карты, eSIM и цифровые материалы для самостоятельной поездки.",
   support: "Документы и сервисы, которые помогают до и во время поездки.",
+  shopping: "Шубы, кожа и украшения — выберите покупку в Турции.",
 };
 
 export const scenarioCtas: Record<MarketplaceScenario, string> = {
@@ -22,6 +24,7 @@ export const scenarioCtas: Record<MarketplaceScenario, string> = {
   transfer: "Заказать трансфер",
   "self-service": "Настроить услугу",
   support: "Получить помощь",
+  shopping: "Открыть шопинг",
 };
 
 export const durationLabels = {
@@ -37,5 +40,6 @@ export function getServiceScenario(service: MarketplaceService): MarketplaceScen
     return "self-service";
   }
   if (["services", "visa"].includes(service.type)) return "support";
+  if (service.type === "shopping") return "shopping";
   return "experience";
 }

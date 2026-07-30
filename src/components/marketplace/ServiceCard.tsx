@@ -31,7 +31,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
   }, [images.length, isActive]);
 
   const duration = formatDuration(service.durationMinutes);
-  const price = new Intl.NumberFormat("ru-RU").format(service.price);
+  const price = service.price > 0 ? new Intl.NumberFormat("ru-RU").format(service.price) : null;
   const categoryName = service.catalogSection === "Билеты в музеи и достопримечательности"
     ? "Билеты"
     : service.catalogSection;
@@ -70,7 +70,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
             <span>{duration ?? service.deliveryMethod}</span>
             <strong>
               <span className={styles.priceLabel}>Цена</span>
-              {" "}от {price} ₽ <small>{service.priceUnit}</small>
+              {service.priceLabel ?? (price ? <> от {price} ₽ <small>{service.priceUnit}</small></> : " по запросу")}
             </strong>
           </div>
           <span className={styles.cardAction}>Подробнее</span>

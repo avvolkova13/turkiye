@@ -154,7 +154,7 @@ export default function HomePage() {
           </div>
           <div className="service-index">
             {services.map(({ name, place, price, href }, index) => (
-              <a href={href} key={name} data-reveal>
+              <a href={sitePath(href)} key={name} data-reveal>
                 <span className="service-number">0{index + 1}</span>
                 <span className="service-name">{name}</span>
                 <span className="service-place">{place}</span>
@@ -177,7 +177,7 @@ export default function HomePage() {
           </div>
           <div className="affordable-list">
             {affordableItems.map(({ name, price, slug }, index) => (
-              <a href={`/services/${slug}`} key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
+              <a href={sitePath(`/services/${slug}`)} key={name} data-reveal data-reveal-step={String((index % 4) + 1)}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{name}</strong>
                 <b>{price}</b>
@@ -215,7 +215,7 @@ export default function HomePage() {
                 { bundle: "Городской ритм", details: "рестораны · впечатления", href: "/catalog?category=restaurants" },
                 { bundle: "Каппадокия без забот", details: "проездной · связь", href: "/catalog?destination=cappadocia" },
               ].map(({ bundle, details, href }) => (
-                <a href={href} key={bundle}>
+                <a href={sitePath(href)} key={bundle}>
                   <span className="bundle-name">
                     <strong>{bundle}</strong>
                     <small>{details}</small>
@@ -273,7 +273,7 @@ export default function HomePage() {
             <span>Ваше следующее место</span>
             <h2>С чего начнём вашу Турцию?</h2>
             <p>Выберите город, услугу или готовый план — остальное соберём по шагам.</p>
-            <a className="primary-action light-action" href="/catalog">
+            <a className="primary-action light-action" href={sitePath("/catalog")}>
               Начать путешествие
             </a>
           </div>
@@ -302,14 +302,14 @@ export default function HomePage() {
         <div className="footer-grid">
           <nav aria-label="Категории каталога" data-reveal>
             <span>Категории</span>
-            <a href="/catalog?category=excursions">Туры</a>
-            <a href="/catalog?category=tickets">Билеты</a>
-            <a href="/catalog?category=activities">Впечатления</a>
-            <a href="/catalog?category=restaurants">Рестораны</a>
-            <a href="/catalog?category=spa">Красота и wellness</a>
-            <a href="/catalog?category=connectivity">eSIM</a>
-            <a href="/catalog?category=transfers">Трансферы</a>
-            <a href="/catalog?category=digital">Проездные</a>
+            <a href={sitePath("/catalog?category=excursions")}>Туры</a>
+            <a href={sitePath("/catalog?category=tickets")}>Билеты</a>
+            <a href={sitePath("/catalog?category=activities")}>Впечатления</a>
+            <a href={sitePath("/catalog?category=restaurants")}>Рестораны</a>
+            <a href={sitePath("/catalog?category=spa")}>Красота и wellness</a>
+            <a href={sitePath("/catalog?category=connectivity")}>eSIM</a>
+            <a href={sitePath("/catalog?category=transfers")}>Трансферы</a>
+            <a href={sitePath("/catalog?category=digital")}>Проездные</a>
           </nav>
           <nav aria-label="Сервисы в путешествии" data-reveal>
             <span>В путешествии</span>

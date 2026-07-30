@@ -176,7 +176,7 @@ export function Header({ brandName }: HeaderProps) {
             <div className="menu-layout">
               <nav aria-label="Полное меню">
                 {menuItems.map(([label, href], index) => (
-                  <a href={href} key={href} onClick={closePanel}>
+                  <a href={sitePath(href)} key={href} onClick={closePanel}>
                     <span>0{index + 1}</span>
                     {label}
                   </a>

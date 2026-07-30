@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { marketplaceCategories, marketplaceDestinations } from "@/data/marketplace";
 import { getVisibleMarketplaceServices } from "@/lib/marketplace/catalog";
 import { parseCatalogQuery, serializeCatalogQuery } from "@/lib/marketplace/query-state";
-import type { CatalogFilters, CatalogSort, TransferSearchState } from "@/types/marketplace";
+import type { CatalogFilters, CatalogSort, MarketplaceSubcategory, TransferSearchState } from "@/types/marketplace";
 
 import { ExperienceSearchForm } from "./ExperienceSearchForm";
 import { FilterPanel } from "./FilterPanel";
@@ -38,6 +38,8 @@ const categoryQuickFilters: { label: string; value: CatalogFilters }[] = [
   { label: "eSIM", value: { category: "connectivity" } },
   { label: "Трансферы", value: { category: "transfers" } },
   { label: "Проездные", value: { category: "digital" } },
+  { label: "Шопинг", value: { category: "shopping" } },
+  { label: "VIP транспорт", value: { category: "vip-transport" } },
 ];
 
 function selectedSort(value: string | string[] | undefined): CatalogSort {
@@ -122,6 +124,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     updateFilters({
       scenario: nextScenario,
       category: undefined,
+      subcategory: undefined,
       text: undefined,
       destination: undefined,
     });
@@ -133,7 +136,7 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
 
   function toggleCategory(category: CatalogFilters) {
     const active = filters.category === category.category;
-    updateFilters(active ? {} : { category: category.category });
+    updateFilters(active ? {} : { category: category.category, subcategory: undefined });
   }
 
   function updateSort(nextSort: CatalogSort) {
@@ -145,8 +148,17 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
     updateUrl(filters, sort, nextPage);
   }
 
+  const subcategories = filters.category === "shopping"
+    ? [
+        { label: "Мех и кожа", value: "fur" as MarketplaceSubcategory },
+        { label: "Украшения", value: "jewelry" as MarketplaceSubcategory },
+      ]
+    : filters.category === "vip-transport"
+      ? [{ label: "Вертолёты", value: "helicopters" as MarketplaceSubcategory }]
+      : [];
   const filterOptions = {
     categories: marketplaceCategories.map(({ id, name }) => ({ label: name, value: id })),
+    subcategories,
     destinations: marketplaceDestinations.map(({ id, name }) => ({ label: name, value: id })),
     durations: [
       { label: "До 2 часов", value: "up-to-2-hours" as const },
@@ -215,6 +227,27 @@ function CatalogBrowserContent({ filters, page, sort }: CatalogBrowserContentPro
             </button>
           ))}
         </div>
+        {subcategories.length > 0 && (
+          <div className={styles.subcategoryFilters} aria-label="Подразделы">
+            <span className={styles.quickFiltersLabel}>В разделе</span>
+            <div className={styles.quickFilterList}>
+              {subcategories.map((subcategory) => (
+                <button
+                  aria-pressed={filters.subcategory === subcategory.value}
+                  className={styles.quickFilter}
+                  key={subcategory.value}
+                  onClick={() => updateFilters({
+                    ...filters,
+                    subcategory: filters.subcategory === subcategory.value ? undefined : subcategory.value,
+                  })}
+                  type="button"
+                >
+                  {subcategory.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <details

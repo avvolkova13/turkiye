@@ -6,6 +6,7 @@ import type {
   MarketplaceDuration,
   MarketplaceLanguage,
   MarketplaceServiceType,
+  MarketplaceSubcategory,
 } from "@/types/marketplace";
 
 import styles from "./marketplace.module.css";
@@ -20,6 +21,7 @@ export type FilterPanelOptions = {
   destinations?: SelectOption<string>[];
   durations?: SelectOption<MarketplaceDuration>[];
   languages?: SelectOption<MarketplaceLanguage>[];
+  subcategories?: SelectOption<MarketplaceSubcategory>[];
 };
 
 type FilterPanelProps = {
@@ -55,11 +57,23 @@ export function FilterPanel({ onChange, options, value }: FilterPanelProps) {
         <label>
           <span>Категория</span>
           <select
-            onChange={(event) => update({ category: event.target.value as MarketplaceServiceType | undefined })}
+            onChange={(event) => update({ category: event.target.value as MarketplaceServiceType | undefined, subcategory: undefined })}
             value={value.category ?? ""}
           >
             <option value="">Все категории</option>
             {options.categories.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+      )}
+      {options.subcategories && options.subcategories.length > 0 && (
+        <label>
+          <span>Подкатегория</span>
+          <select
+            onChange={(event) => update({ subcategory: (event.target.value || undefined) as MarketplaceSubcategory | undefined })}
+            value={value.subcategory ?? ""}
+          >
+            <option value="">Все в разделе</option>
+            {options.subcategories.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
           </select>
         </label>
       )}

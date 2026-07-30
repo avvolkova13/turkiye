@@ -5,6 +5,7 @@ import type {
   MarketplaceLanguage,
   MarketplaceRegion,
   MarketplaceServiceType,
+  MarketplaceSubcategory,
   MarketplaceScenario,
   TransferServiceMode,
   TransferVehicleClass,
@@ -31,7 +32,9 @@ const categories = new Set<MarketplaceServiceType>([
   "insurance",
   "rental",
   "services",
+  "vip-transport",
 ]);
+const subcategories = new Set<MarketplaceSubcategory>(["fur", "jewelry", "helicopters"]);
 const durations = new Set<MarketplaceDuration>([
   "up-to-2-hours",
   "half-day",
@@ -46,6 +49,7 @@ const scenarios = new Set<MarketplaceScenario>([
   "transfer",
   "self-service",
   "support",
+  "shopping",
 ]);
 const transferModes = new Set<TransferServiceMode>(["private", "shared"]);
 const vehicleClasses = new Set<TransferVehicleClass>(["standard", "comfort", "minivan"]);
@@ -75,6 +79,7 @@ function isDemoDate(value: string | undefined): value is MarketplaceDemoDate {
 export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
   const text = firstValue(searchParams.q)?.trim();
   const category = firstValue(searchParams.category);
+  const subcategory = firstValue(searchParams.subcategory);
   const scenarioValue = firstValue(searchParams.scenario);
   const destination = firstValue(searchParams.destination)?.trim();
   const region = firstValue(searchParams.region)?.trim();
@@ -95,6 +100,9 @@ export function parseCatalogQuery(searchParams: SearchParams): CatalogFilters {
     ...(text ? { text } : {}),
     ...(category && categories.has(category as MarketplaceServiceType)
       ? { category: category as MarketplaceServiceType }
+      : {}),
+    ...(subcategory && subcategories.has(subcategory as MarketplaceSubcategory)
+      ? { subcategory: subcategory as MarketplaceSubcategory }
       : {}),
     ...(scenario ? { scenario } : {}),
     ...(destination && destinationIds.has(destination) ? { destination } : {}),
@@ -142,6 +150,7 @@ export function serializeCatalogQuery(filters: CatalogFilters): string {
 
   if (filters.text?.trim()) query.set("q", filters.text.trim());
   if (filters.category) query.set("category", filters.category);
+  if (filters.subcategory) query.set("subcategory", filters.subcategory);
   if (filters.destination) query.set("destination", filters.destination);
   if (filters.region) query.set("region", filters.region);
   if (filters.date) query.set("date", filters.date);

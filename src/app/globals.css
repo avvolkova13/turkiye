@@ -169,7 +169,7 @@ html[data-reveal-ready="true"] [data-reveal]:not([data-visible="true"]) {
 }
 
 .site-header {
-  position: fixed;
+  position: absolute;
   z-index: 80;
   top: 0;
   right: 0;

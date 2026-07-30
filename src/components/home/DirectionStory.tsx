@@ -212,7 +212,7 @@ export function DirectionStory({ scenes }: { scenes: DirectionScene[] }) {
                   : scene.title}
               </h2>
               <p data-direction-part="description">{scene.description}</p>
-              <a className="text-link light-link" data-direction-part="cta" href={scene.href}>
+              <a className="text-link light-link" data-direction-part="cta" href={sitePath(scene.href)}>
                 <FloemaMetaRow
                   icon={<DirectionIcon index={index} />}
                   label={scene.cta}

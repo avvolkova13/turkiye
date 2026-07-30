@@ -1,4 +1,4 @@
 :HL["/turkiye/_next/static/chunks/1mika50kc74bp.css","style"]
 :HL["/turkiye/_next/static/chunks/213e743pim7xj.css","style"]
 :HL["/turkiye/_next/static/chunks/2u_n2s64akpta.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"basilica-ticket","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"HFnNRLwsrc-0XAAkD2qV6"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"basilica-ticket","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"-aQxthcicE9q80IzBI0yV"}

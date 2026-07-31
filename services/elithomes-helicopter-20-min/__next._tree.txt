@@ -1,4 +1,4 @@
 :HL["/turkiye/_next/static/chunks/27irg3op_sz08.css","style"]
 :HL["/turkiye/_next/static/chunks/213e743pim7xj.css","style"]
 :HL["/turkiye/_next/static/chunks/2h6dxcv69n-pm.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"elithomes-helicopter-20-min","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"XhKB0F8gJn_Zb2bvvpZUC"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"elithomes-helicopter-20-min","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"KpYdDhccLTV3hLgRfkwS4"}

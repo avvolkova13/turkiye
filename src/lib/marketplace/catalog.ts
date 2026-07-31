@@ -16,6 +16,7 @@ const PAGE_SIZE = 12;
 const categoryIds = new Set<MarketplaceServiceType>(
   marketplaceCategories.map(({ id }) => id),
 );
+const retiredCategoryIds = new Set<MarketplaceServiceType>(["yachts"]);
 const destinationIds = new Set(marketplaceDestinations.map(({ id }) => id));
 const aegeanDestinationIds = new Set(
   marketplaceDestinations
@@ -41,7 +42,7 @@ const sortValues = new Set<CatalogSort>([
 ]);
 
 const scenarioCategories: Record<MarketplaceScenario, MarketplaceServiceType[]> = {
-  experience: ["excursions", "activities", "guides", "tickets", "yachts", "spa"],
+  experience: ["excursions", "activities", "guides", "tickets", "spa"],
   transfer: ["transfers", "taxi"],
   "self-service": ["digital", "connectivity", "insurance", "rental"],
   support: ["services", "visa", "insurance", "airline-tickets"],
@@ -125,6 +126,12 @@ function sortedMarketplaceServices(
   filters: CatalogFilters,
   sort: CatalogSort,
 ): MarketplaceService[] {
+  if (
+    typeof filters.category === "string" &&
+    retiredCategoryIds.has(filters.category as MarketplaceServiceType)
+  ) {
+    return [];
+  }
   const query = typeof filters.text === "string" ? normalized(filters.text) : "";
   const category = isKnownCategory(filters.category) ? filters.category : undefined;
   const subcategory = filters.subcategory;

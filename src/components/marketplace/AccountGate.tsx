@@ -94,7 +94,6 @@ export function AccountGate() {
             <button aria-selected={mode === "login"} onClick={() => { setMode("login"); setError(""); }} role="tab" type="button">Вход</button>
             <button aria-selected={mode === "register"} onClick={() => { setMode("register"); setError(""); }} role="tab" type="button">Регистрация</button>
           </div>
-          <p className={styles.loginEyebrow}>FARO ID</p>
           <h2 id="account-login-title">{mode === "login" ? "С возвращением" : "Ваше место для поездок"}</h2>
           <p>Сохраняйте заказы, инструкции и всё необходимое для поездки в одном кабинете.</p>
           <form onSubmit={submit}>
@@ -122,7 +121,7 @@ export function AccountGate() {
   return (
     <div className={styles.accountContent}>
       <div className={styles.accountToolbar}>
-        <p>Ваш FARO ID · <strong>{account.email}</strong></p>
+        <p>Ваш профиль · <strong>{account.email}</strong></p>
         <button onClick={signOut} type="button">Выйти</button>
       </div>
       <AccountOrders />

@@ -24,13 +24,13 @@
 .empty { max-width: 42rem; padding: clamp(2rem, 5vw, 4rem) 0; }
 .empty p:not(.eyebrow) { max-width: 30rem; color: #60645b; }
 .loginCard { max-width: none; padding: clamp(1.5rem, 4vw, 3.25rem); border: 1px solid rgba(36,39,33,.16); background: #e9e2d6; }
-.loginEyebrow { margin: 0; color: #a54e33; font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
-.loginCard h2 { max-width: 9ch; margin: .55rem 0 1rem; font-size: clamp(2.4rem, 5vw, 5rem); font-weight: 500; letter-spacing: -.08em; line-height: .9; }
+.loginCard h2 { margin: 0 0 1rem; font-size: clamp(2rem, 4vw, 4rem); font-weight: 500; letter-spacing: -.08em; line-height: 1; white-space: nowrap; }
 .loginCard > p:not(.eyebrow) { max-width: 28rem; color: #60645b; }
 .loginCard form { display: grid; gap: 1rem; margin-top: 2rem; }
 .authTabs { display: flex; gap: .35rem; margin-bottom: 1.5rem; }
 .authTabs button { min-height: 2.5rem; padding: .6rem .9rem; border: 1px solid rgba(36,39,33,.2); border-radius: 999px; background: transparent; color: #60645b; cursor: pointer; }
 .authTabs button[aria-selected="true"] { border-color: #242721; background: #242721; color: #fffdf8; }
+.authTabs button[aria-selected="false"] { border-color: rgba(36,39,33,.2); background: transparent; color: #60645b; }
 .loginCard label { display: grid; gap: .45rem; color: #60645b; font-size: .78rem; }
 .loginCard input { min-height: 3rem; padding: .75rem .9rem; border: 1px solid rgba(36,39,33,.22); border-radius: .7rem; background: #f4f0e8; color: #242721; font: inherit; }
 .loginCard input:focus { outline: none; border-color: #a54e33; box-shadow: 0 0 0 3px rgba(165,78,51,.12); }
@@ -48,5 +48,5 @@
 .accountToolbar p { margin: 0; color: #60645b; }
 .accountToolbar strong { color: #242721; }
 .accountToolbar button { background: transparent; color: #242721; }
-@media (max-width: 820px) { .accountLanding { grid-template-columns: 1fr; } .accountAside { min-height: 20rem; } }
+@media (max-width: 820px) { .accountLanding { grid-template-columns: 1fr; } .accountAside { min-height: 20rem; } .loginCard h2 { white-space: normal; } }
 @media (max-width: 720px) { .ordersIntro, .order summary { align-items: start; flex-direction: column; } .order summary > span:last-child { justify-items: start; } .orderMeta { grid-template-columns: 1fr; } }

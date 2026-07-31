@@ -25,6 +25,8 @@ All photographs below are downloaded from Pexels and marked free to use under th
 - `home-sources/bodrum-amanruya.avif` - Çisel Bozar: https://www.pexels.com/photo/amanruya-hotel-in-bodrum-in-turkey-20297239/
 - `home-sources/cappadocia-cave-hotel.avif` - Ahmet: https://www.pexels.com/photo/aerial-view-of-cappadocia-cave-hotel-in-turkey-29158010/
 - `home-sources/istanbul-legacy-hotel.avif` - Ömer Derinyar: https://www.pexels.com/photo/legacy-ottoman-hotel-architecture-in-istanbul-29080197/
+- `catalog-generated/rumeli-fortress.jpg` - Helge Høifødt, Wikimedia Commons, CC BY-SA 3.0: https://commons.wikimedia.org/wiki/File:Rumeli_Hisari_Istanbul.JPG
+- `catalog-generated/bursa-koza-han-market.jpg` - Adbar, Wikimedia Commons, CC BY-SA 3.0: https://commons.wikimedia.org/wiki/File:Bursa_Koza_Han_(Silk_Bazaar).jpg
 
 Pexels license: https://www.pexels.com/license/
 
@@ -39,6 +41,34 @@ Created on 2026-07-20 with the built-in image generation tool as a project-speci
 ### `istanbul-waterfront-heritage.png` and `istanbul-support-neighborhood.png`
 
 Created on 2026-07-20 with the built-in image generation tool as project-specific editorial images: a refined Istanbul waterfront terrace with Bosphorus views, and a welcoming sunlit Istanbul neighborhood overlooking the water. No ruins, decay, readable signs, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/rhythm-dance-show.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a contemporary dance performance on a dark theatrical stage with warm terracotta lighting. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/spice-bazaar-tasting.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a Turkish spice market stall with colorful spices, lokum and dried fruit. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/bosphorus-supper-cruise.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a multi-deck dinner cruise boat on the Bosphorus at blue hour with warm dining lights. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/turkish-breakfast-cruise.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a Turkish breakfast spread on a boat deck overlooking the Bosphorus. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/istanbul-chef-menu.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a curated tasting set of Turkish dishes with meze, grilled food, fish, stuffed vine leaves and Turkish coffee. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/ottoman-hammam-massage.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: a tasteful massage ritual in a historic Turkish hammam with both adults modestly covered. No readable text, logos, watermarks or third-party brand assets.
+
+### `catalog-generated/wellness-hammam-face-masks.png`
+
+Created on 2026-07-31 with the built-in image generation tool as a project-specific editorial image: three adult spa guests in robes with clay face masks relaxing in a historic Turkish hammam. No readable text, logos, watermarks or third-party brand assets.
 
 ## Generated service-kit assets
 

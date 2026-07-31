@@ -49,6 +49,8 @@ function durationFor(minutes: number | null | undefined): MarketplaceService["du
 }
 
 function deliveryMethodFor(product: (typeof sourceProducts)[number]) {
+  if (product.id === "bosphorus-dinner-cruise") return "Круиз";
+
   if (product.isDigital) {
     if (product.type === "tickets") return "Электронный билет";
     if (product.type === "digital") return "Цифровой пропуск";
@@ -61,7 +63,6 @@ function deliveryMethodFor(product: (typeof sourceProducts)[number]) {
     restaurants: "Бронирование столика",
     spa: "Сеанс ухода",
     transfers: "Трансфер",
-    yachts: "Круиз",
     shopping: "Покупка в магазине",
     "vip-transport": "VIP-перелёт",
   };
@@ -145,5 +146,5 @@ export const marketplaceNavigation: MarketplaceNavigationItem[] = [
   { label: "Туры и впечатления", href: "/catalog?scenario=experience" },
   { label: "Трансферы", href: "/catalog?scenario=transfer" },
   { label: "VIP транспорт", href: "/catalog?category=vip-transport" },
-  { label: "Самостоятельно", href: "/catalog?scenario=self-service" },
+  { label: "Шопинг", href: "/catalog?category=shopping" },
 ];

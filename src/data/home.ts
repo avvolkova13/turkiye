@@ -58,8 +58,8 @@ const baseDirectionScenes = [
     title: "Море между делом и по плану",
     description:
       "Круизы по Босфору, вечерние программы и прогулки на воде.",
-    cta: "Море и яхты",
-    href: "/catalog?category=yachts",
+ cta: "Море и прогулки",
+ href: "/catalog?category=activities",
     image: "/images/kas-coast.jpg",
     imageAlt: "Скалистая бухта и прозрачное море у побережья Каша",
     focalPoint: "51% 64%",
@@ -372,7 +372,7 @@ export const collectionItems = [
     count: "5 товаров",
     href: "/catalog?category=restaurants",
     images: [
-      "/images/bosphorus-ferry.jpg",
+      "/images/catalog-generated/nomads-rooftop-dinner.png",
       "/images/spice-bazaar.jpg",
       "/images/home-canvas/bosphorus-ferry.webp",
       "/images/istanbul-motion.jpg",

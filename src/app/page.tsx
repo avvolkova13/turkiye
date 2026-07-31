@@ -7,10 +7,10 @@ import { Header } from "@/components/home/Header";
 import { HeroCanvasScene } from "@/components/home/HeroCanvasScene";
 import { MotionProvider } from "@/components/home/motion/MotionProvider";
 import { ManifestoCards } from "@/components/home/ManifestoCards";
-import { Newsletter } from "@/components/home/Newsletter";
 import { RevealObserver } from "@/components/home/RevealObserver";
 import { siteConfig } from "@/config/site";
 import { affordableItems, directionScenes, heroFragments } from "@/data/home";
+import { marketplaceCategories } from "@/data/marketplace";
 import { sitePath } from "@/lib/sitePath";
 
 const brandName = siteConfig.publicBrandName ?? "Türkiye";
@@ -59,7 +59,7 @@ export default function HomePage() {
                   alt="Солнечная турецкая улица с тёплой архитектурой"
                   fill
                   sizes="(max-width: 760px) 34vw, 12vw"
-                  src={sitePath("/images/ankara-alley.jpg")}
+                  src={sitePath("/images/istanbul-support-neighborhood.webp")}
                 />
               </div>
             </div>
@@ -279,20 +279,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section
-          className="newsletter-section"
-          id="newsletter"
-          data-header-tone="light"
-          data-reveal
-        >
-          <div data-reveal>
-            <p>Полезные идеи перед следующей поездкой</p>
-            <h2>Получайте идеи для путешествий, новые маршруты и полезные подборки о Турции.</h2>
-          </div>
-          <div data-reveal>
-            <Newsletter />
-          </div>
-        </section>
       </main>
 
       <footer className="page-footer" id="page-footer" data-header-tone="dark">
@@ -300,29 +286,36 @@ export default function HomePage() {
           <Image alt="Faro" height={68} src={sitePath("/faro-logo.svg")} width={161} />
         </div>
         <div className="footer-grid">
-          <nav aria-label="Категории каталога" data-reveal>
-            <span>Категории</span>
-            <a href={sitePath("/catalog?category=excursions")}>Туры</a>
-            <a href={sitePath("/catalog?category=tickets")}>Билеты</a>
-            <a href={sitePath("/catalog?category=activities")}>Впечатления</a>
-            <a href={sitePath("/catalog?category=restaurants")}>Рестораны</a>
-            <a href={sitePath("/catalog?category=spa")}>Красота и wellness</a>
-            <a href={sitePath("/catalog?category=connectivity")}>eSIM</a>
-            <a href={sitePath("/catalog?category=transfers")}>Трансферы</a>
-            <a href={sitePath("/catalog?category=digital")}>Проездные</a>
-          </nav>
-          <nav aria-label="Сервисы в путешествии" data-reveal>
-            <span>В путешествии</span>
-            <a href="#services">Впечатления</a>
-            <a href="#services">Транспорт</a>
-            <a href="#affordable">Связь и помощь</a>
-            <a href="#bundles">Наборы</a>
+    <div className="footer-category-group" data-reveal>
+      <span>Категории</span>
+      <div className="footer-category-columns">
+        <nav aria-label="Категории каталога, первая колонка">
+          {marketplaceCategories.slice(0, Math.ceil(marketplaceCategories.length / 2)).map((category) => (
+            <a href={sitePath(`/catalog?category=${category.id}`)} key={category.id}>
+              {category.name}
+            </a>
+          ))}
+        </nav>
+        <nav aria-label="Категории каталога, вторая колонка">
+          {marketplaceCategories.slice(Math.ceil(marketplaceCategories.length / 2)).map((category) => (
+            <a href={sitePath(`/catalog?category=${category.id}`)} key={category.id}>
+              {category.name}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </div>
+          <nav aria-label="Сервис" data-reveal>
+            <span>Сервис</span>
+            <a href={sitePath("/catalog")}>Каталог</a>
+            <a href={sitePath("/account")}>Личный кабинет</a>
+            <a href={sitePath("/checkout")}>Корзина</a>
+            <a href={sitePath("/search")}>Поиск</a>
           </nav>
           <nav aria-label="Информация о сервисе" data-reveal>
-            <span>Сервис</span>
+            <span>О FARO</span>
             <a href="#statement">О подходе</a>
             <a href="#principles">Как это работает</a>
-            <a href="#newsletter">Поддержка</a>
           </nav>
           <div className="footer-meta" data-reveal>
             <span>Язык и валюта</span>

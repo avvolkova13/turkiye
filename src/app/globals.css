@@ -2400,12 +2400,28 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 2rem;
 }
 
 .footer-grid > div,
 .footer-grid > nav {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+}
+
+.footer-category-group {
+  grid-column: span 2;
+}
+
+.footer-category-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.footer-category-columns > nav {
   display: grid;
   align-content: start;
   gap: 0.55rem;
@@ -3096,6 +3112,14 @@ html[data-motion="reduced"] .direction-copy [data-direction-part] {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 3.5rem 1.5rem;
+  }
+
+  .footer-category-group {
+    grid-column: 1 / -1;
+  }
+
+  .footer-category-columns {
+    gap: 1rem;
   }
 
   .footer-bottom {

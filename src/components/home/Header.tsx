@@ -24,7 +24,7 @@ const headerItems = [
   ["Категории", "/catalog"],
   ["Впечатления", "#ideas"],
   ["Сервис", "#services"],
-  ["Советы", "#newsletter"],
+  ["Советы", "/guides/"],
 ] as const;
 
 export function Header({ brandName }: HeaderProps) {

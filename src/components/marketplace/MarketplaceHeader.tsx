@@ -31,9 +31,9 @@ export function MarketplaceHeader({ currentPath }: MarketplaceHeaderProps) {
           <Link aria-current={currentPath === "/search" ? "page" : undefined} href="/search">
             Поиск
           </Link>
-          <Link aria-current={currentPath === "/account" ? "page" : undefined} href="/account">
+          <a aria-current={currentPath === "/account" ? "page" : undefined} href={sitePath("/account/")}>
             {currentPath === "/account" ? "Личный кабинет" : "Войти в ЛК"}
-          </Link>
+          </a>
           <Link aria-current={currentPath === "/checkout" ? "page" : undefined} href="/checkout">
             <span className={styles.cartLinkContents}>Корзина <CartCount className={styles.cartCount} /></span>
           </Link>

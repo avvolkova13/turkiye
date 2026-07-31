@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import type { MarketplaceBookingDetails, MarketplaceDeliveryChannel, MarketplaceOrder, MarketplaceService } from "@/types/marketplace";
 import { createOrderId, readCart, readOrders, writeCart, writeOrders } from "@/lib/marketplace/local-store";
+import { sitePath } from "@/lib/sitePath";
 import { canAccessCheckout } from "@/lib/marketplace/checkout-access";
 import styles from "@/app/checkout/checkout.module.css";
 
@@ -111,7 +112,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
   function submitPayment(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canAccessCheckout(account)) {
-      router.replace("/account");
+      window.location.href = sitePath("/account/");
       return;
     }
     const digits = cardNumber.replace(/\D/g, "");
@@ -145,7 +146,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
         </div>
         <p><strong>Итого: {money.format(order.total)} ₽</strong></p>
         <p>Детали заказа доставим через {channels.find(({ value }) => value === order.customer.deliveryChannel)?.label}.</p>
-        <div className={styles.confirmationActions}><Link href="/account">Открыть личный кабинет</Link><Link href="/catalog">Вернуться в каталог</Link></div>
+        <div className={styles.confirmationActions}><a href={sitePath("/account/")}>Открыть личный кабинет</a><Link href="/catalog">Вернуться в каталог</Link></div>
       </section>
     );
   }
@@ -160,7 +161,7 @@ export function CheckoutForm({ services }: { services: MarketplaceService[] }) {
         <p className={styles.eyebrow}>Вход обязателен</p>
         <h2>Войдите, чтобы оформить заказ</h2>
         <p>После входа сохранятся настройки поездки, номер заказа и инструкции по доставке.</p>
-        <Link href="/account">Войти или зарегистрироваться</Link>
+        <a href={sitePath("/account/")}>Войти или зарегистрироваться</a>
       </section>
     );
   }

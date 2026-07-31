@@ -11,13 +11,38 @@ const PROFILE_STORAGE_KEY = "faro-account-profile";
 type Account = { email: string; name: string };
 type Profile = Account & { password: string };
 
+function readStorage(key: string) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeStorage(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function removeStorage(key: string) {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Storage can be unavailable in private browsing or restricted contexts.
+  }
+}
+
 function readAccount(): Account | null {
-  const raw = window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
+  const raw = readStorage(ACCOUNT_STORAGE_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw) as Account;
   } catch {
-    window.localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+    removeStorage(ACCOUNT_STORAGE_KEY);
     return null;
   }
 }
@@ -28,12 +53,12 @@ function subscribeToAccount(callback: () => void) {
 }
 
 function readProfile(): Profile | null {
-  const raw = window.localStorage.getItem(PROFILE_STORAGE_KEY);
+  const raw = readStorage(PROFILE_STORAGE_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw) as Profile;
   } catch {
-    window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+    removeStorage(PROFILE_STORAGE_KEY);
     return null;
   }
 }
@@ -63,7 +88,10 @@ export function AccountGate() {
         return;
       }
       const profile = { email, name: name.trim(), password };
-      window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+      if (!writeStorage(PROFILE_STORAGE_KEY, JSON.stringify(profile))) {
+        setError("Не удалось сохранить регистрацию в этом браузере.");
+        return;
+      }
     }
     const profile = readProfile();
     if (!profile || profile.email !== email || profile.password !== password) {
@@ -71,13 +99,16 @@ export function AccountGate() {
       return;
     }
     const nextAccount = { email: profile.email, name: profile.name };
-    window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(nextAccount));
+    if (!writeStorage(ACCOUNT_STORAGE_KEY, JSON.stringify(nextAccount))) {
+      setError("Не удалось сохранить вход в этом браузере.");
+      return;
+    }
     window.dispatchEvent(new Event("faro-account-updated"));
     setError("");
   }
 
   function signOut() {
-    window.localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+    removeStorage(ACCOUNT_STORAGE_KEY);
     window.dispatchEvent(new Event("faro-account-updated"));
     setEmail("");
     setName("");

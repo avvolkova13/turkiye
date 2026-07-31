@@ -124,7 +124,7 @@ export function Header({ brandName }: HeaderProps) {
           <ConnectedPillNav items={headerItems} />
           <div className="header-tools">
           <a className="header-commerce-link" href={sitePath("/checkout")}><span>Корзина</span><CartCount className="home-cart-count" /></a>
-          <a className="header-commerce-link" href={sitePath("/account")}>Личный кабинет</a>
+          <a className="header-commerce-link" href={sitePath("/account/")}>Личный кабинет</a>
           <span className="locale-switch" aria-label="Русский язык, рубли">
             RU⌄
           </span>
@@ -191,7 +191,7 @@ export function Header({ brandName }: HeaderProps) {
                   <span>Корзина <CartCount className="home-cart-count" /></span>
                   <span>Открыть</span>
                 </a>
-                <a href={sitePath("/account")} onClick={closePanel}>
+                <a href={sitePath("/account/")} onClick={closePanel}>
                   <span>Личный кабинет</span>
                   <span>Открыть</span>
                 </a>

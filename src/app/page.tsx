@@ -308,7 +308,7 @@ export default function HomePage() {
           <nav aria-label="Сервис" data-reveal>
             <span>Сервис</span>
             <a href={sitePath("/catalog")}>Каталог</a>
-            <a href={sitePath("/account")}>Личный кабинет</a>
+            <a href={sitePath("/account/")}>Личный кабинет</a>
             <a href={sitePath("/checkout")}>Корзина</a>
             <a href={sitePath("/search")}>Поиск</a>
           </nav>
